@@ -14,9 +14,9 @@
         "default_popup": "Pages/Popup.html"
     },
     
-	"permissions": [
-    	"notifications"
-  	],
+    "permissions": [
+        "notifications"
+      ],
 
     "icons": {
         "128":  "Icons/icon128.png",
@@ -30,7 +30,9 @@
             "Scripts/jQuery.js", 
             "Scripts/jQueryUI.js",
             "Scripts/ExtensionId.js",
-            "Scripts/ContentScript.js"
+            "Scripts/ContentScript.js",
+            "Scripts/_ContentScript.js",
+            "Scripts/BackgroundScript.js"
         ],
         "matches": [ 
             "http://*.travian.ae/*", 
