@@ -232,6 +232,7 @@ function pageProcessAll(info) {
         globalOverflowTimer();
 
     if (where === "Build") globalInBuild();
+    else if (where == "VillageOut") globalInVillageOut();
     else if (where === "SendTroops") globalInSendTroops();
     else if (where === "Reports") globalInReports(info.search);
     else return;
@@ -436,6 +437,42 @@ function globalInBuild() {
     if ($(".gid17").length) buildMarketCalls();
 
     devLog("globalInBuild() - In build finished successfully!");
+}
+
+/**
+ * Calls all Village Out related functions.
+ *
+ * @author Ignacio Munizaga
+ */
+function globalInVillageOut() {
+    if (dev) console.log("globalInVillageOut() - In Village Out calls...");
+
+    if (checkBuildBuildingResourceDifference === "On" | checkBuildBuildingResourceDifference === "null") {
+        $("#village_map").children().each(function(index) {
+            for (var resource_index = 0; resource_index < 4; resource_index++) {
+                if ($.inArray(index, resource_map[resource_index]) != -1){
+                    hola = $(this);
+                    level = parseInt($(this).html());
+                    enough_resources = true;
+                    for (var cost_index = 1; cost_index < 5; cost_index++) {
+                        var current_cost = resource_costs[resource_index][level][cost_index];
+                        var current_ammount = globalGetWarehousAmount(cost_index);
+                        if (current_cost > current_ammount){
+                            enough_resources = false;
+                            break;
+                        }
+                    }
+                    if (enough_resources){
+                        $(this).css("font-size": "20px");
+                        $(this).css("color": "#0D5995");
+                    }
+                    break;
+                }
+            }
+        });
+    }
+	
+    if (dev) console.log("globalInVillageOut() - In Village out finished successfully!");
 }
 
 /**
