@@ -569,7 +569,12 @@ function buildCalculateUnitResourcesDifferenceTimerFunction(args) {
 
         args[0].each(function(iindex) {
             var res = parseInt($(args[1][iindex]).children("span[class*='resources r" + (rindex + 1) + "']").text(), 10);
-            var diff = inWarehouse - (res * parseInt($(this).attr("value") || 0, 10));
+            quantity = parseInt($(this).attr("value"), 10);
+            // it's not intuitive if quantity is zero.
+            if (quantity == 0) {
+                quantity = 1;
+            }
+            var diff = inWarehouse - res * quantity;
             var color = diff < 0 ? "#B20C08" : "#0C9E21";
             $("#paUnitCostDifferenceI" + iindex + "R" + rindex ).html("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(" + diff + ")");
             $("#paUnitCostDifferenceI" + iindex + "R" + rindex ).attr("style", "color:" + color);
