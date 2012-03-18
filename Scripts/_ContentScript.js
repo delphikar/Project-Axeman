@@ -233,6 +233,7 @@ function pageProcessAll(info) {
 
     if (where === "Build") globalInBuild();
     else if (where == "VillageOut") globalInVillageOut();
+    else if (where == "VillageIn") globalInVillageIn();
     else if (where === "SendTroops") globalInSendTroops();
     else if (where === "Reports") globalInReports(info.search);
     else return;
@@ -445,14 +446,22 @@ function globalInVillageOut() {
     if (dev) console.log("globalInVillageOut() - In Village Out calls...");
 
     if (checkBuildBuildingResourceDifference === "On" | checkBuildBuildingResourceDifference === "null") {
-        $("#village_map").children().each(function(index) {
-            for (var resource_index = 0; resource_index < 4; resource_index++) {
-                if ($.inArray(index, Enums.VillageMaps[village.VillageOut.type][resource_index]) != -1){
-                    level = parseInt($(this).html());
-                    next_level = "lvl" + (level + 1);
-                    enough_resources = true;
+        var offset = 0;
+        $("#rx").children().each(function(index) {
+            for (var resourceIndex = 0; resourceIndex < 4; resourceIndex++) {
+                var villageMap = Enums.VillageMaps[village.VillageOut.type];
+                if ($.inArray(index, villageMap[resourceIndex]) != -1){
+                    var $this = $(this);
+                    var level = parseInt($this.attr('alt').match(/\d+/g)[0]);
+                    if (level == 0){
+                        offset++;
+                        continue;
+                    }
+                    var next_level = "lvl" + (level + 1);
+                    var enough_resources = true;
                     for (var cost_index = 1; cost_index < 5; cost_index++) {
-                        var current_cost = Enums.Fields[resource_index][next_level][cost_index];
+                        var FieldCostIndex = Enums.Fields[resourceIndex]
+                        var current_cost = FieldCostIndex[next_level][cost_index-1];
                         var current_ammount = globalGetWarehousAmount(cost_index);
                         if (current_cost > current_ammount){
                             enough_resources = false;
@@ -460,12 +469,13 @@ function globalInVillageOut() {
                         }
                     }
                     if (enough_resources){
-                        $(this).css("font-size", "20px");
-                        $(this).css("color", "#ffffff");
-                        $(this).css("background-color", "#AAFF55");
-                        $(this).css("padding", "#AAFF55");
-                        $(this).css("border-radius", "20px");
-                        $(this).animate({top: "+=-2"});
+                        $current_circle = $("#village_map .level").eq(index - offset)
+                        $current_circle.css("font-size", "20px");
+                        $current_circle.css("color", "#ffffff");
+                        $current_circle.css("background-color", "#AAFF55");
+                        $current_circle.css("padding", "#AAFF55");
+                        $current_circle.css("border-radius", "20px");
+                        $current_circle.animate({top: "+=-2"});
                     }
                     break;
                 }
@@ -473,6 +483,24 @@ function globalInVillageOut() {
         });
     }
     if (dev) console.log("globalInVillageOut() - In Village out finished successfully!");
+}
+
+
+/**
+ * Calls all Village Out related functions.
+ *
+ * @author Ignacio Munizaga
+ */
+function globalInVillageIn() {
+    if (dev) console.log("globalInVillageIn() - In Village In calls...");
+
+    if (checkBuildBuildingResourceDifference === "On" | checkBuildBuildingResourceDifference === "null") {
+        $("#clickareas").children().each(function(index) {
+            if (dev) console.log("globalInVillageIn()" + index);
+            asdf = $(this);
+        });
+    }
+    if (dev) console.log("globalInVillageIn() - In Village in finished successfully!");
 }
 
 /**

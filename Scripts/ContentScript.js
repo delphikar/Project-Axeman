@@ -161,6 +161,16 @@ var Enums = {
 	],
 	
 	Buildings: {
+        g18: {
+            name: "Embassy",
+			Cost: {
+            }
+         },
+        g22: {
+            name: "Academy",
+			Cost: {
+            }
+         },
 		// http://t4.answers.travian.com/index.php?aid=46#go2answer
 		TownHall: {
 			Cost: {
@@ -303,9 +313,6 @@ var Enums = {
 			lvl9: [0, 0, 0, 0, 0, 0, 0, 0],
 			lvl10: [0, 0, 0, 0, 0, 0, 0, 0]
 		}//,
-		
-		// http://t4.answers.travian.com/index.php?aid=4#go2answer
-		//Embassy: { },
 		
 		// http://t4.answers.travian.com/index.php?aid=17#go2answer
 		//Palace: { },
