@@ -502,10 +502,6 @@ function globalInVillageOut() {
                 if ($.inArray(index, villageMap[resourceIndex]) != -1){
                     var $this = $(this);
                     var level = parseInt($this.attr('alt').match(/\d+/g)[0]);
-                    if (level == 0){
-                        offset++;
-                        continue;
-                    }
                     var next_level = "lvl" + (level + 1);
                     var enough_resources = true;
                     for (var cost_index = 1; cost_index < 5; cost_index++) {
@@ -522,6 +518,11 @@ function globalInVillageOut() {
                             var next_url = "build.php?id=" + (index + 1);
                             bot.addOrder("bot.goToPage('" + next_url + "');");
                             bot.addOrder("bot.clickBuildButton()");
+                        }
+                        if (level == 0){
+                            // level 0 cannot be painted
+                            offset++;
+                            continue;
                         }
                         $current_circle = $("#village_map .level").eq(index - offset)
                         $current_circle.css("font-size", "20px");
