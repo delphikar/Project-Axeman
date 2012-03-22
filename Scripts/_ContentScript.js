@@ -203,7 +203,7 @@ function pageLoadVillageData() {
 }
 
 function pageLoadBotData() {
-    if (!loadOrders  || orders === "null") {
+    if (!loadOrders  || String(orders) === "null") {
         orders = [];
     }
     else orders = JSON.parse(orders);
