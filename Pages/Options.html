@@ -83,6 +83,9 @@
 
                 // PLUS options
                 setupCheckboxButton("checkReportShowCheckAll");
+
+                // Bob options
+                setupCheckboxButton("botActivated");
             }
 
             function setupCheckboxButton(name) {
@@ -128,6 +131,7 @@
                 <li class="ui-state-default ui-corner-top"><a href="#tabs-3">Marketplace</a></li>
                 <li class="ui-state-default ui-corner-top"><a href="#tabs-4">Sending troops</a></li>
                 <li class="ui-state-default ui-corner-top"><a href="#tabs-5">PLUS options</a></li>
+                <li class="ui-state-default ui-corner-top"><a href="#tabs-6">Bot options</a></li>
             </ul>
             <div id="tabs-1" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
 
@@ -246,6 +250,19 @@
 
                 </table>
 
+            </div>
+            <div id="tabs-6" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+                <table>
+
+                    <tr>
+                        <td>ActivateBot&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td>
+                            <input type="checkbox" id="botActivated" class="ui-helper-hidden-accessible">
+                            <label id="botActivatedLabel" for="botActivated" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" />
+                        </td>						
+                    </tr>
+
+                </table>
             </div>
             
         </div>

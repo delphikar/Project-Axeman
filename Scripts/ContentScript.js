@@ -34,18 +34,18 @@ var Enums = {
 
     // Specifies the resource map in a village, with arrays of wood, clay, iron and crop respectively
 	VillageMaps: {
-		f1: [3, 3, 3, 9],
-		f2: [3, 4, 5, 6],
+		f1: [[2, 13, 16], [5, 15, 17], [6, 9, 10], [0, 1, 3, 4, 7, 8, 11, 12, 14]],
+		f2: [[2, 13, 16], [4, 5, 15, 17], [0, 3, 6, 9, 10], [1, 7, 8, 11, 12, 14]],
 		f3: [[0, 2, 13, 16], [4, 5, 15, 17], [3, 6, 9, 10], [1, 7, 8, 11, 12, 14]],
-		f4: [4, 5, 3, 6],
-		f5: [5, 3, 4, 6],
-		f6: [1, 1, 1, 15],
-		f7: [4, 4, 3, 7],
-		f8: [3, 4, 4, 7],
-		f9: [4, 3, 4, 7],
-		f10: [3, 5, 4, 6],
-		f11: [4, 3, 5, 6],
-		f12: [5, 4, 3, 6]
+		f4: [[0, 2, 13, 16], [3, 4, 5, 15, 17], [6, 9, 10], [1, 7, 8, 11, 12, 14]],
+		f5: [[0, 2, 4, 13, 16], [5, 15, 17], [3, 6, 9, 10], [1, 7, 8, 11, 12, 14]],
+		f6: [[2], [15], [3], [0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17]],
+		f7: [[0, 3, 13, 16], [4, 5, 15, 17], [6, 9, 10], [1, 2, 7, 8, 11, 12, 14]],
+		f8: [[3, 13, 16], [4, 5, 15, 17], [0, 6, 9, 10], [1, 2, 7, 8, 11, 12, 14]],
+		f9: [[3, 4, 13, 16], [5, 15, 17], [0, 6, 9, 10], [1 ,2, 7, 8, 11, 12, 14]],
+		f10: [[2, 13, 16], [3, 4, 5, 15, 17], [0, 6, 9, 10], [1, 7, 8, 11, 12, 14]],
+		f11: [[1, 2, 4, 12], [9, 10, 15], [0, 3, 7, 8, 11], [5, 6, 13, 14, 16, 17]],
+		f12: [[0, 2, 3, 13, 16], [4, 5, 15, 17], [6, 9, 10], [1, 7, 8, 11, 12, 14]],
 	},
 	
 	// lvl.: [wood, clay, iron, crop, consumption, time, culture points, production]
@@ -327,69 +327,3 @@ var Enums = {
 		//TradeOffice: { },
 	}
 };
-
- /**
-  * Village model class
-  *
-  * @author Aleksandar Toplek
-  */
- function Village() {
-	// Note: On any *.travian.*/... page (except help)
-	this.name = "<NameNotDefined>";
-	this.loyalty = 100;
-	
-	// Note: On spieler.php?uid=* page where * is players id
-	this.isMainCity = false;
-	this.population = 0;
-	this.Position = {
-		x: 0,
-		y: 0
-	};
-	
-	// Note: On any *.travian.*/... page (except help)
-	this.Resources = {
-		lastUpdated: 0,
-		
-		storage: [0, 0],
-		stored: [0, 0, 0, 0],
-		
-		production: [0, 0, 0, 0],
-		
-		totalCropProduction: 0,
-		cosumption: 0
-	};
-	
-	// Note: On dorf1.php page
-	this.VillageIn = {
-		lastUpdated: 0,
-		
-		levels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		buildings: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-	};
-	
-	// NOTE: On dorf1.php page
-	this.VillageOut = {
-		lastUpdated: 0,
-
-		type: "f3",
-		levels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-	};
-	
-	this.Troops = {
-		// NOTE: On build.php?id=39 (since rally point is on the same place in every village)
-		// This is players troops currently in village that can be sent to attack/support
-		AvailableTroops: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-		
-		// NOTE: On build.php?id=39 (since rally point is on the same place in every village)
-		// This is total troops in village (supports + players troops + troops in attack/support/return/adventure)
-		TotalTroops: {
-			gauls: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			romans: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			teutons: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			nature: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-		},
-		
-		// NOTE: build.php page > gid13 (Armory)
-		TroopLevels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] 
-	};
- }

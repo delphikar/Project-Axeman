@@ -21,14 +21,23 @@
 //
 // Global variables
 //
+//
+// Bot variables
+var loadOrders = true;
+
 // Debugging variables
 var dev = true;
 var dbgtmrs = false;
+
 // Other variables
 var dataLoaded = 0;
 var dataAvailable = 11;
+if(loadOrders){
+    dataAvailable = 12;
+}
 var startTime = 0;
 var timerStep = 128;
+
 // Settings
 var checkGlobalRemoveInGameHelp;
 var checkGlobalStorageOverflowTimeout;
@@ -39,9 +48,15 @@ var checkMarketListMyVillages;
 var checkMarketShowJunkResource;
 var checkMarketShowSumIncomingResources;
 var checkSendTroopsListMyVillages;
-var checkReportShowCheckAll; // TODO: Add setting in options page
+var checkReportShowCheckAll;
+var botActivated;
+
 // Village info
 var village;
+
+// bot info
+var orders="null";
+var bot;
 
 //
 // Global constants
@@ -114,7 +129,15 @@ function initPages() {
         pageProcessAll(info);
     }
 
+    devLog("initPages Checking orders");
+    var order;
+    if (bot.orders.length > 0){
+        order = bot.getOrder();
+        debugger;
+    }
+
     // All finished, saving data
+    //bot.resetOrders();
     saveData();
 
     var endTime = (new Date()).getTime();
@@ -122,12 +145,20 @@ function initPages() {
         $(".infotextTime").text("Script time: " + (endTime - startTime) + " ms");
         devLog("initPages - Finished successfully! (" + (endTime - startTime) + ")");
     }
+
+    // if there is an order execute it
+    if (order){
+        debugger
+        order();
+    }
 }
 
 function saveData() {
     devLog("saveData - Saving started...");
 
     _sendDataSetRequest("village" + village.name, JSON.stringify(village));
+
+    _sendDataSetRequest("orders" , JSON.stringify(bot.orders));
 
     devLog("saveData - All requests sent!");
 }
@@ -152,12 +183,16 @@ function pageLoadData() {
     requestData("Data", "checkMarketShowSumIncomingResources");
     requestData("Data", "checkSendTroopsListMyVillages");
     requestData("Data", "checkReportShowCheckAll");
+    requestData("Data", "botActivated");
 
     requestData("Data", "village" + globalGetActiveVillageName(), "village");
+    if (loadOrders){
+        requestData("Data", "orders");
+    }
 }
 
 function pageLoadVillageData() {
-    if (village === "null") {
+    if (true || village === "null") {
         village = new Village();
         village.name = globalGetActiveVillageName();
     }
@@ -165,6 +200,18 @@ function pageLoadVillageData() {
 
     devLog("pageLoadVillageData - Village loaded [" + village.name + "]");
     devLog(village);
+}
+
+function pageLoadBotData() {
+    if (!loadOrders  || orders === "null") {
+        orders = [];
+    }
+    else orders = JSON.parse(orders);
+
+    bot = new Bot(orders);
+
+    devLog("pageLoadBotData - Bot loaded");
+    devLog(bot);
 }
 
 /**
@@ -223,6 +270,8 @@ function pageProcessAll(info) {
     devLog("pageProcessAll - Pathname [" + info.pathname + "] mathched with [" + where + "]");
 
     pageLoadVillageData();
+    pageLoadBotData();
+
     village.Resources.production = villageGetResourceProduction();
 
     if (checkGlobalRemoveInGameHelp === "On" | checkGlobalRemoveInGameHelp === "null")
@@ -469,6 +518,11 @@ function globalInVillageOut() {
                         }
                     }
                     if (enough_resources){
+                        if (bot.canBuild()){
+                            var next_url = "build.php?id=" + (index + 1);
+                            bot.addOrder("bot.goToPage('" + next_url + "');");
+                            bot.addOrder("bot.clickBuildButton()");
+                        }
                         $current_circle = $("#village_map .level").eq(index - offset)
                         $current_circle.css("font-size", "20px");
                         $current_circle.css("color", "#ffffff");
@@ -481,6 +535,10 @@ function globalInVillageOut() {
                 }
             }
         });
+        if(bot.orders.length == 0){
+            // In case of no orders, refresh the page in 5 min
+            bot.addOrder("bot.goToPageInTimeout('window.location.href', 300000);");
+        }
     }
     if (dev) console.log("globalInVillageOut() - In Village out finished successfully!");
 }
@@ -497,7 +555,6 @@ function globalInVillageIn() {
     if (checkBuildBuildingResourceDifference === "On" | checkBuildBuildingResourceDifference === "null") {
         $("#clickareas").children().each(function(index) {
             if (dev) console.log("globalInVillageIn()" + index);
-            asdf = $(this);
         });
     }
     if (dev) console.log("globalInVillageIn() - In Village in finished successfully!");
@@ -797,57 +854,7 @@ function buildMarketGetTraderMaxTransport() {
 function buildMarketFillVillagesList() {
     devLog("buildMarketFillVillagesList - Started...");
 
-    // Gets data
-    var selectData = globalGetVillagesList();
-    var selectInput = _selectB("enterVillageName_list", "text village", "dname");
-
-    devLog("buildMarketFillVillagesList - Generating selection...");
-
-    // Generated select tag
-    selectInput += _selectOption(_gim("TravianSelectVillage"));
-    $.each(selectData, function (current, value) {
-        selectInput += _selectOption(value.text);
-    });
-    selectInput += _selectE();
-
-    devLog("buildMarketFillVillagesList - Selection generated!;");
-
-    // TODO: Make this compatible with Send troops page
-
-    // Creates two radio buttons for choosing the method of city selection
-    // These radio buttons does not have names in order to be invisible on the server side
-    // (radio with no names are not send on form submission)
-    var _textRadio = $('<input type="radio" id="marketNameOption_text" />');
-    var _listRadio = $('<input type="radio" id="marketNameOption_list" checked="checked" />');
-
-    var _compactInput = $(".compactInput");
-    _compactInput.prepend(_textRadio);
-    _compactInput.append($("<br />"));
-    _compactInput.append(_listRadio);
-
-    // Click handler for radios, each radio must uncheck the other one.
-    // Once they dont have names, their original behaviour does not happen
-    // They also have to disable the option that is not being used.
-    // Disabled form elemens are not sent in form submission, so they are
-    // not sent twice
-    _textRadio.click(function(){
-        $("#marketNameOption_list").attr("checked", false);
-        $("#enterVillageName_list").attr("disabled", true);
-        $("#enterVillageName").attr("disabled", "");
-    });
-
-    _listRadio.click(function(){
-        $("#marketNameOption_text").attr("checked", false);
-        $("#enterVillageName").attr("disabled", true);
-        $("#enterVillageName_list").attr("disabled", "");
-    });
-
-    // Disables the original name selector by default
-    // Changes the width to match the layout
-    $("#enterVillageName").attr("disabled", true).css("width", "78%");
-
-    // Replaces textbox with selectionbox (drop-down)
-    _compactInput.append(selectInput);
+    fillVillagesList();
 
     devLog("buildMarketFillVillagesList - Textbox successfully replaced!");
 }
@@ -973,10 +980,31 @@ function buildMarketIncomingSum() {
 function sendTroopsFillVillagesList() {
     devLog("sendTroopsFillVillagesList - Started...");
 
-    var selectData = globalGetVillagesList();
-    var selectInput = _selectB("enterVillageName", "text village", "dname");
+    fillVillagesList();
 
-    devLog("sendTroopsFillVillagesList - Generating selection...");
+    // minor css fixes
+    $("div.a2b .destination").css("width", "235px");
+    $("div.a2b .option").css("float", "none");
+    $("div.a2b .option").css("display", "inline");
+    $("enterVillageName").css("display", "inline");
+
+
+    devLog("sendTroopsFillVillagesList - Finished successfully!");
+}
+
+/**
+ * Creates a List of cities to send troos/resources to
+ *
+ * @author Ignacio Munizaga
+ */
+function fillVillagesList() {
+    devLog("fillVillagesList - Started...");
+
+    // Gets data
+    var selectData = globalGetVillagesList();
+    var selectInput = _selectB("enterVillageName_list", "text village", "dname");
+
+    devLog("fillVillagesList - Generating selection...");
 
     selectInput += _selectOption(_gim("TravianSelectVillage"));
     $.each(selectData, function(current, value) {
@@ -984,12 +1012,45 @@ function sendTroopsFillVillagesList() {
     });
     selectInput += _selectE();
 
-    devLog("sendTroopsFillVillagesList - Selection generated!");
-    devLog("sendTroopsFillVillagesList - Appending table...");
+    devLog("fillVillagesList - Selection generated!");
 
-    $(".compactInput").html(selectInput);
+    // Creates two radio buttons for choosing the method of city selection
+    // These radio buttons does not have names in order to be invisible on the
+    // server side (radio with no names are not send on form submission)
+    var _textRadio = $('<input type="radio" id="NameOption_text" />');
+    var _listRadio = $('<input type="radio" id="NameOption_list" checked="checked"/>');
 
-    devLog("sendTroopsFillVillagesList - Finished successfully!");
+    var _compactInput = $(".compactInput");
+    _compactInput.prepend(_textRadio);
+    _compactInput.append($("<br />"));
+    _compactInput.append(_listRadio);
+
+    // Click handler for radios. Each radio must uncheck the other one.
+    // Once they dont have names, their original behaviour does not happen
+    // They also have to disable the option that is not being used.
+    // Disabled form elemens are not sent in form submission, so they are
+    // not sent twice
+    _textRadio.click(function(){
+        $("#NameOption_list").attr("checked", false);
+        $("#enterVillageName_list").attr("disabled", true);
+        $("#enterVillageName").attr("disabled", "");
+    });
+
+    _listRadio.click(function(){
+        $("#NameOption_text").attr("checked", false);
+        $("#enterVillageName").attr("disabled", true);
+        $("#enterVillageName_list").attr("disabled", "");
+    });
+
+    // Disables the original name selector by default
+    // Changes the width to match the layout
+    $("#enterVillageName").attr("disabled", true).css("width", "78%");
+    $("#enterVillageName").attr("disabled", true).css("display", "inline");
+
+    // Replaces textbox with selectionbox (drop-down)
+    _compactInput.append(selectInput);
+
+    devLog("fillVillagesList - Textbox successfully replaced!");
 }
 
 /**
@@ -1340,6 +1401,7 @@ function Village() {
     this.coordX = 0;
     this.coordY = 0;
 
+
     // TODO: Is this data or control?
     //this.resourceOverflowLastUpdate = 0;
     //this.resourceOverflowTime = [0, 0, 0, 0];
@@ -1363,8 +1425,7 @@ function Village() {
     // NOTE: On dorf1.php
     this.VillageOut = {
         lastUpdated: 0,
-
-        type: "f3",
+        type: $('#village_map').attr('class'),
         levels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     };
 
@@ -1416,4 +1477,52 @@ function Village() {
     // TODO: Can build/conquer new village
     // TODO: Culture points
 }
+
+function Bot(orders){
+    this.orders = orders;
+    this.active = (botActivated === "On" || botActivated === "null");
+
+    this.addOrder = function(order){
+        if (this.active){
+            var orderStr = String(order).replace(/\n/g, "");
+            var functionStr = "function(){$$}".replace("$$", orderStr);
+            this.orders.push("var order = " + functionStr + ";");
+        }
+    };
+
+    this.getOrder = function(){
+        if (this.active){
+            debugger;
+            var order_str = this.orders.shift();
+            eval(order_str);
+            return order;
+        }
+        else return "function(){}";
+    };
+
+    this.resetOrders = function(){
+        this.orders = [];
+    };
+
+    this.goToPage = function(page){
+        window.location.href = page;
+    }
+
+    this.goToPageInTimeout = function(page, timeout){
+        timeout = timeout * Math.random()
+        setTimeout('window.location.href=' + page, timeout);
+    }
+
+    this.clickBuildButton = function(){
+        var build_button = $('button.build');
+        if (build_button != undefined){
+            build_button.click();
+        }
+    }
+
+    this.canBuild = function(){
+        return ($('.buildingList').length == 0 && this.orders.length == 0);
+    }
+}
+
 
