@@ -1532,28 +1532,41 @@ function Bot(orders){
     }
 
     this.villageOutLogic = function(buildableFields) {
-        if (this.canBuild()){
+        // if we can build, and there is something to build
+        if (this.canBuild() && buildableFields.length > 0){
             var production = village.Resources.production.slice();
             var cropProduction = production.pop();
+
+            var minProduction = Math.min.apply(Math, production);
+            var minProductionIndex = production.indexOf(minProduction);
+
             // by default build crop
             var buildResource = 3;
 
-            if(cropProduction > 10){
-                var minProduction = Math.min.apply(Math, production);
-                var minProductionIndex = production.indexOf(minProduction);
-                //build the minor production resource
+            // if the crop production is high, the minor production resource
+            if(cropProduction > 10 && cropProduction > (0.2 * minProduction)){
                 buildResource = minProductionIndex;
             }
+
+            var minLevel = 21;
+            var fieldToBuild;
             for(index in buildableFields){
                 var buildableField = buildableFields[index];
                 var fieldType = buildableField[1];
+                // if this is want we want to build
                 if(fieldType == buildResource){
-                    var fieldIndex = buildableField[0];
-                    var next_url = "build.php?id=" + (fieldIndex + 1);
-                    bot.addOrder("bot.goToPage('" + next_url + "');");
-                    bot.addOrder("bot.clickBuildButton()");
-                    break;
+                    var level = buildableField[2];
+                    // focus on the lowest level field first
+                    if(level < minLevel){
+                        minLevel = level;
+                        fieldToBuild = buildableField[0];
+                    }
                 }
+            }
+            if(fieldToBuild){
+                var next_url = "build.php?id=" + (fieldToBuild + 1);
+                bot.addOrder("bot.goToPage('" + next_url + "');");
+                bot.addOrder("bot.clickBuildButton()");
             }
         }
         if(this.orders.length == 0){
