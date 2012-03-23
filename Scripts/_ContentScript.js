@@ -31,9 +31,9 @@ var dbgtmrs = false;
 
 // Other variables
 var dataLoaded = 0;
-var dataAvailable = 11;
-if(loadOrders){
-    dataAvailable = 12;
+var dataAvailable = 14;
+if(!loadOrders){
+    dataAvailable--;
 }
 var startTime = 0;
 var timerStep = 128;
@@ -49,6 +49,7 @@ var checkMarketShowJunkResource;
 var checkMarketShowSumIncomingResources;
 var checkSendTroopsListMyVillages;
 var checkReportShowCheckAll;
+var colorBuildableFields;
 var botActivated;
 
 // Village info
@@ -183,6 +184,7 @@ function pageLoadData() {
     requestData("Data", "checkMarketShowSumIncomingResources");
     requestData("Data", "checkSendTroopsListMyVillages");
     requestData("Data", "checkReportShowCheckAll");
+    requestData("Data", "colorBuildableFields");
     requestData("Data", "botActivated");
 
     requestData("Data", "village" + globalGetActiveVillageName(), "village");
@@ -494,51 +496,55 @@ function globalGetWarehousInfo(index) {
 function globalInVillageOut() {
     if (dev) console.log("globalInVillageOut() - In Village Out calls...");
 
-    if (checkBuildBuildingResourceDifference === "On" | checkBuildBuildingResourceDifference === "null") {
-        var offset = 0;
-        $("#rx").children().each(function(index) {
-            for (var resourceIndex = 0; resourceIndex < 4; resourceIndex++) {
-                var villageMap = Enums.VillageMaps[village.VillageOut.type];
-                if ($.inArray(index, villageMap[resourceIndex]) != -1){
-                    var $this = $(this);
-                    var level = parseInt($this.attr('alt').match(/\d+/g)[0]);
-                    var next_level = "lvl" + (level + 1);
-                    var enough_resources = true;
-                    for (var cost_index = 1; cost_index < 5; cost_index++) {
-                        var FieldCostIndex = Enums.Fields[resourceIndex]
-                        var current_cost = FieldCostIndex[next_level][cost_index-1];
-                        var current_ammount = globalGetWarehousAmount(cost_index);
-                        if (current_cost > current_ammount){
-                            enough_resources = false;
-                            break;
-                        }
+    // check if there are enough resources to build fields
+    var buildableFields = []
+    var villageMap = Enums.VillageMaps[village.VillageOut.type];
+    $("#rx").children().each(function(fieldIndex) {
+        for (var resourceIndex = 0; resourceIndex < 4; resourceIndex++) {
+            if ($.inArray(fieldIndex, villageMap[resourceIndex]) != -1){
+                var $this = $(this);
+                var level = parseInt($this.attr('alt').match(/\d+/g)[0]);
+                var next_level = "lvl" + (level + 1);
+                var enough_resources = true;
+                for (var cost_index = 1; cost_index < 5; cost_index++) {
+                    var FieldCostIndex = Enums.Fields[resourceIndex]
+                    var current_cost = FieldCostIndex[next_level][cost_index-1];
+                    var current_ammount = globalGetWarehousAmount(cost_index);
+                    if (current_cost > current_ammount){
+                        enough_resources = false;
+                        break;
                     }
-                    if (enough_resources){
-                        if (bot.canBuild()){
-                            var next_url = "build.php?id=" + (index + 1);
-                            bot.addOrder("bot.goToPage('" + next_url + "');");
-                            bot.addOrder("bot.clickBuildButton()");
-                        }
-                        if (level == 0){
-                            // level 0 cannot be painted
-                            offset++;
-                            continue;
-                        }
-                        $current_circle = $("#village_map .level").eq(index - offset)
-                        $current_circle.css("font-size", "20px");
-                        $current_circle.css("color", "#ffffff");
-                        $current_circle.css("background-color", "#AAFF55");
-                        $current_circle.css("padding", "#AAFF55");
-                        $current_circle.css("border-radius", "20px");
-                        $current_circle.animate({top: "+=-2"});
-                    }
-                    break;
                 }
+                if (enough_resources){
+                    buildableFields.push([fieldIndex, resourceIndex, level]);
+                }
+                break;
             }
-        });
-        if(bot.orders.length == 0){
-            // In case of no orders, refresh the page in 5 min
-            bot.addOrder("bot.goToPageInTimeout('window.location.href', 300000);");
+        }
+    });
+
+    // call the bot operations on village out
+    bot.villageOutLogic(buildableFields);
+
+    if (colorBuildableFields === "On" | colorBuildableFields === "null") {
+        var offset = 0;
+        for (var index in buildableFields) {
+            var buildableField = buildableFields[index];
+
+            // level 0 fields cannot be painted
+            if (buildableField[2] == 0){
+                offset++;
+                continue;
+            }
+
+            var fieldIndex = buildableField[0];
+            $current_circle = $("#village_map .level").eq(fieldIndex - offset);
+            $current_circle.css("font-size", "20px");
+            $current_circle.css("color", "#ffffff");
+            $current_circle.css("background-color", "#AAFF55");
+            $current_circle.css("padding", "#AAFF55");
+            $current_circle.css("border-radius", "20px");
+            $current_circle.animate({top: "+=-2"});
         }
     }
     if (dev) console.log("globalInVillageOut() - In Village out finished successfully!");
@@ -1510,7 +1516,7 @@ function Bot(orders){
     }
 
     this.goToPageInTimeout = function(page, timeout){
-        timeout = timeout * Math.random()
+        timeout = Math.ceil(timeout * Math.random());
         setTimeout('window.location.href=' + page, timeout);
     }
 
@@ -1524,6 +1530,39 @@ function Bot(orders){
     this.canBuild = function(){
         return ($('.buildingList').length == 0 && this.orders.length == 0);
     }
-}
 
+    this.villageOutLogic = function(buildableFields) {
+        if (this.canBuild()){
+            var production = village.Resources.production.slice();
+            var cropProduction = production.pop();
+            // by default build crop
+            var buildResource = 3;
+
+            if(cropProduction > 10){
+                var minProduction = Math.min.apply(Math, production);
+                var minProductionIndex = production.indexOf(minProduction);
+                //build the minor production resource
+                buildResource = minProductionIndex;
+            }
+            for(index in buildableFields){
+                var buildableField = buildableFields[index];
+                var fieldType = buildableField[1];
+                if(fieldType == buildResource){
+                    var fieldIndex = buildableField[0];
+                    var next_url = "build.php?id=" + (fieldIndex + 1);
+                    bot.addOrder("bot.goToPage('" + next_url + "');");
+                    bot.addOrder("bot.clickBuildButton()");
+                    break;
+                }
+            }
+        }
+        if(this.orders.length == 0){
+            // In case of no orders, refresh the page in 5 min
+            bot.addOrder("bot.goToPageInTimeout('window.location.href', 300000);");
+        }
+    }
+}
+Array.prototype.min = function() {
+      return Math.min.apply(null, this)
+}
 
