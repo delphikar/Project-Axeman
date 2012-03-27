@@ -157,7 +157,7 @@ function initPages() {
 function saveData() {
     devLog("saveData - Saving started...");
 
-    _sendDataSetRequest("village" + village.name, JSON.stringify(village));
+    _sendDataSetRequest("village" + village.uid, JSON.stringify(village));
 
     bot.saveData();
 
@@ -187,10 +187,10 @@ function pageLoadData() {
     requestData("Data", "colorBuildableFields");
     requestData("Data", "botActivated");
 
-    var activeVillageName = globalGetActiveVillageName();
-    requestData("Data", "village" + activeVillageName, "village");
+    var activeVillageUId = globalGetActiveVillageUniversalIdentifier();
+    requestData("Data", "village" + activeVillageUId, "village");
     if (loadBotData){
-        requestData("Data", "botData" + activeVillageName, "botData");
+        requestData("Data", "botData" + activeVillageUId, "botData");
     }
 }
 
@@ -198,6 +198,7 @@ function pageLoadVillageData() {
     if (true || village === "null") {
         village = new Village();
         village.name = globalGetActiveVillageName();
+        village.uid = globalGetActiveVillageUniversalIdentifier();
     }
     else village = JSON.parse(village);
 
@@ -318,7 +319,7 @@ function pageGetWhere(pathname) {
 }
 
 /**
- * Filters active village from right village list
+ * Filters active village from name right village list
  *
  * @author Aleksandar Toplek
  *
@@ -331,6 +332,40 @@ function globalGetActiveVillageName() {
 
     devLog("globalGetActiveVillageName - Village name [" + name + "]");
     return name;
+}
+
+/**
+ * Filters active village Id from right village list
+ *
+ * @author Ignacio Munizaga
+ *
+ * @returns {String} id of active village
+ */
+function globalGetActiveVillageId() {
+    devLog("globalGetActiveVillageId - Getting village id...");
+
+    var id = $("li[class*='entry'] > a[class='active']").attr("href").match(/\d+/g)[0];
+
+    devLog("globalGetActiveVillageId - Village id [" + id + "]");
+
+    return id;
+}
+
+/**
+ * creates a unique identifier (through servers) of the village
+ *
+ * @author Ignacio Munizaga
+ *
+ * @returns {String} inter-server village id
+ */
+function globalGetActiveVillageUniversalIdentifier() {
+    devLog("globalGetActiveVillageUniversalIdentifier - Getting village UID...");
+
+    var uid = document.domain + globalGetActiveVillageId();
+
+    devLog("globalGetActiveVillageUniversalIdentifier - Village uid [" + uid + "]");
+
+    return uid;
 }
 
 /**
@@ -1520,7 +1555,7 @@ function Village() {
 
 function Bot(botData){
     this.orders = botData['orders'];
-    this.active = (botActivated === "On" && botData['active']);
+    this.active = ((botActivated === "On" | botActivated === "null") && botData['active']);
 
     this.addOrder = function(order){
         if (this.active){
@@ -1572,7 +1607,7 @@ function Bot(botData){
     }
 
     this.saveData = function(){
-        _sendDataSetRequest("botData" + village.name, JSON.stringify({
+        _sendDataSetRequest("botData" + village.uid, JSON.stringify({
             active: this.active,
             orders: this.orders
         }));
