@@ -23,7 +23,7 @@
 //
 //
 // Bot variables
-var loadOrders = true;
+var loadBotData = true;
 
 // Debugging variables
 var dev = true;
@@ -32,7 +32,7 @@ var dbgtmrs = false;
 // Other variables
 var dataLoaded = 0;
 var dataAvailable = 14;
-if(!loadOrders){
+if(!loadBotData){
     dataAvailable--;
 }
 var startTime = 0;
@@ -56,7 +56,7 @@ var botActivated;
 var village;
 
 // bot info
-var orders="null";
+var botData;
 var bot;
 
 //
@@ -159,7 +159,7 @@ function saveData() {
 
     _sendDataSetRequest("village" + village.name, JSON.stringify(village));
 
-    _sendDataSetRequest("orders" , JSON.stringify(bot.orders));
+    bot.saveData();
 
     devLog("saveData - All requests sent!");
 }
@@ -187,9 +187,10 @@ function pageLoadData() {
     requestData("Data", "colorBuildableFields");
     requestData("Data", "botActivated");
 
-    requestData("Data", "village" + globalGetActiveVillageName(), "village");
-    if (loadOrders){
-        requestData("Data", "orders");
+    var activeVillageName = globalGetActiveVillageName();
+    requestData("Data", "village" + activeVillageName, "village");
+    if (loadBotData){
+        requestData("Data", "botData" + activeVillageName, "botData");
     }
 }
 
@@ -205,12 +206,15 @@ function pageLoadVillageData() {
 }
 
 function pageLoadBotData() {
-    if (!loadOrders  || String(orders) === "null") {
-        orders = [];
+    if (!loadBotData  || String(botData) === "null") {
+        botData = {
+            orders: [],
+            active: false
+        };
     }
-    else orders = JSON.parse(orders);
+    else botData = JSON.parse(botData);
 
-    bot = new Bot(orders);
+    bot = new Bot(botData);
 
     devLog("pageLoadBotData - Bot loaded");
     devLog(bot);
@@ -281,6 +285,9 @@ function pageProcessAll(info) {
 
     if (checkGlobalStorageOverflowTimeout === "On" | checkGlobalStorageOverflowTimeout === "null")
         globalOverflowTimer();
+
+    if (botActivated === "On" | botActivated === "null")
+        globalShowBotOptions();
 
     if (where === "Build") globalInBuild();
     else if (where == "VillageOut") globalInVillageOut();
@@ -355,6 +362,32 @@ function globalRemoveInGameHelp() {
     $("#ingameManual").remove();
 
     devLog("globalRemoveInGameHelp - In game help removed!");
+}
+
+/**
+ * Shows options for the bot
+ *
+ * @author Ignacio Munizaga
+ */
+function globalShowBotOptions() {
+    devLog("globalShowBotOptions - Initializing...");
+
+    $villageNameDiv = $("#villageName");
+
+    $villageNameDiv.append("<div id='bot_options'><input type='checkbox' id='bot_activated''/>Activate bot</input></div>");
+
+    var $botActivated = $('#bot_activated');
+    $botActivated.attr('checked', bot.active);
+    $botOptions = $("#bot_options");
+    $botOptions.css("background-color", "#ffffff");
+    $botOptions.css("margin-top", "20px");
+    $botOptions.css("border-radius", "10px");
+    $botOptions.css("opacity", "0.9");
+    $botOptions.bind('click', function(){
+            bot.toggleBot();
+    });
+
+    devLog("globalShowBotOptions - Finished!");
 }
 
 /**
@@ -1485,9 +1518,9 @@ function Village() {
     // TODO: Culture points
 }
 
-function Bot(orders){
-    this.orders = orders;
-    this.active = (botActivated === "On" || botActivated === "null");
+function Bot(botData){
+    this.orders = botData['orders'];
+    this.active = (botActivated === "On" && botData['active']);
 
     this.addOrder = function(order){
         if (this.active){
@@ -1531,6 +1564,20 @@ function Bot(orders){
         return ($('.buildingList').length == 0 && this.orders.length == 0);
     }
 
+    this.toggleBot = function(){
+        var $botActivated = $('#bot_activated');
+        this.active = $botActivated.attr('checked');
+        this.saveData();
+        this.goToPageInTimeout('window.location.href', 15000);
+    }
+
+    this.saveData = function(){
+        _sendDataSetRequest("botData" + village.name, JSON.stringify({
+            active: this.active,
+            orders: this.orders
+        }));
+    }
+
     this.villageOutLogic = function(buildableFields) {
         // if we can build, and there is something to build
         if (this.canBuild() && buildableFields.length > 0){
@@ -1544,7 +1591,7 @@ function Bot(orders){
             var buildResource = 3;
 
             // if the crop production is high, the minor production resource
-            if(cropProduction > 10 && cropProduction > (0.2 * minProduction)){
+            if(cropProduction > 10 && cropProduction > (0.5 * minProduction)){
                 buildResource = minProductionIndex;
             }
 
@@ -1563,7 +1610,7 @@ function Bot(orders){
                     }
                 }
             }
-            if(fieldToBuild){
+            if(fieldToBuild != undefined){
                 var next_url = "build.php?id=" + (fieldToBuild + 1);
                 bot.addOrder("bot.goToPage('" + next_url + "');");
                 bot.addOrder("bot.clickBuildButton()");
