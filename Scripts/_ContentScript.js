@@ -416,8 +416,10 @@ function globalShowBotOptions() {
     $botOptions = $("#bot_options");
     $botOptions.css("background-color", "#ffffff");
     $botOptions.css("margin-top", "20px");
-    $botOptions.css("border-radius", "10px");
-    $botOptions.css("opacity", "0.9");
+    $botOptions.css("border-radius", "5px");
+    $botOptions.css("border-radius", "5px");
+    $botOptions.css("opacity", "0.95");
+    $botOptions.css("box-shadow", "1px 1px 2px #000");
     $botOptions.bind('click', function(){
             bot.toggleBot();
     });
