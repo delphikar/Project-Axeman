@@ -399,7 +399,7 @@ function Services() {
 		}
 
 		// Sends request to save profiles list so that other plugins can use it
-		var updateProfilesRequest = new Request("Background", "Data", "Profiles", "set", JSON.stringify(AvailableProfiles));
+		var updateProfilesRequest = new Request("Background", "Data", "Profiles", { Type: "set", Value: AvailableProfiles });
 		updateProfilesRequest.Send(function (response) { });
 	};
 

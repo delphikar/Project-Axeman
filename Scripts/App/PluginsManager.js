@@ -45,13 +45,12 @@ function PluginsManager() {
 	};
 
 	var RegisterPlugin = function (pluginMetadata) {
-		var activeStateRequest = new Request("Background", "Data", "PluginActive" + pluginMetadata.Name, "get", null);
-		var isLoaded = false;
+		var activeStateRequest = new Request("Background", "Data", "IsPluginActive" + pluginMetadata.Name, { Type: "get" });
 
 		// Send request and handle callback
 		activeStateRequest.Send(
 			function (response) {
-				if (response == "On" || !response) {
+				if (response == null || !response.State || response.State == "On") {
 					Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is active...");
 					Log("PluginsManager: Registering '" + pluginMetadata.Name + "'");
 
@@ -59,8 +58,6 @@ function PluginsManager() {
 					pluginObject.Register();
 				}
 				else Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is NOT active!");
-
-				var isLoaded = true;
 			}
 		);
 	};

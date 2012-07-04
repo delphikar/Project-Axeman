@@ -14,12 +14,11 @@
  * Request class to store data
  *
  *****************************************************************************/
-function Request(requestSign, requestCategory, requestName, actionName, requestData) {
-	this.requestSign = requestSign;
-	this.requestCategory = requestCategory;
-	this.requestName = requestName;
-	this.actionName = actionName;
-	this.requestData = requestData;
+function Request(requestSign, requestCategory, requestName, requestData) {
+	this.Sign = requestSign;
+	this.Category = requestCategory;
+	this.Name = requestName;
+	this.Data = requestData;
 
 	/**************************************************************************
 	 *
@@ -51,7 +50,7 @@ function RequestManager() {
 	this.Recieve = function(sign, callback) {
 		chrome.extension.onRequest.addListener(
 			function(request, sender, sendResponse) {
-				if (sign == request.requestSign) {
+				if (sign == request.Sign) {
 					callback(request, sender, sendResponse);
 				}
 			}

@@ -54,11 +54,14 @@
 			//if (obj.Flags.Featured == true) $("#PluginItem").addClass("FeaturedFlag");
 
 			// Gets active state
-			var activeState = localStorage.getItem("PluginActive" + obj.Name);
-			if (activeState === null) {
-				localStorage.setItem("PluginActive" + obj.Name, "On");
+			var activeState = null;
+			var stateObject = JSON.parse(localStorage.getItem("IsPluginActive" + obj.Name));
+			if (stateObject === null) {
+				localStorage.setItem("IsPluginActive" + obj.Name, JSON.stringify({ State: "On" }));
 				activeState = "On";
 			}
+			else activeState = stateObject.State;
+			
 
 			// Assigns that state to control
 			if (activeState == "On") $("#PluginActive" + obj.Name).attr("checked", true);
@@ -69,7 +72,7 @@
 				var currentState = $("#PluginActive" + obj.Name).attr("checked") == null ? "Off" : "On";
 				$("#PluginActiveLabel" + obj.Name + " span").text(currentState == "On" ? "On" : "Off");
 				$("#PluginImage" + obj.Name).attr("class", (currentState == "On" ? " " : "Disabled"));
-				localStorage.setItem("PluginActive" + obj.Name, currentState);
+				localStorage.setItem("IsPluginActive" + obj.Name, JSON.stringify({ State: currentState }));
 			});
 
 			// Activate initial control state

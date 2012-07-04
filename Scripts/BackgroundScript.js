@@ -29,75 +29,81 @@ function Initialize() {
 	//	alert('Your browser does not support HTML5 localStorage. Try upgrading.');
 	//}
 
+	// Sets sign to "Background"
 	requestManager.Recieve("Background", GotRequest);
 }
 
 
 // TODO: Comment function
 function GotRequest(request, sender, sendResponse) {
-	DLog("Got request { requestSign: " + request.requestSign + ", requestCategory: " + request.requestCategory + ", requestName: " + request.requestName + ", actionName: " + request.actionName + ", requestData: " + request.requestData + " }");
+	DLog("BackgroundScript: Got request category [" + request.Category + "]");
 
 	// Supports following categories
-	//		Notification
 	//		Data
-	switch (request.requestCategory) {
-		case "Notification": GotNotificationRequest(request); break;
-		case "Data": GotDataRequest(request, sendResponse); break;
+	//		Action
+	switch (request.Category) {
+		case "Data": { GotDataRequest(request, sendResponse); break; }
+		case "Action": { GotActionRequest(request); break; }
 		default:
 			console.error("BackgroundScript: Unknown category!", request);
 			break;
 	}
 }
 
-// TODO: Comment function
-function GotNotificationRequest(request) {
-	DLog("BackgroundScript: Got Notification request.");
+function GotActionRequest(request) {
+	DLog("BackgroundScript: Got Action request [" + request.Name + "]");
 
-	if (request.actionName == "Show") {
-		notificationManager.Show(request.requestData);
+	if (request.requestName == "IsFirstPlay") {
+		chrome.tabs.create({ url: GetURL("Pages/Welcome.html") }, function () { });
 	}
-}
+};
+
+// TODO: Comment function
+//function GotNotificationRequest(request) {
+//	DLog("BackgroundScript: Got Notification request.");
+
+//	if (request.actionName == "Show") {
+//		notificationManager.Show(request.requestData);
+//	}
+//}
 
 function GotDataRequest(request, response) {
-	DLog("BackgroundScript: Got Data request.");
+	DLog("BackgroundScript: Got Data request [" + request.Data.Type + "]");
 
 	// On GET request
-	if (request.actionName == "get") {
-		// Get data from storage by requestName
-		var data = localStorage.getItem(request.requestName);
-
-		Log("BackgroundScript: Data '" + request.requestName + "' GET [" + data + "]");
-
-		// Send data back in response
-		response(data);
+	if (request.Data.Type == "get") {
+		response(GetObject(request.Name));
 	}
-	// ON SET request
-	else if (request.actionName == "set") {
-		try {
-			if (request.requestName == "IsFirstPlay") {
-				chrome.tabs.create({ url: GetURL("Pages/Welcome.html") }, function () { });
-			}
-
-			// Check if data needs to be stringifyed
-			if (typeof request.requestData != "string") {
-				request.requestData = JSON.stringify(request.requestData);
-			}
-
-			// Save data to storage
-			localStorage.setItem(request.requestName, request.requestData);
-
-			Log("BackgroundScript: Data '" + request.requestName + "' SET [" + request.requestData + "]");
-		} catch (e) {
-			if (e != null) {
-				// Data wasnt successfully saved due to quota exceed so throw an error
-				Error("BackgroundScript:  Quota exceeded!");
-				Warn("BackgroundScript: " + localStorage.length);
-				alert("Quota exceded! Can't save any changes for Project Axeman");
-			}
-			else {
-				Error("BackgroundScript:  Unknown error!");
-				alert("Unknown error! Can't save any changes for Projrct Axeman");
-			}
-		}
+		// ON SET request
+	else if (request.Data.Type == "set") {
+		SetObject(request.Name, request.Data.Value);
+	}
+	else {
+		Error("BackgroundScript: Unknown Data request Type [" + request.Data.Type + "]");
+		Error(request);
 	}
 }
+
+
+var SetObject = function (key, value) {
+	try {
+		localStorage.setItem(key, JSON.stringify(value));
+		DLog("BackgroundScript: Set Data [" + key + "] Value [" + value + "]");
+	}
+	catch (exception) {
+		if (exception.name === 'QUOTA_EXCEEDED_ERR' ||
+			exception.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+			Error("BackgroundScript: Quota exceeded!");
+		}
+		else {
+			Error("BackgroundScript: Unknown error while trying to set an item!");
+		}
+	}
+};
+
+var GetObject = function (key) {
+	var value = localStorage.getItem(key);
+	var parsedValue = value && JSON.parse(value);
+	DLog("BackgroundScript: Got Data [" + key + "] Value [" + parsedValue + "]");
+	return parsedValue;
+};

@@ -18,7 +18,7 @@
  *
  *****************************************************************************/
 function App() {
-	var loadNumber = 2;
+	var loadNumber = 1;
 	var currentLoad = 0;
 
 	this.pluginsManager = new PluginsManager();
@@ -35,7 +35,11 @@ function App() {
 		$.ajaxSetup({ cache: false });
 
 		// Inject Project Axeman styles
-		$("head").append("<link href='" + GetURL("Pages/PAStyles.css") + "' type='text/css' rel='stylesheet' />");
+		var stylesheet = $("<link>");
+		stylesheet.attr("href", GetURL("Pages/PAStyles.css"));
+		stylesheet.attr("type", "text/css");
+		stylesheet.attr("rel", "stylesheet");
+		$("head").append(stylesheet);
 
 		// Initialize Modal View
 		this.InitializeModalView();
@@ -55,24 +59,24 @@ function App() {
 		Log("App: Loading...");
 
 		// Loading available user profiles
-		LoadIsFirstPlay();
+		//LoadIsFirstPlay();
 		LoadProfiles();
 	};
 
-	var LoadIsFirstPlay = function () {
-		var isFirstPlayRequest = new Request("Background", "Data", "IsFirstPlay", "get", null);
-		isFirstPlayRequest.Send(function (response) {
-			console.warn(response);
+	//var LoadIsFirstPlay = function () {
+	//	var isFirstPlayRequest = new Request("Background", "Data", "IsFirstPlay", "get");
+	//	isFirstPlayRequest.Send(function (response) {
+	//		console.warn(response);
 
-			if (IsNullOrEmpty(response)) {
-				var setFirstPlayRequest = new Request("Background", "Data", "IsFirstPlay", "set", "true");
-				setFirstPlayRequest.Send();
-			}
+	//		if (IsNullOrEmpty(response)) {
+	//			var setFirstPlayRequest = new Request("Background", "Action", "CheckFirstPlay");
+	//			setFirstPlayRequest.Send();
+	//		}
 
-			// Calls for loading finished for this request
-			CheckFinishedLoading();
-		});
-	};
+	//		// Calls for loading finished for this request
+	//		CheckFinishedLoading();
+	//	});
+	//};
 
 	var LoadProfiles = function () {
 		/// <summary>
@@ -81,7 +85,7 @@ function App() {
 
 		DLog("App: Requesting profiles list...");
 
-		var profilesRequest = new Request("Background", "Data", "Profiles", "get", null);
+		var profilesRequest = new Request("Background", "Data", "Profiles", { Type: "get" });
 		profilesRequest.Send(function (response) {
 			// Check if response is valid
 			if (IsNullOrEmpty(response)) {
@@ -92,7 +96,7 @@ function App() {
 			}
 			else {
 				// Parse response
-				AvailableProfiles = JSON.parse(response) || new Array();
+				AvailableProfiles = response || new Array();
 
 				DLog("App: Recieved [" + AvailableProfiles.length + "] profile(s)");
 			}
@@ -150,22 +154,6 @@ function App() {
 
 	/**************************************************************************
 	 *
-	 * Test method
-	 *
-	 * Start this only in development mode
-	 *
-	 *************************************************************************/
-	this.TestFunction = function () {
-		// NotificationManager test
-		var imageURL = GetImageURL("Notifications", "ProjectAxeman.png");
-		var notification = new Notification(imageURL, "Project Axeman", "Test message", 1000);
-		var request = new Request("Background", "Notification", "Simple", "Show", notification);
-		request.Send(null);
-	};
-
-
-	/**************************************************************************
-	 *
 	 * Initializes Moval View
 	 *
 	 * This function will inject modalview <div> tag onto page. This will
@@ -177,8 +165,11 @@ function App() {
 		Log("App: Initializing ModalView");
 
 		// Appends modal view 
-		var source = "<div id='PAModalView' class='ModalView'></div>";
-		$("body").append(source);
+		var modalViewElement = $("<div>");
+		modalViewElement.attr("id", "PAModelView");
+		modalViewElement.addClass("ModalView");
+		//var source = "<div id='PAModalView' class='ModalView'></div>";
+		$("body").append(modalViewElement);
 
 		// Attach function to click and keyup events
 		// so that we close modalview when user clicks
