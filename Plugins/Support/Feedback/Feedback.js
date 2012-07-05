@@ -7,23 +7,16 @@
  * Created on:
  * 		08.06.2012.
  *
- * Notes:
- *			This plugin allows user to send feedback for Project Axeman 
- *		extension since it's still in beta faze.
- *
  *****************************************************************************/
 
-/******************************************************************************
- *
- * Feedback
- *
- *****************************************************************************/
+/// <summary>
+/// Feedback plugin class
+/// </summary>
 function Feedback() {
-	/**************************************************************************
-	 *
-	 * Registers Feedback plugin
-	 *
-	 *************************************************************************/
+
+	/// <summary>
+	/// Registers Feedback plugin
+	/// </summary>
 	this.Register = function () {
 		if (!IsLogedIn) {
 			Log("Feedback: User isn't loged in...");
@@ -41,13 +34,20 @@ function Feedback() {
 		$("#myGameLinkHeaderWrapper").remove();
 
 		// On mouse over/leave grayscale effect
-		$("#PAFeedback").mouseenter(function () { $("#PAFeedback").attr("style", ""); }).mouseleave(function () { $("#PAFeedback").attr("style", "-webkit-filter:grayscale(1);"); });
+		$("#PAFeedback").mouseenter(function () {
+			$("#PAFeedback").css("-webkit-filter", "grayscale(0)");
+		});
+		$("#PAFeedback").mouseleave(function () {
+			$("#PAFeedback").css("-webkit-filter", "grayscale(1)");
+		});
 
 		// Show popup on feedback image click
 		$("#PAFeedback").click(function () {
-			$.get(GetURL("Plugins/Support/Feedback/FeedbackForm.html"), function (response) {
-				(new App()).ShowModalView(response);
-			});
+			$.get(GetURL("Plugins/Support/Feedback/FeedbackForm.html"),
+				function (response) {
+					app.ShowModalView(response);
+				}
+			);
 		});
 	};
 }
@@ -57,7 +57,7 @@ var FeedbackMetadata = {
 	Name: "Feedback",
 	Alias: "Feedback",
 	Category: "Support",
-	Version: "0.1.1.1",
+	Version: "0.1.1.2",
 	Description: "Send us some feedback so we can quickly respond to any problems or ideas.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

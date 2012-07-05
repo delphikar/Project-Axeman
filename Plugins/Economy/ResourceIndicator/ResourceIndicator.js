@@ -7,50 +7,46 @@
  * Created on:
  * 		02.07.2012.
  *
- * Notes:
- *			TODO
- *
  *****************************************************************************/
 
-
-// TODO Review na comment code
+/// <summary>
+/// Informs user about warehouse and granary 
+/// overflow by showing time untill filled under
+/// resources bar
+/// </summary>
 function ResourceIndicator() {
-/**
- * Informs about warehouse and granary overflow
- *
- * @author Aleksandar Toplek
- */
-	this.Register = function () {
-		if (!IsLogedIn) return;
 
-		if (!MatchPages(
-			Enums.TravianPages.Player,
-			Enums.TravianPages.VillageOut,
-			Enums.TravianPages.VillageIn,
-			Enums.TravianPages.VillageView,
-			Enums.TravianPages.Build,
-			Enums.TravianPages.Map,
-			Enums.TravianPages.MapPosition,
-			Enums.TravianPages.Statistics,
-			Enums.TravianPages.Reports,
-			Enums.TravianPages.Messages,
-			Enums.TravianPages.Alliance,
-			Enums.TravianPages.HeroLook,
-			Enums.TravianPages.HeroInventory,
-			Enums.TravianPages.HeroAdventures,
-			Enums.TravianPages.HeroAuctions,
-			Enums.TravianPages.Plus,
-			Enums.TravianPages.Help)) {
+	/// <summary>
+	/// Initializes object
+	/// </summary>
+	this.Register = function () {
+		if (!IsLogedIn) {
+			Log("ResourcesIndicator: User isn't loged in...");
 			return;
 		}
-		//devLog("globalOverflowTimer - Initializing...");
 
+		if (MatchPages(
+			Enums.TravianPages.Home,
+			Enums.TravianPages.Login,
+			Enums.TravianPages.Logout)) return;
+
+		Log("ResourcesIndicator: Registering ResourceIndicator plugin...");
+
+		// Appends calculated time to page
 		$("#res").children().each(function (index) {
 			// Skips crop consumption
 			if (index !== 4) {
 				var actualProduction = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
+
+				// Create element to append
+				var element = $("<div><b><p>");
+				element.css("background-color", "#EFF5FD");
+				$("p", element).attr("id", "ResourceIndicator" + index);
+				$("p", element).css("text-align", "right");
+				$("p", element).html("never");
+
 				if (actualProduction == 0) {
-					$(this).append("<div style='background-color: #EFF5FD;'><b><p id='ResourceIndicator" + index + "' style='text-align: right;'>" + "never" + "</p></b></div>");
+					$(this).append(element);
 				}
 				else {
 					var current = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[index];
@@ -61,26 +57,28 @@ function ResourceIndicator() {
 							ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[0];
 						var timeLeft = (max - current) / actualProduction;
 
-						$(this).append("<div style='background-color: #EFF5FD;'><b><p id='ResourceIndicator" + index + "' style='text-align: right;'>" + ConvertHoursToTime(timeLeft) + "</p></b></div>");
+						$("p", element).html(ConvertHoursToTime(timeLeft));
+						$(this).append(element);
 					}
 					else {
 						var timeLeft = current / Math.abs(actualProduction);
 
-						$(this).append("<div style='background-color: #EFF5FD;  color:red !important; border: 1px solid red;'><b><p id='ResourceIndicator" + index + "' style='text-align: right;'>" + _hoursToTime(timeLeft) + "</p></b></div>");
-
+						element.css("color", "red !important");
+						element.css("border", "1px solid red");
+						$("p", element).html(ConvertHoursToTime(timeLeft));
+						$(this).append(element);
 					}
 				}
-				//devLog("globalOverflowTimer - l" + (index + 1) + " appended!");
-
+				DLog("ResourcesIndicator: Appended to resource [l" + (index + 1) + "]");
 			}
 		});
 
+		// Initial refresh
 		RefreshFunction("ResourceIndicator");
 
-		setInterval(RefreshFunction, 1000, "ResourceIndicator");
-		//devLog("globalOverflowTimer - Timer registered!");
-
-		//devLog("globalOverflowTimer - Finished!");
+		var interval = 1000;
+		setInterval(RefreshFunction, interval, "ResourceIndicator");
+		DLog("ResourcesIndicator: Timer registered to interval [" + interval + "]");
 	};
 
 	/// <summary>
@@ -97,13 +95,14 @@ function ResourceIndicator() {
 				// Get current time from element
 				var hours = ConvertTimeToHours($(this).text());
 
-				//if (dbgtmrs) devLog("globalOverflowTimerFunction - l" + (index + 1) + "   " + $(this).text() + "    " + hours);
-
 				// Not updating if 00:00:00
 				if (hours > 0) {
 					// Subtracts one second and writes new text to element
 					hours -= 0.0002777006777777; // 1 s -> 1/~3600 (3601 because of calculation error)
 					$(this).html(ConvertHoursToTime(hours));
+				}
+				else if (hours < 0) {
+					hours = 0;
 				}
 
 				// Changes element style (color) depending on current time state
@@ -125,7 +124,7 @@ var ResourceIndicatorMetadata = {
 	Name: "ResourceIndicator",
 	Alias: "Resource Indicator",
 	Category: "Economy",
-	Version: "0.2.0.1",
+	Version: "0.2.0.2",
 	Description: "Shows how long is needed for warehouse and granary to fill up to its maximum capacity and alerts accordingly.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

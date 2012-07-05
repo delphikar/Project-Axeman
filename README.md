@@ -46,7 +46,10 @@ Collaborators
 
 ## Changelog
 
-- **Version 0.2.0** _(03.07.2012.)_
+- **Version 0.2.0.1** _(05.07.2012.)_
+	- 
+
+- **Version 0.2** _(03.07.2012.)_
 
 	- README and LICENSE file changes	
 	- Merge pull request #2 from AleksandarDev/features … Features

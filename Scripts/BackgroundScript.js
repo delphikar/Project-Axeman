@@ -9,53 +9,135 @@
  *
  *****************************************************************************/
 
- // Public Definition
-var BackgroundScript = {
-	"Initialize": 		Initialize
-};
+var backgroundScript = new BackgroundScript();
+backgroundScript.Initialize();
 
-// Variables
-notificationManager = new NotificationManager();
-requestManager = new RequestManager();
+/// <summary>
+/// Background scipt is class that has all chrome.* permissions and can do actions that contentscript can't
+/// </summary>
+function BackgroundScript() {
+	var notificationManager = new NotificationManager();
+	var requestManager = new RequestManager();
+	var isLocalStorageSupported = true;
 
+	/// <summary>
+	/// Initialize class variables
+	/// </summary>
+	this.Initialize = function () {
+		// Check if localStorage is supported
+		if (typeof (localStorage) == 'undefined') {
+			isLocalStorageSupported = false;
+			Error("BackgroundScript: localStorage not found! Try updating your browser!");
+		}
 
-// This is called since there is no launcher
-// as there is for App script
-BackgroundScript.Initialize();
+		// Attach listener to "Background" request sign
+		requestManager.Recieve("Background", GotRequest);
+	};
 
-// TODO: Comment function 
-function Initialize() {
-	//if (typeof(localStorage) == 'undefined') {
-	//	alert('Your browser does not support HTML5 localStorage. Try upgrading.');
-	//}
+	/// <summary>
+	/// Handles requests for BackgroundScript
+	/// </summary>
+	/// <param name="request">Request object</param>
+	/// <param name="sender">Sender object</param>
+	/// <param name="sendResponse">sendResponse function</param>
+	var GotRequest = function (request, sender, sendResponse) {
+		DLog("BackgroundScript: Got request category [" + request.Category + "]");
 
-	// Sets sign to "Background"
-	requestManager.Recieve("Background", GotRequest);
-}
+		// Supports following categories
+		//		Data
+		//		Action
+		switch (request.Category) {
+			case "Data": {
+				GotDataRequest(request, sendResponse);
+				break;
+			}
+			case "Action": {
+				GotActionRequest(request);
+				break;
+			}
+			default: {
+				Error("BackgroundScript: Unknown category [" + request.Category  + "]");
+				break;
+			}
+		}
+	};
 
+	/// <summary>
+	/// Handles action requests
+	/// </summary>
+	/// <param name="request">Request object</param>
+	var GotActionRequest = function (request) {
+		DLog("BackgroundScript: Got Action request [" + request.Name + "]");
 
-// TODO: Comment function
-function GotRequest(request, sender, sendResponse) {
-	DLog("BackgroundScript: Got request category [" + request.Category + "]");
+		if (request.Name == "IsFirstPlay") {
+			ActionIsFirstPlay();
+		}
+		//if (request.requestName == "IsFirstPlay") {
+		//	chrome.tabs.create({ url: GetURL("Pages/Welcome.html") }, function () { });
+		//}
+	};
 
-	// Supports following categories
-	//		Data
-	//		Action
-	switch (request.Category) {
-		case "Data": { GotDataRequest(request, sendResponse); break; }
-		case "Action": { GotActionRequest(request); break; }
-		default:
-			console.error("BackgroundScript: Unknown category!", request);
-			break;
-	}
-}
+	/// <summary>
+	/// Handles data requests
+	/// </summary>
+	/// <param name="request">Request object</param>
+	/// <param name="sendResponse">Response function</param>
+	var GotDataRequest = function (request, sendResponse) {
+		DLog("BackgroundScript: Got Data request [" + request.Data.Type + "]");
 
-function GotActionRequest(request) {
-	DLog("BackgroundScript: Got Action request [" + request.Name + "]");
+		if (request.Data.Type == "get") {
+			sendResponse(GetObject(request.Name));
+		}
+		else if (request.Data.Type == "set") {
+			SetObject(request.Name, request.Data.Value);
+		}
+		else {
+			Error("BackgroundScript: Unknown Data request Type [" + request.Data.Type + "]");
+			Error(request);
+		}
+	};
 
-	if (request.requestName == "IsFirstPlay") {
-		chrome.tabs.create({ url: GetURL("Pages/Welcome.html") }, function () { });
-	}
+	var ActionIsFirstPlay = function () {
+		if (!GetObject("IsFirstPlay")) {
+			chrome.tabs.create({ url: GetURL("Pages/Welcome.html") });
+			SetObject("IsFirstPlay", { State: "AlreadyPlayed" });
+		};
+	};
+	
+	/// <summary>
+	/// Sets object to localStorage as <key, value> pair
+	/// This function will automatically stringify given object.
+	/// </summary>
+	/// <param name="key">Key object</param>
+	/// <param name="value">Value object</param>
+	var SetObject = function (key, value) {
+		try {
+			localStorage.setItem(key, JSON.stringify(value));
+			DLog("BackgroundScript: Set Data [" + key + "] Value [" + value + "]");
+		}
+		catch (exception) {
+			if (exception.name === 'QUOTA_EXCEEDED_ERR' ||
+				exception.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+				Error("BackgroundScript: Quota exceeded! Clear localStorage to solve problem. WARNING: Clearing localStorage will delete all user data.");
+			}
+			else {
+				Error("BackgroundScript: Unknown error while trying to set an item!");
+			}
+		}
+	};
+
+	/// <summary>
+	/// Gets object from localStorage as value for given key
+	/// This function will automatically parse localStorage value and return object type
+	/// </summary>
+	/// <param name="key">Key object</param>
+	/// <returns>Object from localStorage that corresponds to given key</returns>
+	var GetObject = function (key) {
+		var value = localStorage.getItem(key);
+		var parsedValue = value && JSON.parse(value);
+		DLog("BackgroundScript: Got Data [" + key + "] Value [" + parsedValue + "]");
+		return parsedValue;
+	};
 };
 
 // TODO: Comment function
@@ -66,44 +148,3 @@ function GotActionRequest(request) {
 //		notificationManager.Show(request.requestData);
 //	}
 //}
-
-function GotDataRequest(request, response) {
-	DLog("BackgroundScript: Got Data request [" + request.Data.Type + "]");
-
-	// On GET request
-	if (request.Data.Type == "get") {
-		response(GetObject(request.Name));
-	}
-		// ON SET request
-	else if (request.Data.Type == "set") {
-		SetObject(request.Name, request.Data.Value);
-	}
-	else {
-		Error("BackgroundScript: Unknown Data request Type [" + request.Data.Type + "]");
-		Error(request);
-	}
-}
-
-
-var SetObject = function (key, value) {
-	try {
-		localStorage.setItem(key, JSON.stringify(value));
-		DLog("BackgroundScript: Set Data [" + key + "] Value [" + value + "]");
-	}
-	catch (exception) {
-		if (exception.name === 'QUOTA_EXCEEDED_ERR' ||
-			exception.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-			Error("BackgroundScript: Quota exceeded!");
-		}
-		else {
-			Error("BackgroundScript: Unknown error while trying to set an item!");
-		}
-	}
-};
-
-var GetObject = function (key) {
-	var value = localStorage.getItem(key);
-	var parsedValue = value && JSON.parse(value);
-	DLog("BackgroundScript: Got Data [" + key + "] Value [" + parsedValue + "]");
-	return parsedValue;
-};

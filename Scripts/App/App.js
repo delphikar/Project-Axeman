@@ -9,25 +9,18 @@
  *
  ******************************************************************************/
 
-/******************************************************************************
- *
- * Application class
- *
- * Initialize object of this class to start
- * using extension on current website
- *
- *****************************************************************************/
+/// <summary>
+/// App class
+/// This is start class for content script
+/// </summary>
 function App() {
 	var loadNumber = 1;
 	var currentLoad = 0;
+	var pluginsManager = new PluginsManager();
 
-	this.pluginsManager = new PluginsManager();
-
-	/**************************************************************************
-	 *
-	 * Application entry point
-	 * 
-	 *************************************************************************/
+	/// <summary>
+	/// Initializes App object
+	/// </summary>
 	this.Initialize = function () {
 		Log("App: Initialization started...");
 
@@ -49,40 +42,26 @@ function App() {
 		this.GetActivePage();
 
 		this.Load();
+
+		// Send request to check if this is first play
+		var requestIsFirstPlay = new Request("Background", "Action", "IsFirstPlay");
+		requestIsFirstPlay.Send();
 	};
 
+	/// <summary>
+	/// Loads all variables needed for further initialization
+	/// </summary>
 	this.Load = function () {
-		/// <summary>
-		/// Loads all variables needed for further initialization
-		/// </summary>
-
 		Log("App: Loading...");
 
 		// Loading available user profiles
-		//LoadIsFirstPlay();
 		LoadProfiles();
 	};
 
-	//var LoadIsFirstPlay = function () {
-	//	var isFirstPlayRequest = new Request("Background", "Data", "IsFirstPlay", "get");
-	//	isFirstPlayRequest.Send(function (response) {
-	//		console.warn(response);
-
-	//		if (IsNullOrEmpty(response)) {
-	//			var setFirstPlayRequest = new Request("Background", "Action", "CheckFirstPlay");
-	//			setFirstPlayRequest.Send();
-	//		}
-
-	//		// Calls for loading finished for this request
-	//		CheckFinishedLoading();
-	//	});
-	//};
-
+	/// <summary>
+	/// Sends request and loads available user profiles
+	/// </summary>
 	var LoadProfiles = function () {
-		/// <summary>
-		/// Sends request and loads available user profiles
-		/// </summary>
-
 		DLog("App: Requesting profiles list...");
 
 		var profilesRequest = new Request("Background", "Data", "Profiles", { Type: "get" });
@@ -106,36 +85,32 @@ function App() {
 		});
 	};
 
+	/// <summary>
+	/// Increments number of current loads and checks if it is equal 
+	/// to needed loads, if so calls initialization finalization
+	/// </summary>
 	var CheckFinishedLoading = function () {
-		/// <summary>
-		/// Increments number of current loads and checks if it is equal 
-		/// to needed loads, if so calls initialization finalization
-		/// </summary>
-
 		DLog("App: Loaded [" + (currentLoad + 1) + " of " + loadNumber + "]");
 
 		if (++currentLoad >= loadNumber) {
 			// If loading finished, finalize initialization
-			app.InitializeFinalize();
+			InitializationFinalize();
 		}
 	};
 
-	this.InitializeFinalize = function () {
-		/// <summary>
-		/// Finazlizes initialization process
-		/// </summary>
-
+	/// <summary>
+	/// Finazlizes initialization process
+	/// </summary>
+	var InitializationFinalize = function () {
 		Log("App: Finalizing initialization...");
 
 		// Register plugins
-		this.pluginsManager.Initialize();
+		pluginsManager.Initialize();
 	};
 
-	/**************************************************************************
-	 *
-	 * Gets pathnames of current page and saves it to variables
-	 *
-	 **************************************************************************/
+	/// <summary>
+	/// Gets pathnames of current page and saves it to variables
+	/// </summary>
 	this.GetActivePage = function () {
 		Log("App: Reading current page...");
 
@@ -152,15 +127,12 @@ function App() {
 		ActivePageQuery = currentQuery;
 	};
 
-	/**************************************************************************
-	 *
-	 * Initializes Moval View
-	 *
-	 * This function will inject modalview <div> tag onto page. This will
-	 * be used to slide in/out pages so that user can change settings
-	 * or see some additional information.
-	 *
-	 *************************************************************************/
+	/// <summary>
+	/// Initializes Moval View
+	/// This function will inject modalview <div> tag onto page. This will
+	/// be used to slide in/out pages so that user can change settings
+	/// or see some additional information.
+	/// </summary>
 	this.InitializeModalView = function () {
 		Log("App: Initializing ModalView");
 
@@ -168,7 +140,6 @@ function App() {
 		var modalViewElement = $("<div>");
 		modalViewElement.attr("id", "PAModelView");
 		modalViewElement.addClass("ModalView");
-		//var source = "<div id='PAModalView' class='ModalView'></div>";
 		$("body").append(modalViewElement);
 
 		// Attach function to click and keyup events
@@ -189,13 +160,11 @@ function App() {
 		Log("App: ModalView injected to the page");
 	};
 
-	/**************************************************************************
-	 *
-	 * Slides in ModalView if it is hidden and shows given content on it
-	 *
-	 * Returns true if modalview is successfully shown
-	 *
-	 *************************************************************************/
+	/// <summary>
+	/// Slides in ModalView if it is hidden and shows given content on it
+	/// </summary>
+	/// <param name="content">Content string</param>
+	/// <returns>Returns true if modalview is successfully shown</returns>
 	this.ShowModalView = function (content) {
 		// Return if modelview is already active
 		if (app.isModalViewActive == true) {
@@ -215,13 +184,10 @@ function App() {
 		return true;
 	};
 
-	/**************************************************************************
-	 *
-	 * Slides out ModalView if it is shown
-	 *
-	 * Returns true if modalview is successfully hidden
-	 *
-	 *************************************************************************/
+	/// <summary>
+	/// Slides out ModalView if it is shown
+	/// </summary>
+	/// <returns>Returns true if modalview is successfully hidden</returns>
 	this.HideModalView = function () {
 		// Return if modalview is already hidden
 		if (app.isModalViewActive == false) {
