@@ -47,7 +47,13 @@ Collaborators
 ## Changelog
 
 - **Version 0.2.0.1** _(05.07.2012.)_
-	- 
+	- Fixed resources production crawling (now from script) on almost every page
+	- Optimized crawling villages list
+	- Updated ResourceCalculator
+	- Updated ResourceIndicator
+	- Added "Feedback" text on top of feedback page
+	- Updated BackgroundScript
+	- BackgroundScript now supports Action category
 
 - **Version 0.2** _(03.07.2012.)_
 
