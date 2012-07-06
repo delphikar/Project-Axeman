@@ -15,7 +15,7 @@
 			}
 
 			.Container {
-				width: 700px;
+				width: 720px;
 				margin: 20px auto auto auto;
 				background: white;
 				-webkit-box-shadow: 0 0 20px #AAA;
@@ -143,7 +143,83 @@
 			.ClearBoth {
 				clear: both;
 			}
+
+			.Gallery {
+				height: 400px;
+				width: 640px;
+				
+				background: #FAFAFA;
+				-webkit-box-shadow: 0 0 20px #AAA;
+				
+				margin-bottom: 30px;
+				
+				overflow: hidden;
+			}
+				.Gallery > ul {
+					padding: 0;
+					margin: 0;
+				}
+					.Gallery > ul > li {
+						display: block;						
+					}
+						.Gallery > ul > li img {
+							width: 640px;
+							height: 400px;
+						}
+						.Gallery > ul > li > div {
+							float:left;
+							position: absolute;
+							margin-top: -150px;
+							padding: 10px 30px 10px 15px;
+							
+							font-size: 24px;
+							color: #EEE;
+							background: #333;
+							
+							opacity: 0.9;
+							
+							max-width: 380px;
+						}
+						.Gallery > ul > li > div > div {
+							font-size: 16px;
+						}
+			#PreviousInGallery,	
+			#NextInGallery {
+				position: absolute;
+				margin-top: -220px;
+				padding: 5px 5px 5px 7px;
+
+				color: #EEE;
+				background: #333;
+				opacity: 0.4;
+				
+				font-family: Webdings;
+				font-size: 24px;
+				
+				cursor: pointer;
+			}
+				#PreviousInGallery:hover,
+				#NextInGallery:hover {
+					opacity: 1;
+				}
+			#NextInGallery {
+				float:left;
+				margin-left: 584px;
+			}
+			#PreviousInGallery {
+				float:left;
+				margin-left: 20px;
+			}
 	  </style>
+
+		<script type="text/javascript">
+			function ScrollToPlugin(name) {
+				$('#PluginsMenuItem').click();
+				$('html, body').animate({
+					scrollTop: $("#" + name).offset().top
+				}, 2000);
+			};
+		</script>
 	</head>
 
 	<body>
@@ -185,6 +261,71 @@
 					Google Chrome Open Source extension for Travian 4 that adds some "missing" features to the game by <a href="http://github.com/JustBuild">JustBuild Development</a>
 				</div>
 
+				<!-- Gallery -->
+				<div class="Gallery">
+					<ul>
+						<li>
+							<a href="javascript:ScrollToPlugin('PluginResourceIndicator');"><img src="Resources/Images/Gallery/Capture_1.png" /></a>
+							<div>Resource Indicator
+								<div>Plugin that will warn you when there is no more space in the warehouse or granary</div>
+							</div>
+						</li>
+						<li style="display:none">
+							<img src="Resources/Images/Gallery/Capture_2.png" />
+							<div>Game Launcher
+								<div>Gives you quick acces to all your games</div>
+							</div>
+						</li>
+						<li style="display:none">
+							<a href="javascript:ScrollToPlugin('ResourceCalculator');"><img src="Resources/Images/Gallery/Capture_3.png" /></a>
+							<div>Resource Calculator - Buildings
+								<div>Calculates needed resource to build field or building and shows how much time is needed to collect that amount of resources</div>
+							</div>
+						</li>
+						<li style="display:none">
+							<a href="javascript:ScrollToPlugin('ResourceCalculator');"><img src="Resources/Images/Gallery/Capture_4.png" /></a>
+							<div>Resource Calculator - Units
+								<div>Shows you how much of each resource is needed to train given amount of units</div>
+							</div>
+						</li>
+						<li style="display:none">
+							<a href="javascript:ScrollToPlugin('Feedback');"><img src="Resources/Images/Gallery/Capture_5.png" /></a>
+							<div>Feedback
+								<div>Send us feedback directly from game using this plugin</div>
+							</div>
+						</li>
+						<li style="display:none">
+							<img src="Resources/Images/Gallery/Capture_6.png" />
+							<div>Plugins Manager
+								<div>Customize your game by enabling or disabling individual plugins</div>
+							</div>
+						</li>
+					</ul>
+					<div id="PreviousInGallery"><span>3</span></div>
+					<div id="NextInGallery"><span>4</span></div>
+					<script type="text/javascript">
+						function HandleImageMove(next) {
+							var galleryItems = $(".Gallery li")
+							for (var index = 0; index < galleryItems.length; index++) {
+								var element = $(galleryItems[index]);
+								if (element.css("display") != "none") {
+									element.css("display", "none");
+									var nextIndex = next ? index + 1 : index - 1;
+									if (nextIndex < 0) nextIndex += galleryItems.length;
+									var nextIndexFixed = nextIndex % galleryItems.length;
+									console.warn(nextIndexFixed);
+									$(galleryItems[nextIndexFixed]).css("display", "block");
+
+									break;
+								}
+							}
+						};
+
+						$("#NextInGallery").click(function () { HandleImageMove(true); });
+						$("#PreviousInGallery").click(function () { HandleImageMove(false); });
+					</script>
+				</div>
+
 				<p>
 					Project Axeman is JavaScript extension for <a href="http://google.com/chrome">Google Chrome</a> that will inject custom script to Travian browser game page.
 					Those custom scripts will add additional functionality to the game. It is customizable and easy to use. This means that you can enable or disable 
@@ -192,11 +333,11 @@
 				</p>
 				<p>
 					This extension works using <i>plugins</i>. There are may plugins available to customize your game. You can easily enable or diasble individual plugins
-					by going into Plugin Manager and click on On/Off button under each plugin's image. Those plugins put additional functionality in to the game. They inject
+					by going into Plugins Manager and click on On/Off button under each plugin's image. Those plugins put additional functionality in to the game. They inject
 					custom scripts and can change page layout so that they help you be the best in the game.
 				</p>
 			
-				<!-- Download -->
+				<!-- Download part of page-->
 				<h2>Download</h2>
 				<p>
 					You can get extension from 
