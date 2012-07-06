@@ -160,7 +160,7 @@ function ConvertTimeToHours(time) {
 	var hours = parseInt(split[0], 10) + (parseInt(split[1], 10) / 60) + (parseInt(split[2], 10) / 3600);
 
 	return hours;
-}
+};
 
 /**
  * Transforms given hours number to time string
@@ -175,7 +175,6 @@ function ConvertTimeToHours(time) {
  * @private
  */
 function ConvertHoursToTime(hours) {
-
 	var _hours = hours;
 	_hours = Math.floor(_hours);
 	hours -= _hours;
@@ -192,4 +191,11 @@ function ConvertHoursToTime(hours) {
 	return (_hours < 10 ? '0' + _hours : _hours) + ":" +
     (_minutes < 10 ? '0' + _minutes : _minutes) + ":" +
     (_seconds < 10 ? '0' + _seconds : _seconds);
-}
+};
+
+function EnsureParams(object, required) {
+	// TODO implement
+	for (var index = 0; index < args.length; index++) {
+		console.warn(args[index]);
+	}
+};

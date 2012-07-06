@@ -138,7 +138,7 @@ function App() {
 
 		// Appends modal view 
 		var modalViewElement = $("<div>");
-		modalViewElement.attr("id", "PAModelView");
+		modalViewElement.attr("id", "PAModalView");
 		modalViewElement.addClass("ModalView");
 		$("body").append(modalViewElement);
 
