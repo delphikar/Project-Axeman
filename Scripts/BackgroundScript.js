@@ -69,12 +69,13 @@ function BackgroundScript() {
 	var GotActionRequest = function (request) {
 		DLog("BackgroundScript: Got Action request [" + request.Name + "]");
 
-		if (request.Name == "IsFirstPlay") {
-			ActionIsFirstPlay();
+		if (IsNullOrEmpty(request.Name)) {
+			Error("BackgroundScript: Invalid action name [" + request.Name + "]");
 		}
-		//if (request.requestName == "IsFirstPlay") {
-		//	chrome.tabs.create({ url: GetURL("Pages/Welcome.html") }, function () { });
-		//}
+		else if (!ActionsAvailable[request.Name]) {
+			Error("BackgroundScript: Unknown action [" + request.Name + "]");
+		}
+		else ActionsAvailable[request.Name]();
 	};
 
 	/// <summary>
@@ -97,11 +98,18 @@ function BackgroundScript() {
 		}
 	};
 
+	/// <summary>
+	/// Handles IsFirstPlay action request
+	/// </summary>
 	var ActionIsFirstPlay = function () {
 		if (!GetObject("IsFirstPlay")) {
 			chrome.tabs.create({ url: GetURL("Pages/Welcome.html") });
 			SetObject("IsFirstPlay", { State: "AlreadyPlayed" });
 		};
+	};
+
+	var ActionsAvailable = {
+		IsFirstPlay: ActionIsFirstPlay
 	};
 	
 	/// <summary>

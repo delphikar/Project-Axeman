@@ -35,7 +35,7 @@ Models.Village = function () {
 
 	// Note: On any *.travian.*/... page (except help)
 	this.Resources = {
-		Storage: [0, 0],
+		Storage: [0, 0, 0, 0],
 		Stored: [0, 0, 0, 0],
 
 		Production: [0, 0, 0, 0],

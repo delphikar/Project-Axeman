@@ -44,8 +44,7 @@ function App() {
 		this.Load();
 
 		// Send request to check if this is first play
-		var requestIsFirstPlay = new Request("Background", "Action", "IsFirstPlay");
-		requestIsFirstPlay.Send();
+		(new Request("Background", "Action", "IsFirstPlay")).Send();
 	};
 
 	/// <summary>

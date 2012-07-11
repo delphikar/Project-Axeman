@@ -105,6 +105,14 @@ function DLog(message) {
 	}
 };
 
+/// <summary>
+/// Writes and warning containing a copy of given object
+/// </summary>
+/// <param name="obj">Object to debug</param>
+function Debug(obj) {
+	Warn(JSON.parse(JSON.stringify(obj)));
+};
+
 
 function GetKeyByValue(obj, value) {
 	/// <summary>

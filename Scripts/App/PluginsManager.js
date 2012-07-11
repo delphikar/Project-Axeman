@@ -36,12 +36,15 @@ function PluginsManager() {
 	this.RegisterPlugins = function (pluginsToRegister) {
 		DLog("PluginsManager: Registering [" + pluginsToRegister.length + "] plugins");
 
-		$.each(
-			pluginsToRegister,
-			function (index, obj) {
-				RegisterPlugin(obj);
+		$.each(pluginsToRegister, function (index, obj) {
+			// If plugins is internal don't load it if development mode is off
+			if (obj.Flags.Internal && !IsDevelopmentMode) {
+				DLog("PluginsManager: Internal plugin [" + obj.Name  + "]");
+				return;
 			}
-		);
+
+			RegisterPlugin(obj);
+		});
 	};
 
 	var RegisterPlugin = function (pluginMetadata) {

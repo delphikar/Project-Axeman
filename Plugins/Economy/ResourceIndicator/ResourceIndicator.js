@@ -52,9 +52,7 @@ function ResourceIndicator() {
 					var current = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[index];
 
 					if (actualProduction > 0) {
-						var max = index == 3 ?
-							ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[1] :
-							ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[0];
+						var max = ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[index]
 						var timeLeft = (max - current) / actualProduction;
 
 						$("p", element).html(ConvertHoursToTime(timeLeft));

@@ -75,9 +75,8 @@ function Services() {
 
 			// If storage, else it's crop production/consumtion
 			if (index < 4) {
-				// Set Storage mac value
-				if (index == 0) activeVillage.Resources.Storage[0] = storageMax;
-				if (index == 3) activeVillage.Resources.Storage[1] = storageMax
+				// Set Storage max value
+				activeVillage.Resources.Storage[index] = storageMax;
 
 				// Set current stored value
 				activeVillage.Resources.Stored[index] = resInStorage;
@@ -115,7 +114,6 @@ function Services() {
 		var regexString = ".*?\\d+.*?(\\d+).*?\\d+.*?(\\d+).*?\\d+.*?(\\d+).*?\\d+.*?(\\d+)";
 		var p = new RegExp(regexString, ["i"]);
 		var m = p.exec(scriptContent);
-		console.warn(m);
 		if (m != null) {
 			for (var index = 1; index < 5; index++) {
 				activeVillage.Resources.Production[index - 1] = m[index];
@@ -382,7 +380,7 @@ var ServicesMetadata = {
 	Name: "Services",
 	Alias: "Services",
 	Category: "Core",
-	Version: "0.0.1.3",
+	Version: "0.0.1.4",
 	Description: "Takes care of all variables and randomly changes pages. This is core plugin and by disableing it you could do damage to saved user data.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

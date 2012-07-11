@@ -1,7 +1,7 @@
 #Project Axeman
-_Current version 0.2_
+_Current version 0.2.1_
 
-_Development version 0.2.0.0_
+_Development version 0.2.1.0_
 
 
 ## Overview
@@ -18,8 +18,12 @@ _This extension uses [Google Chrome](http://www.google.com/chrome "Google Chrome
 - Support for up to 54 countries which means support for more than 200 servers
 - Beautiful design that goes hand-in-hand with travian website
 - Advanced Plugin system where you can enable or disable plugins as you need
+
+**Available plugins**
+
 - Warehouse na Granary capacity indicator
 - Calculating fields, buildings and units cost is now fast and easy
+- Fields upgrade indicator
 - _And a lot more..._
 
 **Plugins to come**
@@ -46,6 +50,16 @@ Collaborators
 
 ## Changelog
 
+- **Version 0.2.1.0** _(11.07.2012.)_
+	- Added FieldUpgradeIndicator plugin
+	- Minor fixes
+
+- **Version 0.2.0.3** _(06.07.2012.)_
+	- Disabled DevelopmentMode by default (_bug from last build_)
+
+- **Version 0.2.0.2** _(06.07.2012.)_
+	- Fixed ModelView not showinf problem
+
 - **Version 0.2.0.1** _(05.07.2012.)_
 	- Fixed resources production crawling (now from script) on almost every page
 	- Optimized crawling villages list
@@ -55,7 +69,7 @@ Collaborators
 	- Updated BackgroundScript
 	- BackgroundScript now supports Action category
 
-- **Version 0.2** _(03.07.2012.)_
+- **Version 0.2.0.0** _(03.07.2012.)_
 
 	- README and LICENSE file changes	
 	- Merge pull request #2 from AleksandarDev/features … Features
@@ -186,7 +200,7 @@ Collaborators
 		- Updated README.md
 
 
-- **Version 0.1.7** _(01.09.2011.)_
+- **Version 0.1.7.0** _(01.09.2011.)_
 
     - Added: (Build) In build/upgrade page now there is time indication for each of resources 
     - Added: (Global) Desktop notifications support
@@ -203,7 +217,7 @@ Collaborators
     - Fixed: (Extension) Extension not working on case sensitive operating systems _(e.g. Ubuntu)_
 
 
-- **Version 0.1.6** _(21.08.2011.)_
+- **Version 0.1.6.0** _(21.08.2011.)_
 
     - Added: (Build) Resource difference now in Town Hall (celebrations)
     - Added: (Global) Internationalization support
@@ -212,7 +226,7 @@ Collaborators
     - Fixed: (Global) Warehouse/Granary overflow timer now called only once in a second
 
 
-- **Version 0.1.5** _(20.08.2011.)_
+- **Version 0.1.5.0** _(20.08.2011.)_
 
     - Added: (Build) Units cost difference
     - Fixed: (Global) Warehouse/Granary overflow now stops at 00:00:00
@@ -223,7 +237,7 @@ Collaborators
     - Removed: (Build) Unit cost calculated as buildings
 
 
-- **Version 0.1.4** _(19.08.2011.)_
+- **Version 0.1.4.0** _(19.08.2011.)_
 
     - Added: (Market) Sum of incoming resources
     - Added: (Global) Warehouse/Granary overflow timeout
@@ -241,7 +255,7 @@ Collaborators
     - Fixed: (Global) Minor problems
 
 
-- **Version 0.1.3** _(03.08.2011.)_
+- **Version 0.1.3.0** _(03.08.2011.)_
 
     - Added: (Market) Junk resource info
     - Added: (Global) LocalStorage for saving settings "options.html"
@@ -252,7 +266,7 @@ Collaborators
     - Added: (Global) Setting - Show junk resource
 
 
-- **Version 0.1.2** _(01.08.2011.)_
+- **Version 0.1.2.0** _(01.08.2011.)_
 
     - Added: (Global) PageAction/"popup.html" which is visible only on Travian     pages
     - Added: (SendTroops) My villages list (combobox) in send troops page (a2b.php)
@@ -260,12 +274,12 @@ Collaborators
     - Removed: (Global) BrowserAction _(button on the right side of browser toolbox/addressbar)_
 
 
-- **Version 0.1.1** _(03.07.2011.)_
+- **Version 0.1.1.0** _(03.07.2011.)_
 
     - Added: (Market) Sending resource shortcut X2
 
 
-- **Version 0.1.0** _(02.07.2011.)_
+- **Version 0.1.0.0** _(02.07.2011.)_
 
     - First release
     - Added: (Global) BrowserAction/"popup.html" page added
