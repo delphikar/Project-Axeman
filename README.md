@@ -50,6 +50,9 @@ Collaborators
 
 ## Changelog
 
+- **Version 0.2.1.1** _(12.07.2012.)_
+	- Fixed FieldUpgradeIndicator not showing marks on right position
+
 - **Version 0.2.1.0** _(11.07.2012.)_
 	- Added FieldUpgradeIndicator plugin
 	- Minor fixes
