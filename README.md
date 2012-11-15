@@ -1,7 +1,7 @@
 #Project Axeman
 _Current version 0.2.1_
 
-_Development version 0.2.1.0_
+_Development version 0.2.1.2_
 
 
 ## Overview
@@ -45,10 +45,12 @@ Collaborators
 
 - Everton Moreth _([emoreth](https://github.com/emoreth "Everton Moreth on github"))_
 - Ignacio Munizaga _([thagat](https://github.com/emoreth "Everton Moreth on github"))_
-- kavillock _([kavillock](https://github.com/emoreth "Everton Moreth on github"))_
+- Grzegorz Witczak _([kavillock](https://github.com/kavillock "Grzegorz Witczak on github"))_
 
 
 ## Changelog
+- **Version 0.2.1.2** _(15.11.2012.)_
+	- Minor fixed
 
 - **Version 0.2.1.1** _(12.07.2012.)_
 	- Fixed FieldUpgradeIndicator not showing marks on right position
