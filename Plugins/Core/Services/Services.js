@@ -412,7 +412,9 @@ var ServicesMetadata = {
 
 	Settings: {
 		HasSettings: false,
-		SourceURL: ""
+		SourceURL: "",
+		Deafult: "On",
+		Core: True
 	},
 
 	Flags: {
