@@ -118,6 +118,10 @@ var FieldUpgradeIndicatorMetadata = {
 		HasSettings: false,
 		SourceURL: ""
 	},
+	
+	Default:{
+		State: "On"
+	},
 
 	Flags: {
 		Internal: false,

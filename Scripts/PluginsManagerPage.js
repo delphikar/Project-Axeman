@@ -57,8 +57,8 @@
 			var activeState = null;
 			var stateObject = JSON.parse(localStorage.getItem("IsPluginActive" + obj.Name));
 			if (stateObject === null) {
-				localStorage.setItem("IsPluginActive" + obj.Name, JSON.stringify({ State: "On" }));
-				activeState = "On";
+				activeState = obj.Default.State;
+				localStorage.setItem("IsPluginActive" + obj.Name, JSON.stringify({ State: activeState }));
 			}
 			else activeState = stateObject.State;
 			

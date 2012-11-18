@@ -66,6 +66,10 @@ var FeedbackMetadata = {
 		HasSettings: false,
 		SourceURL: ""
 	},
+	
+	Default:{
+		State: "Off"
+	},
 
 	Flags: {
 		Internal: false,
