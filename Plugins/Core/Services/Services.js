@@ -409,7 +409,7 @@ var ServicesMetadata = {
 	Alias: "Services",
 	Category: "Core",
 	Version: "0.0.1.4",
-	Description: "Takes care of all variables and randomly changes pages. This is core plugin and by disableing it you could do damage to saved user data.",
+	Description: "Takes care of all variables and randomly changes pages.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
