@@ -281,8 +281,11 @@ function Services() {
 	var CrawlVillageType = function () {
 		if (!MatchPages(Enums.TravianPages.VillageOut)) return;
 
-		var currentVillageType = #("village_map").atrr("class") || "f3";
+		var currentVillageType = $("village_map").attr("class") || "f3";
+	
+		var activeVillage = GetActiveVillage();
 		activeVillage.VillageOut.Type = currentVillageType;
+		UpdateActiveVillage(activeVillage);
 
 		DLog("Services: CrawlVillageType is [" + currentVillageType + "]");
 	};
@@ -412,9 +415,7 @@ var ServicesMetadata = {
 
 	Settings: {
 		HasSettings: false,
-		SourceURL: "",
-		Deafult: "On",
-		Core: True
+		SourceURL: ""
 	},
 
 	Flags: {
