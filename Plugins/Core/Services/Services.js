@@ -136,7 +136,7 @@ function Services() {
 			var pop = parseInt($("td.inhabitants").text(), 10) || 0;
 			ActiveProfile.Population = pop;
 			
-		DLog("Services: Population of Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Production + "]");
+		DLog("Services: Population of active village is [" + ActiveProfile.Population + "]");
 	};
 
 	// <summary>
