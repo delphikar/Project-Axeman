@@ -18,7 +18,7 @@
 											</tr>\
 											<tr>\
 												<td>\
-													<input id='PluginActive" + obj.Name + "' type='checkbox' class='ui-helper-hidden-accessible' />\
+													<input id='PluginActive" + obj.Name + "' type='checkbox' class='ui-helper-hidden-accessible'" + (obj.Settings.Changeable ? "" : "disabled")+"/>\
 													<label id='PluginActiveLabel" + obj.Name + "' for='PluginActive" + obj.Name + "' class='ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only' role='button' aria-disabled='false' />\
 												</td>\
 											</tr>\
@@ -74,6 +74,9 @@
 				$("#PluginImage" + obj.Name).attr("class", (currentState == "On" ? " " : "Disabled"));
 				localStorage.setItem("IsPluginActive" + obj.Name, JSON.stringify({ State: currentState }));
 			});
+			
+			// Is plugin Changeable
+				if(!obj.Settings.Changeable) localStorage.setItem("IsPluginActive" + obj.Name, JSON.stringify({ State: obj.Default.State }));
 
 			// Activate initial control state
 			$("#PluginActiveLabel" + obj.Name + " span").text(activeState == "On" ? "On" : "Off");

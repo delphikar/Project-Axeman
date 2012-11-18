@@ -129,7 +129,8 @@ var ResourceIndicatorMetadata = {
 
 	Settings: {
 		HasSettings: false,
-		SourceURL: ""
+		SourceURL: "",
+		Changeable: true
 	},
 	
 	Default:{

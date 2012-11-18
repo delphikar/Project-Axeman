@@ -64,7 +64,8 @@ var FeedbackMetadata = {
 
 	Settings: {
 		HasSettings: false,
-		SourceURL: ""
+		SourceURL: "",
+		Changeable: true
 	},
 	
 	Default:{

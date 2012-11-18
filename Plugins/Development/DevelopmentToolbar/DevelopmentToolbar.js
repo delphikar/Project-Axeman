@@ -159,7 +159,8 @@ var DevelopmentToolbarMetadata = {
 
 	Settings: {
 		HasSettings: false,
-		SourceURL: ""
+		SourceURL: "",
+		Changeable: true
 	},
 	
 	Default:{

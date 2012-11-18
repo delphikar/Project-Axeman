@@ -116,7 +116,8 @@ var FieldUpgradeIndicatorMetadata = {
 
 	Settings: {
 		HasSettings: false,
-		SourceURL: ""
+		SourceURL: "",
+		Changeable: true
 	},
 	
 	Default:{

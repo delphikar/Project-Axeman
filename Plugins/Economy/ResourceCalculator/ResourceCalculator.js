@@ -213,7 +213,8 @@ var ResourceCalculatorMetadata = {
 
 	Settings: {
 		HasSettings: false,
-		SourceURL: ""
+		SourceURL: "",
+		Changeable: true
 	},
 	
 	Default:{

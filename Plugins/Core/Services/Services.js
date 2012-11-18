@@ -415,7 +415,8 @@ var ServicesMetadata = {
 
 	Settings: {
 		HasSettings: false,
-		SourceURL: ""
+		SourceURL: "",
+		Changeable: false
 	},
 	
 	Default:{
