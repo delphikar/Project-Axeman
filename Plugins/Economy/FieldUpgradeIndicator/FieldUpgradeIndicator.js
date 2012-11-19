@@ -114,25 +114,12 @@ var FieldUpgradeIndicatorMetadata = {
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
-	Settings: {
-		HasSettings: false,
-		SourceURL: "",
-		Changeable: true
-	},
-	
-	Default:{
-		State: "On"
-	},
-
 	Flags: {
-		Internal: false,
-		Alpha: true,
-		Beta: false,
-		Featured: false
+		Alpha: true
 	},
 
 	Class: FieldUpgradeIndicator
 };
 
 // Adds this plugin to global list of available plugins
-GlobalPluginsList[GlobalPluginsList.length] = FieldUpgradeIndicatorMetadata;
+GlobalPluginsList[GlobalPluginsList.length] = $.extend(true, {}, Models.PluginMetadata, FieldUpgradeIndicatorMetadata);

@@ -211,25 +211,12 @@ var ResourceCalculatorMetadata = {
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
-	Settings: {
-		HasSettings: false,
-		SourceURL: "",
-		Changeable: true
-	},
-	
-	Default:{
-		State: "On"
-	},
-
 	Flags: {
-			Internal: false,
-			Alpha: false,
-			Beta: true,
-			Featured: false
+		Beta: true
 	},
 
 	Class: ResourceCalculator
 };
 
 // Adds this plugin to global list of available plugins
-GlobalPluginsList[GlobalPluginsList.length] = ResourceCalculatorMetadata;
+GlobalPluginsList[GlobalPluginsList.length] = $.extend(true, {}, Models.PluginMetadata, ResourceCalculatorMetadata);

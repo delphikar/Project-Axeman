@@ -414,24 +414,15 @@ var ServicesMetadata = {
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
 	Settings: {
-		HasSettings: false,
-		SourceURL: "",
 		Changeable: false
-	},
-	
-	Default:{
-		State: "On"
 	},
 
 	Flags: {
-		Internal: false,
-		Alpha: true,
-		Beta: false,
-		Featured: false
+		Alpha: true
 	},
 
 	Class: Services
 };
 
 // Adds this plugin to global list of available plugins
-GlobalPluginsList[GlobalPluginsList.length] = ServicesMetadata;
+GlobalPluginsList[GlobalPluginsList.length] = $.extend(true, {}, Models.PluginMetadata, ServicesMetadata);

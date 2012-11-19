@@ -157,25 +157,12 @@ var DevelopmentToolbarMetadata = {
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
-	Settings: {
-		HasSettings: false,
-		SourceURL: "",
-		Changeable: true
-	},
-	
-	Default:{
-		State: "On"
-	},
-
 	Flags: {
-		Internal: false,
-		Alpha: false,
-		Beta: true,
-		Featured: false
+		Beta: true
 	},
 
 	Class: DevelopmentToolbar
 };
 
 // Adds this plugin to global list of available plugins
-GlobalPluginsList[GlobalPluginsList.length] = DevelopmentToolbarMetadata;
+GlobalPluginsList[GlobalPluginsList.length] = $.extend(true, {}, Models.PluginMetadata, DevelopmentToolbarMetadata);
