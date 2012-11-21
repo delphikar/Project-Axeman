@@ -112,7 +112,7 @@ function Services() {
 
 		// Regular expression string from
 		// http://txt2re.com/index-javascript.php3?s=resources.production%20=%20{%20%27l1%27:%20500,%27l2%27:%20556,%27l3%27:%20500,%27l4%27:%20367};&16&12&14&13&11
-		var regexString = ".*?\\d+.*?(\\d+).*?\\d+.*?(\\d+).*?\\d+.*?(\\d+).*?\\d+.*?(\\d+)";
+		var regexString = ".*?\\d+.*?(\\d+).*?\\d+.*?(\\d+).*?\\d+.*?(\\d+).*?\\d+.*?([-+]?\\d+)";
 		var p = new RegExp(regexString, ["i"]);
 		var m = p.exec(scriptContent);
 		if (m != null) {
