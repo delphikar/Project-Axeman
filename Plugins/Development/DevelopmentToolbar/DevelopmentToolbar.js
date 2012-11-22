@@ -60,6 +60,7 @@ function DevelopmentToolbar() {
 				// Toolbar style
 				'.DTBase {' +
 					'position:fixed;' +
+					'z-index:1000;' +
 					'bottom: 0px; right: 0px; left: 0px;' +
 					'padding: 5px;' +
 					'background: -webkit-gradient(linear, left top, left bottom, from(#D3D3D3), to(#919191));' +
