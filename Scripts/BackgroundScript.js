@@ -31,7 +31,7 @@ function BackgroundScript() {
 		}
 
 		// Attach listener to "Background" request sign
-		requestManager.Recieve("Background", GotRequest);
+		requestManager.Recieve("Background", gotRequest);
 	};
 
 	/// <summary>
@@ -40,7 +40,7 @@ function BackgroundScript() {
 	/// <param name="request">Request object</param>
 	/// <param name="sender">Sender object</param>
 	/// <param name="sendResponse">sendResponse function</param>
-	var GotRequest = function (request, sender, sendResponse) {
+	var gotRequest = function (request, sender, sendResponse) {
 		DLog("BackgroundScript: Got request category [" + request.Category + "]");
 
 		// Supports following categories
@@ -48,11 +48,11 @@ function BackgroundScript() {
 		//		Action
 		switch (request.Category) {
 			case "Data": {
-				GotDataRequest(request, sendResponse);
+				gotDataRequest(request, sendResponse);
 				break;
 			}
 			case "Action": {
-				GotActionRequest(request);
+				gotActionRequest(request);
 				break;
 			}
 			default: {
@@ -66,7 +66,7 @@ function BackgroundScript() {
 	/// Handles action requests
 	/// </summary>
 	/// <param name="request">Request object</param>
-	var GotActionRequest = function (request) {
+	var gotActionRequest = function (request) {
 		DLog("BackgroundScript: Got Action request [" + request.Name + "]");
 
 		if (IsNullOrEmpty(request.Name)) {
@@ -83,14 +83,14 @@ function BackgroundScript() {
 	/// </summary>
 	/// <param name="request">Request object</param>
 	/// <param name="sendResponse">Response function</param>
-	var GotDataRequest = function (request, sendResponse) {
+	var gotDataRequest = function (request, sendResponse) {
 		DLog("BackgroundScript: Got Data request [" + request.Data.Type + "]");
 
 		if (request.Data.Type == "get") {
-			sendResponse(GetObject(request.Name));
+			sendResponse(getObject(request.Name));
 		}
 		else if (request.Data.Type == "set") {
-			SetObject(request.Name, request.Data.Value);
+			setObject(request.Name, request.Data.Value);
 		}
 		else {
 			Error("BackgroundScript: Unknown Data request Type [" + request.Data.Type + "]");
@@ -101,15 +101,18 @@ function BackgroundScript() {
 	/// <summary>
 	/// Handles IsFirstPlay action request
 	/// </summary>
-	var ActionIsFirstPlay = function () {
-		if (!GetObject("IsFirstPlay")) {
+	var actionIsFirstPlay = function () {
+		if (!getObject("IsFirstPlay")) {
 			chrome.tabs.create({ url: GetURL("Pages/Welcome.html") });
-			SetObject("IsFirstPlay", { State: "AlreadyPlayed" });
+			setObject("IsFirstPlay", { State: "AlreadyPlayed" });
 		};
 	};
 
+	/// <summary>
+	/// List of actions that can be called
+	/// </summary>
 	var ActionsAvailable = {
-		IsFirstPlay: ActionIsFirstPlay
+		IsFirstPlay: actionIsFirstPlay
 	};
 	
 	/// <summary>
@@ -118,7 +121,7 @@ function BackgroundScript() {
 	/// </summary>
 	/// <param name="key">Key object</param>
 	/// <param name="value">Value object</param>
-	var SetObject = function (key, value) {
+	var setObject = function (key, value) {
 		try {
 			localStorage.setItem(key, JSON.stringify(value));
 			DLog("BackgroundScript: Set Data [" + key + "] Value [" + value + "]");
@@ -140,7 +143,7 @@ function BackgroundScript() {
 	/// </summary>
 	/// <param name="key">Key object</param>
 	/// <returns>Object from localStorage that corresponds to given key</returns>
-	var GetObject = function (key) {
+	var getObject = function (key) {
 		var value = localStorage.getItem(key);
 		var parsedValue = value && JSON.parse(value);
 		DLog("BackgroundScript: Got Data [" + key + "] Value [" + parsedValue + "]");

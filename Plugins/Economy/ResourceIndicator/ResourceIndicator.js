@@ -137,7 +137,7 @@ var ResourceIndicatorMetadata = {
 	Name: "ResourceIndicator",
 	Alias: "Resource Indicator",
 	Category: "Economy",
-	Version: "0.2.0.2",
+	Version: "0.2.0.3",
 	Description: "Shows how long is needed for warehouse and granary to fill up to its maximum capacity and alerts accordingly.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
