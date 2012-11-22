@@ -57,7 +57,7 @@ var FeedbackMetadata = {
 	Name: "Feedback",
 	Alias: "Feedback",
 	Category: "Support",
-	Version: "0.1.1.3",
+	Version: "0.1.1.5",
 	Description: "Send us some feedback so we can quickly respond to any problems or ideas.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

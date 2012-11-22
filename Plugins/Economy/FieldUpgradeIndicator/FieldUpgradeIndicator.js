@@ -3,6 +3,9 @@
  * 
  * Author:
  * 		Aleksandar Toplek
+ * 
+ * Coolaborators:
+ * 		Grzegorz Witczak
  *
  * Created on:
  * 		11.07.2012.
@@ -15,7 +18,6 @@ function FieldUpgradeIndicator() {
 	/// </summary>
 	this.Register = function () {
 		// TODO Refactor
-		// TODO Comment
 		// TODO Log
 
 		Log("FieldUpgradeIndicator: Registering FieldUpgradeIndicator plugin...");
@@ -44,6 +46,7 @@ function FieldUpgradeIndicator() {
 								// from Enums.Fields
 								var fieldUpgradeCost = Enums.Fields[rIndex][fieldLevel];
 
+								// TODO Add fully upgraded 
 								var canBeUpgraded = true;
 								var upgradeable = true;
 								for (var rrIndex = 0; rrIndex < 4; rrIndex++) {
@@ -66,7 +69,7 @@ function FieldUpgradeIndicator() {
 										if (costDiff < 0) {
 											canBeUpgraded = false;
 											// NOTE: This can't break because we have to check for
-											// warehouse/granary cost difference even if we cen't
+											// warehouse/granary cost difference even if we can't
 											// upgrade field. Can be case where we can't upgarade
 											// because of wood and we would break at first itteration
 											// but field clay cost is larger than what can be store. 
@@ -100,6 +103,7 @@ function FieldUpgradeIndicator() {
 		}
 	};
 	
+	// TODO Comment function
 	function generateLevelObject(levelObject, upgradeable, canBeUpgraded){
 		if (!upgradeable) {
 			$(levelObject).css({
@@ -139,7 +143,7 @@ var FieldUpgradeIndicatorMetadata = {
 	Name: "FieldUpgradeIndicator",
 	Alias: "Field Upgrade Indicator",
 	Category: "Economy",
-	Version: "0.0.1.1",
+	Version: "0.0.1.4",
 	Description: "Know when you can upgrade fields without clicking on every field. This plugin will highlight upgradeable fields for you.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

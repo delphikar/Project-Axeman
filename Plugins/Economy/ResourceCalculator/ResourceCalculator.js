@@ -56,7 +56,7 @@ function ResourceCalculator() {
 			$(".contractCosts").each(function (cindex) {
 				$("span:eq(" + rindex + ")", this).each(function () {
 					// Get cost difference
-					var res = parseInt($(this).text(), 10);
+					var res = parseInt($(this).text(), 10) || 0;
 					var diff = inWarehouse - res;
 					var color = diff < 0 ? "#B20C08" : "#0C9E21";
 
@@ -219,7 +219,7 @@ var ResourceCalculatorMetadata = {
 	Name: "ResourceCalculator",
 	Alias: "Resource Calculator",
 	Category: "Economy",
-	Version: "0.2.0.1",
+	Version: "0.2.0.2",
 	Description: "Shows you how much of each resource is needed to build field, building or train army. ",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

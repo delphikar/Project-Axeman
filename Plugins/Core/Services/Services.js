@@ -133,8 +133,8 @@ function Services() {
 	var CrawlPopulation = function () {
 		if (!MatchPages(Enums.TravianPages.Player)) return;
 		
-			var pop = parseInt($("td.inhabitants").text(), 10) || 0;
-			ActiveProfile.Population = pop;
+		var pop = parseInt($("td.inhabitants").text(), 10) || 0;
+		ActiveProfile.Population = pop;
 			
 		DLog("Services: Population of active village is [" + ActiveProfile.Population + "]");
 	};
@@ -408,7 +408,7 @@ var ServicesMetadata = {
 	Name: "Services",
 	Alias: "Services",
 	Category: "Core",
-	Version: "0.0.1.4",
+	Version: "0.0.1.5",
 	Description: "Takes care of all variables and randomly changes pages.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

@@ -1,7 +1,7 @@
 #Project Axeman
-_Current version 0.2.1_
+_Current version 0.2.1.3_
 
-_Development version 0.2.2_
+_Development version 0.2.2.0_
 
 
 ## Overview
@@ -50,7 +50,7 @@ Collaborators
 
 
 ## Changelog
-- **Version 0.2.2** _(21.11.2012.)_
+- **Version 0.2.2** _(22.11.2012.)_
 	- Minor fixes
 	- Fix some typos
 	- Delete old & unused elements
@@ -94,7 +94,6 @@ Collaborators
 	- BackgroundScript now supports Action category
 
 - **Version 0.2.0.0** _(03.07.2012.)_
-
 	- README and LICENSE file changes	
 	- Merge pull request #2 from AleksandarDev/features … Features
 	- Moved new contentscript file	
