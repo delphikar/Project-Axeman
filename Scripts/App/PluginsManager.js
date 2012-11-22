@@ -52,7 +52,8 @@ function PluginsManager() {
 		// Send request and handle callback
 		activeStateRequest.Send(
 			function (response) {
-				if (response == null || !response.State || response.State == "On") {
+			var state = pluginMetadata.Default.State;
+				if ((response == null || !response.State) && state == "On" || response.State == "On") {
 					Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is active...");
 					Log("PluginsManager: Registering '" + pluginMetadata.Name + "'");
 
