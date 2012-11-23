@@ -49,8 +49,7 @@ function UpgradeIndicator() {
 							var fieldUpgradeCost = Enums.Fields[rIndex][fieldLevel];
 
 							// TODO Add fully upgraded 
-							var canBeUpgraded = true;
-							var upgradeable = true;
+							var upgradeState = "upgradeable";
 							for (var rrIndex = 0; rrIndex < 4; rrIndex++) {
 								// Check if village have warehouse/granary large enough
 								// to upgrade field
@@ -60,8 +59,7 @@ function UpgradeIndicator() {
 									console.warn("Can Store:" + canStoreResource);
 									console.warn("Cost: " + fieldUpgradeCost[rrIndex]);
 
-									upgradeable = false;
-									canBeUpgraded = false;
+									upgradeState = "nonUpgradeable";
 									break;
 								}
 								else {
@@ -69,7 +67,7 @@ function UpgradeIndicator() {
 									var availableResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[rrIndex];
 									var costDiff = availableResource - fieldUpgradeCost[rrIndex];
 									if (costDiff < 0) {
-										canBeUpgraded = false;
+										upgradeState = "lowResources";
 										// NOTE: This can't break because we have to check for
 										// warehouse/granary cost difference even if we can't
 										// upgrade field. Can be case where we can't upgarade
@@ -78,8 +76,6 @@ function UpgradeIndicator() {
 									}
 								}
 							}
-
-							generateLevelObject(levelObject, upgradeable, canBeUpgraded);
 
 							processed = true;
 							break;
@@ -90,16 +86,9 @@ function UpgradeIndicator() {
 				}
 			}
 			else {
-				$(this).css({
-					"background-image": "none",
-					"background-color": "#FA4",
-					"border": "1px grey solid",
-					"border-radius": "2em",
-					"color": "black",
-					"text-shadow": "0 0 3px silver",
-					"text-decoration": "blink"
-				});
+				upgradeState = "underConstruction";
 			}
+			generateLevelObject(levelObject, upgradeState);
 		});
 	}
 	function BuildingUpgradeIndicator(){
@@ -118,8 +107,7 @@ function UpgradeIndicator() {
 
 				console.log("------"+buildingGID+": "+GIDs[buildingGID]);
 				
-				var canBeUpgraded = true;
-				var upgradeable = true;
+				var upgradeState = "upgradeable";
 				if(buildingLevel < building.length){
 					for (var rrIndex = 0; rrIndex < 4; rrIndex++) {
 						// Check if village have warehouse/granary large enough
@@ -130,8 +118,7 @@ function UpgradeIndicator() {
 							console.warn("Can Store:" + canStoreResource);
 							console.warn("Cost: " + buildingUpgradeCost[rrIndex]);
 
-							upgradeable = false;
-							canBeUpgraded = false;
+							upgradeState = "nonUpgradeable";
 							break;
 						}
 						else {
@@ -139,7 +126,7 @@ function UpgradeIndicator() {
 							var availableResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[rrIndex];
 							var costDiff = availableResource - buildingUpgradeCost[rrIndex];
 							if (costDiff < 0) {
-								canBeUpgraded = false;
+								upgradeState = "lowResources";
 								// NOTE: This can't break because we have to check for
 								// warehouse/granary cost difference even if we can't
 								// upgrade field. Can be case where we can't upgarade
@@ -150,57 +137,65 @@ function UpgradeIndicator() {
 					}
 				}
 				else{
-					upgradeable = false;
-					canBeUpgraded = false;
+					upgradeState = "maxUpgraded";
 				}
-				generateLevelObject(levelObject, upgradeable, canBeUpgraded);
 			}
 			else {
-				$(levelObject).css({
-					"background-image": "none",
-					"background-color": "#FA4",
-					"border": "1px grey solid",
-					"border-radius": "2em",
-					"color": "black",
-					"text-shadow": "0 0 3px silver",
-					"text-decoration": "blink"
-				});
+				upgradeState = "underConstruction";
 			}
+			generateLevelObject(levelObject, upgradeState);
 		});
 	}
 	
 	// TODO Comment function
-	function generateLevelObject(levelObject, upgradeable, canBeUpgraded){
-		if (!upgradeable) {
-			$(levelObject).css({
-				"background-image": "none",
-				"background-color": "red",
-				"border": "1px grey solid",
-				"border-radius": "2em",
-				"color": "white",
-				"text-shadow": "0 0 3px black"
-			});
+	function generateLevelObject(levelObject, upgradeState){
+		var css;
+		$(levelObject).css({
+			"background-image": "none",
+			"border": "1px grey solid",
+			"border-radius": "2em"
+		});
+
+		switch(upgradeState) {
+			case "upgradeable":
+				css = {
+					"background-color": "green",
+					"color": "white",
+					"text-shadow": "0 0 3px black"
+				};
+			break;
+			case "underConstruction":
+				css = {
+					"background-color": "#FA4",
+					"color": "black",
+					"text-shadow": "0 0 3px silver",
+					"text-decoration": "blink"
+				};
+			break;
+			case "nonUpgradeable":
+				css = {
+					"background-color": "red",
+					"color": "white",
+					"text-shadow": "0 0 3px black"
+				};
+			break;
+			case "maxUpgraded":
+				css = {
+					"background-color": "silver",
+					"color": "black",
+					"text-shadow": "0 0 3px white"
+				};
+			break;
+			case "lowResources":
+				css = {
+					"background-color": "white",
+					"color": "black",
+					"text-shadow": "0 0 3px silver"
+				};
+			break;
 		}
-		else if (canBeUpgraded) {
-			$(levelObject).css({
-				"background-image": "none",
-				"background-color": "green",
-				"border": "1px grey solid",
-				"border-radius": "2em",
-				"color": "white",
-				"text-shadow": "0 0 3px black"
-			});
-		}
-		else{
-			$(levelObject).css({
-				"background-image": "none",
-				"background-color": "white",
-				"border": "1px grey solid",
-				"border-radius": "2em",
-				"color": "black",
-				"text-shadow": "0 0 3px silver"
-			});
-		}
+
+		$(levelObject).css(css);
 	}
 };
 
