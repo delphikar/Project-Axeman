@@ -1,0 +1,3 @@
+﻿- Changed ResourceIndicator beautifer color to grayscale
+- HelpPlugin (Insert FAQ of extensions to help.php)
+- <span class="settle">1 Naseliti</span>

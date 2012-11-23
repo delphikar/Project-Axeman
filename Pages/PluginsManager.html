@@ -42,13 +42,18 @@
 			}
 
 			.PluginItem {
-				background-color:#f8f8f8; 
-				
-				margin: 25px 0px;  
-				padding:15px; 
-				
-				border-radius:10px; 
-				box-shadow:2px 2px 15px #bbb;
+				background-color: #f8f8f8;
+				margin: 25px 0px;
+				padding: 15px;
+
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+
+				-moz-box-shadow: 2px 2px 15px #bbb;
+				-webkit-box-shadow: 2px 2px 15px #bbb;
+				box-shadow: 2px 2px 15px #bbb;
+
 				width: 590px;
 			}
 			
@@ -83,7 +88,7 @@
 			}
 
 			.Disabled {
-				-webkit-filter:grayscale(1);
+				-webkit-filter: grayscale(1);
 			}
 
 			.AlphaFlag,
@@ -114,17 +119,20 @@
 	</head>
 	<body>
 		<div class="PASection" style="width:664px; margin-left:auto; margin-right:auto;">
-			<div>
-				<h1 style="padding:5px 5px 5px 25px">Plugins manager</h1>
-			</div>
-
+			<!-- Page header -->
+			<div><h1 style="padding:5px 5px 5px 25px">Plugins manager</h1></div>
+			
+			<!-- Page content -->
 			<div class="PASection" style="margin:-1px; padding: 30px 0">
+				<!-- Filter bar -->
 				<div style="text-align:center;">
 					<input type="text" class="PATextBoxLight FilterBar" placeholder="Search for available plugins" disabled="disabled" />
 				</div>
+				<!-- Plugins container -->
 				<div id="PluginsTable" class="PluginsTable"></div>
 			</div>
-
+			
+			<!-- Page footer -->
 			<div style="margin-left:10px; padding:5px; color:#959595;">
 				<div style="float:left;">
 					<p style="width:100%;">

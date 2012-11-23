@@ -50,7 +50,10 @@ Collaborators
 
 
 ## Changelog
-- **Version 0.2.2** _(22.11.2012.)_
+- **Version 0.2.2** _(xx.11.2012)_
+	
+
+- **Version 0.2.1.3** _(22.11.2012.)_
 	- Minor fixes
 	- Fix some typos
 	- Delete old & unused elements

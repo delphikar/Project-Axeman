@@ -54,8 +54,3 @@ AVAILABLE PLUGINS
 	FieldUpgradeIndicator	(Plugins/Economy/FieldUpgradeIndicator/FieldUpgradeIndicator.js)
 	ResourceCalculator		(Plugins/Economy/ResourceCalculator/ResourceClaculator.js)
 	ResourceIndicator		(Plugins/Economy/ResourceIndicator/ResourceIndicator.js)
-
-
-TODO LIST (AleksandarDev)
-	- HelpPlugin (Insert FAQ of extensions to help.php)
-	- <span class="settle">1 Naseliti</span>

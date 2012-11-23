@@ -34,7 +34,7 @@ function ResourceIndicator() {
 
 		//Indicator beautifer
 		$("#res").css({
-			"background": "-webkit-linear-gradient(top, rgba(224, 231, 241, 0) 0%,rgba(224, 231, 241, 1) 50%)",
+			"background": "-webkit-linear-gradient(top, rgba(237, 237, 237, 0) 0%,rgba(224, 231, 241, 0.98) 50%)",
 			"width": "589px",
 			"border-bottom-left-radius": "10px",
 			"border-bottom-right-radius": "10px",
@@ -47,7 +47,7 @@ function ResourceIndicator() {
 			if (index == 4)
 				return true;
 			var actualProduction = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
-			console.log(actualProduction);
+			//console.log(actualProduction);
 
 			// Create element to append
 			var element = $("<div><b><p>");

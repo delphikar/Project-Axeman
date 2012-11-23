@@ -176,7 +176,7 @@ function ResourceCalculator() {
 			Inputs: inputs,
 			UnitCosts: costs
 		};
-		console.warn(data);
+		//console.warn(data);
 		setInterval(RefreshUnitsFunction, refreshRate, data);
 	};
 

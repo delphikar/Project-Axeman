@@ -53,10 +53,10 @@ function FieldUpgradeIndicator() {
 									// Check if village have warehouse/granary large enough
 									// to upgrade field
 									var canStoreResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[rrIndex];
-									console.warn("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + fieldUpgradeCost[rrIndex] + " for lvl." + (fieldLevel + 1));
+									//console.warn("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + fieldUpgradeCost[rrIndex] + " for lvl." + (fieldLevel + 1));
 									if (fieldUpgradeCost[rrIndex] > canStoreResource) {
-										console.warn("Can Store:" + canStoreResource);
-										console.warn("Cost: " + fieldUpgradeCost[rrIndex]);
+										//console.warn("Can Store:" + canStoreResource);
+										//console.warn("Cost: " + fieldUpgradeCost[rrIndex]);
 
 										upgradeable = false;
 										canBeUpgraded = false;
