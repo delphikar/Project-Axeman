@@ -12,7 +12,7 @@
  *
  *****************************************************************************/
 
-function FieldUpgradeIndicator() {
+function UpgradeIndicator() {
 	/// <summary>
 	/// Initializes object 
 	/// </summary>
@@ -20,7 +20,7 @@ function FieldUpgradeIndicator() {
 		// TODO Refactor
 		// TODO Log
 
-		Log("FieldUpgradeIndicator: Registering FieldUpgradeIndicator plugin...");
+		Log("UpgradeIndicator: Registering UpgradeIndicator plugin...");
 
 		if (MatchPages(Enums.TravianPages.VillageOut)) FieldUpgradeIndicator();
 		if (MatchPages(Enums.TravianPages.VillageIn)) BuildingUpgradeIndicator();
@@ -204,10 +204,10 @@ function FieldUpgradeIndicator() {
 	}
 };
 
-// Metadata for this plugin (FieldUpgradeIndicator)
-var FieldUpgradeIndicatorMetadata = {
-	Name: "FieldUpgradeIndicator",
-	Alias: "Field Upgrade Indicator",
+// Metadata for this plugin (UpgradeIndicator)
+var UpgradeIndicatorMetadata = {
+	Name: "UpgradeIndicator",
+	Alias: "Upgrade Indicator",
 	Category: "Economy",
 	Version: "0.0.1.5",
 	Description: "Know when you can upgrade fields and building without clicking for each. This plugin will highlight upgradeable fields and building for you.",
@@ -222,4 +222,4 @@ var FieldUpgradeIndicatorMetadata = {
 };
 
 // Adds this plugin to global list of available plugins
-GlobalPluginsList[GlobalPluginsList.length] = $.extend(true, {}, Models.PluginMetadata, FieldUpgradeIndicatorMetadata);
+GlobalPluginsList[GlobalPluginsList.length] = $.extend(true, {}, Models.PluginMetadata, UpgradeIndicatorMetadata);

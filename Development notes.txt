@@ -51,7 +51,7 @@ AVAILABLE PLUGINS
 	Services				(Plugins/Core/Services/Services.js)
 	DevelopmentToolbar 		(Plugins/Development/DevelopmentToolbar/DevelopmentToolbar.js)
 	Feedback				(Plugins/Support/Feedback/Feedback.js)
-	FieldUpgradeIndicator	(Plugins/Economy/FieldUpgradeIndicator/FieldUpgradeIndicator.js)
+	UpgradeIndicator		(Plugins/Economy/UpgradeIndicator/UpgradeIndicator.js)
 	ResourceCalculator		(Plugins/Economy/ResourceCalculator/ResourceClaculator.js)
 	ResourceIndicator		(Plugins/Economy/ResourceIndicator/ResourceIndicator.js)
 

@@ -85,7 +85,7 @@ var Enums = {
 		f12: [[0, 2, 3, 13, 16], [4, 5, 15, 17], [6, 9, 10], [1, 7, 8, 11, 12, 14]],
 	},
 	
-	VillageInMaps: {
+	VillageInGID: {
 		1: 'Woodcutter',
 		2: 'ClayPit',
 		3: 'IronMine',

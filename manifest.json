@@ -43,7 +43,7 @@
 				"Plugins/Support/Feedback/Feedback.js",
 				"Plugins/Economy/ResourceIndicator/ResourceIndicator.js",
 				"Plugins/Economy/ResourceCalculator/ResourceCalculator.js",
-				"Plugins/Economy/FieldUpgradeIndicator/FieldUpgradeIndicator.js",
+				"Plugins/Economy/UpgradeIndicator/UpgradeIndicator.js",
 				"Scripts/App/App.js",
 				"Scripts/App/AppLauncher.js"
 			],
