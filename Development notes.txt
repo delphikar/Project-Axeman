@@ -6,9 +6,9 @@ RELEASE TODO LIST
 
 LIBRARIES USED
 
-	jQuery current version:		1.7.1
-	jQueryUI current version:	1.8.18
-	jQuery.PageSlide version:	2.0			
+	jQuery current version:		1.8.3
+	jQueryUI current version:	1.9.1
+	jQuery.PageSlide version:	2.0
 	https://github.com/srobbin/jquery-pageslide
 
 
