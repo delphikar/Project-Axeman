@@ -4,11 +4,11 @@
  * Author:
  * 		Aleksandar Toplek
  *
+ * Coolaborators:
+ * 		Grzegorz Witczak
+ *
  * Created on:
  * 		02.07.2012.
- *
- * ToDo:
- * 		Check crop balance in buildings
  *
  *****************************************************************************/
 
