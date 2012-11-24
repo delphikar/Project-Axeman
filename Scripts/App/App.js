@@ -171,15 +171,21 @@ function App() {
 			return false;
 		}
 
-		DLog("App: ModalView shown");
+		DLog("App: Opening ModalView...");
 
 		// Changes content of modelview
 		$("#PAModalView").html(content);
 
 		// Slide modal view in
-		$("#PAModalView").show("slide", { direction: "right" }, 500);
+		var animationDuration = 500;
+		$("#PAModalView").show("slide", { direction: "right" }, animationDuration);
 
-		app.isModalViewActive = true;
+		// Selay setting modal view to shown for length of animation
+		setTimeout(function() {
+			app.isModalViewActive = true;
+			DLog("App: ModalView shown");
+		}, animationDuration);
+		
 		return true;
 	};
 
@@ -194,12 +200,16 @@ function App() {
 			return false;
 		}
 
-		DLog("App: ModalView hidden");
-
 		// Slide modal view away
-		$("#PAModalView").hide("slide", { direction: "right" }, 500);
+		var animationDuration = 500;
+		$("#PAModalView").hide("slide", { direction: "right" }, animationDuration);
+		
+		// Delay setting modal view to hidden for length of animation
+		setTimeout(function() {
+			app.isModalViewActive = false;
+			DLog("App: ModalView hidden");
+		}, animationDuration);
 
-		app.isModalViewActive = false;
 		return true;
 	};
 }

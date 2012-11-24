@@ -63,7 +63,7 @@ var FeedbackMetadata = {
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 	
 	Default:{
-		State: "Off"
+		State: "On"
 	},
 
 	Flags: {
