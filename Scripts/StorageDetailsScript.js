@@ -26,14 +26,13 @@ function StorageDetails() {
 
 // Class: Dump
 // Author: Shuns (www.netgrow.com.au/files)
-// Last Updated: 10/10/06
-// Version: 1.1
-// ToDo: Get it work with Project-Axeman, rewrite to jQuery
+// Mod: kavillock
+// Last Updated: 12/11/24
+// Version: 1.1.2
 
 function dump(object, showTypes) {
 	var dump = '';
 	var st = typeof showTypes == 'undefined' ? true : showTypes;
-	//var script = 'function tTable(s) {var switchToState = tSource(s) ;var table = s.parentNode.parentNode;for (var i = 1; i < table.childNodes.length; i++) {t = table.childNodes[i] ;if (t.style) {tTarget(t, switchToState);}}}function tSource(s) {if (s.style.fontStyle == "italic" || s.style.fontStyle == null) {s.style.fontStyle = "normal";s.title = "click to collapse";return "open";} else {s.style.fontStyle = "italic";s.title = "click to expand";return "closed" ;}}function tTarget (t, switchToState) {if (switchToState == "open") {t.style.display = "";} else {t.style.display = "none";}}';
 	dump += (/string|number|undefined|boolean/.test(typeof(object)) || object == null) ? object : recurse(object, typeof object);
 
 	return dump;
@@ -100,12 +99,8 @@ function dump(object, showTypes) {
 _dumpStyles = function(type, use) {
 	var r = '';
 	var table = 'font-size:xx-small;font-family:verdana,arial,helvetica,sans-serif;cell-spacing:2px;';
-	var th = 'font-size:xx-small;font-family:verdana,arial,helvetica,sans-serif;text-align:left;color: white;padding: 5px;vertical-align :top;cursor:hand;cursor:pointer;';
+	var th = 'font-size:xx-small;font-family:verdana,arial,helvetica,sans-serif;text-align:left;color: white;padding: 5px;vertical-align :top;';
 	var td = 'font-size:xx-small;font-family:verdana,arial,helvetica,sans-serif;vertical-align:top;padding:3px;';
-	//var thScript = 'onClick="tTable(this);" title="click to collapse"';
-	//var tdScript = 'onClick="tRow(this);" title="click to collapse"';
-	var thScript = 'class="thScript"';
-	var tdScript = 'class="tdScript"';
 	switch (type) {
 		case 'string':
 		case 'number':
@@ -117,10 +112,10 @@ _dumpStyles = function(type, use) {
 					r = ' style="' + table + 'background-color:#0000cc;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#4444cc;"' + thScript;
+					r = ' style="' + th + 'background-color:#4444cc;"';
 				break;
 				case 'td-key':
-					r = ' style="' + td + 'background-color:#ccddff;cursor:hand;cursor:pointer;"' + tdScript;
+					r = ' style="' + td + 'background-color:#ccddff;"';
 				break;
 				case 'td-value':
 					r = ' style="' + td + 'background-color:#fff;"';
@@ -133,10 +128,10 @@ _dumpStyles = function(type, use) {
 					r = ' style="' + table + 'background-color:#006600;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#009900;"' + thScript;
+					r = ' style="' + th + 'background-color:#009900;"';
 				break;
 				case 'td-key':
-					r = ' style="' + td + 'background-color:#ccffcc;cursor:hand;cursor:pointer;"' + tdScript;
+					r = ' style="' + td + 'background-color:#ccffcc;"';
 				break;
 				case 'td-value':
 					r = ' style="' + td + 'background-color:#fff;"';
@@ -149,10 +144,10 @@ _dumpStyles = function(type, use) {
 					r = ' style="' + table + 'background-color:#aa4400;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#cc6600;"' + thScript;
+					r = ' style="' + th + 'background-color:#cc6600;"';
 				break;
 				case 'td-key':
-					r = ' style="' + td + 'background-color:#fff;cursor:hand;cursor:pointer;"' + tdScript;
+					r = ' style="' + td + 'background-color:#fff;"';
 				break;
 				case 'td-value':
 					r = ' style="' + td + 'background-color:#fff;"';
@@ -165,7 +160,7 @@ _dumpStyles = function(type, use) {
 					r = ' style="' + table + 'background-color:#dddddd;cell-spacing:3;"';
 				break;
 				case 'td-key':
-					r = ' style="' + th + 'background-color:#eeeeee;color:#000000;cursor:hand;cursor:pointer;"' + tdScript;
+					r = ' style="' + th + 'background-color:#eeeeee;color:#000000;"';
 				break;	  
 			}	
 		break;
@@ -175,10 +170,10 @@ _dumpStyles = function(type, use) {
 					r = ' style="' + table + 'background-color:#CC0000;cell-spacing:3;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#FF0000;"' + thScript;
+					r = ' style="' + th + 'background-color:#FF0000;"';
 				break;
 				case 'td-key':
-					r = ' style="' + th + 'background-color:#FF5757;color:#000000;cursor:hand;cursor:pointer;"' + tdScript;
+					r = ' style="' + th + 'background-color:#FF5757;color:#000000;"';
 				break;
 				case 'td-value':
 					r = ' style="' + td + 'background-color:#fff;"';
@@ -191,10 +186,10 @@ _dumpStyles = function(type, use) {
 					r = ' style="' + table + 'background-color:#663399;cell-spacing:3;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#9966CC;"' + thScript;
+					r = ' style="' + th + 'background-color:#9966CC;"';
 				break;
 				case 'td-key':
-					r = ' style="' + th + 'background-color:#B266FF;color:#000000;cursor:hand;cursor:pointer;"' + tdScript;
+					r = ' style="' + th + 'background-color:#B266FF;color:#000000;"';
 				break;
 				case 'td-value':
 					r = ' style="' + td + 'background-color:#fff;"';
@@ -207,10 +202,10 @@ _dumpStyles = function(type, use) {
 					r = ' style="' + table + 'background-color:#FFCC33;cell-spacing:3;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#FFD966;"' + thScript;
+					r = ' style="' + th + 'background-color:#FFD966;"';
 				break;
 				case 'td-key':
-					r = ' style="' + th + 'background-color:#FFF2CC;color:#000000;cursor:hand;cursor:pointer;"' + tdScript;
+					r = ' style="' + th + 'background-color:#FFF2CC;color:#000000;"';
 				break;
 				case 'td-value':
 					r = ' style="' + td + 'background-color:#fff;"';
