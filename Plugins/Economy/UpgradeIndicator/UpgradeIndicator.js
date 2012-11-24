@@ -25,6 +25,8 @@ function UpgradeIndicator() {
 		if (MatchPages(Enums.TravianPages.VillageOut)) FieldUpgradeIndicator();
 		if (MatchPages(Enums.TravianPages.VillageIn)) BuildingUpgradeIndicator();
 	};
+	
+
 	function FieldUpgradeIndicator(){
 		// Get village levels map
 		var villageMap = $("#village_map");
@@ -91,6 +93,7 @@ function UpgradeIndicator() {
 			generateLevelObject(levelObject, upgradeState);
 		});
 	}
+
 	function BuildingUpgradeIndicator(){
 		// Get village levels map
 		var villageMap = $("#village_map");
@@ -147,16 +150,21 @@ function UpgradeIndicator() {
 		});
 	}
 	
-	// TODO Comment function
+	/// <summary>
+	/// Generate level circle, which shows
+	/// possible expansion status
+	/// </summary>
 	function generateLevelObject(levelObject, upgradeState){
+		//generate blank cicrcle
 		var css;
 		$(levelObject).css({
 			"background-image": "none",
-			"border": "1px grey solid",
+			"box-shadow": "inset 0 0 0 1px dimGray",
 			"border-radius": "2em"
 		});
 
 		switch(upgradeState) {
+			//we have enought resources
 			case "upgradeable":
 				css = {
 					"background-color": "green",
@@ -164,6 +172,7 @@ function UpgradeIndicator() {
 					"text-shadow": "0 0 3px black"
 				};
 			break;
+			//building is under construction
 			case "underConstruction":
 				css = {
 					"background-color": "#FA4",
@@ -172,6 +181,7 @@ function UpgradeIndicator() {
 					"text-decoration": "blink"
 				};
 			break;
+			//we have not enought storage
 			case "nonUpgradeable":
 				css = {
 					"background-color": "red",
@@ -179,6 +189,7 @@ function UpgradeIndicator() {
 					"text-shadow": "0 0 3px black"
 				};
 			break;
+			//building is completely upgraded
 			case "maxUpgraded":
 				css = {
 					"background-color": "silver",
@@ -186,6 +197,7 @@ function UpgradeIndicator() {
 					"text-shadow": "0 0 3px white"
 				};
 			break;
+			//we have enought storage, but not resources
 			case "lowResources":
 				css = {
 					"background-color": "white",
