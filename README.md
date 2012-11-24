@@ -1,7 +1,7 @@
 #Project Axeman
 _Current version 0.2.1.3_
 
-_Development version 0.2.2.0_
+_Development version 0.2.2.1_
 
 
 ## Overview
@@ -50,6 +50,14 @@ Collaborators
 
 
 ## Changelog
+- **Version 0.2.2.1** _(24.11.2012.)_
+	- PluginManager check deafult state of plugin, on first run
+	- StorageDetais show data as table
+	- Enums have all buildings
+	- jQuery & jQueryUI update
+	- FieldUpgradeIndicator is now UpgradeIndicator
+		- Add VillageIn support
+
 - **Version 0.2.2** _(22.11.2012.)_
 	- Minor fixes
 	- Fix some typos

@@ -132,10 +132,27 @@ function Services() {
 	// </summary>
 	var CrawlPopulation = function () {
 		if (!MatchPages(Enums.TravianPages.Player)) return;
-		
-		var pop = parseInt($("td.inhabitants").text(), 10) || 0;
+		var pop =  parseInt($("#details tbody tr").eq(4).children().last().text(), 10) || 0;
 		ActiveProfile.Population = pop;
+
+		//*
+		$.each(ActiveProfile.Villages ,function (index, obj) {
+			var village = $("#villages tbody tr").find("td:contains('"+obj.Name+"')").parent();
+		
+			var checkMainCity = ($(".name", village).has(".mainVillage").length ? true : false);
+			ActiveProfile.Villages[index].IsMainCity = checkMainCity
 			
+			var villagePop =  parseInt($(".inhabitants", village).text(), 10) || 0;
+			ActiveProfile.Villages[index].Population = villagePop;
+			
+			var PositionX = $(".coordinateX", village).text();
+			PositionX = parseInt(PositionX.replace("(",""), 10) || 0;
+			ActiveProfile.Villages[index].Position.x  = PositionX;
+			var PositionY = $(".coordinateY", village).text();
+			PositionY = parseInt(PositionY.replace(")",""), 10) || 0;
+			ActiveProfile.Villages[index].Position.y  = PositionY;
+		});
+		//*/
 		DLog("Services: Population of active village is [" + ActiveProfile.Population + "]");
 	};
 

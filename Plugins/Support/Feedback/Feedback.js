@@ -61,10 +61,6 @@ var FeedbackMetadata = {
 	Description: "Send us some feedback so we can quickly respond to any problems or ideas.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
-	
-	Default:{
-		State: "Off"
-	},
 
 	Flags: {
 		Beta: true
