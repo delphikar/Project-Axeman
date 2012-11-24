@@ -43,6 +43,7 @@
 				"Plugins/Economy/ResourceIndicator/ResourceIndicator.js",
 				"Plugins/Economy/ResourceCalculator/ResourceCalculator.js",
 				"Plugins/Economy/FieldUpgradeIndicator/FieldUpgradeIndicator.js",
+				"Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js",
 				"Plugins/Development/_Development/_Development.js",
 				"Scripts/App/App.js",
 				"Scripts/App/AppLauncher.js"
@@ -110,8 +111,8 @@
 		"Pages/PAStyles.css",
 		"Plugins/Support/Feedback/Image.png",
 		"Plugins/Support/Feedback/FeedbackForm.html",
-		"Plugins/Development/_Development/SortAscending.png",
-		"Plugins/Development/_Development/SortDescending.png",
-		"Plugins/Development/_Development/SortHierarchical.png"
+		"Plugins/Utility/VillageListEnhancement/SortAscending.png",
+		"Plugins/Utility/VillageListEnhancement/SortDescending.png",
+		"Plugins/Utility/VillageListEnhancement/SortHierarchical.png"
 	]
 }

@@ -38,7 +38,7 @@ function ResourceIndicator() {
 			"width": "589px",
 			"border-bottom-left-radius": "10px",
 			"border-bottom-right-radius": "10px",
-			"box-shadow": "0px 1px 3px #888"
+			"box-shadow": "0px 1px 2px #888"
 		});
 
 		// Appends calculated time to page
@@ -137,7 +137,7 @@ var ResourceIndicatorMetadata = {
 	Name: "ResourceIndicator",
 	Alias: "Resource Indicator",
 	Category: "Economy",
-	Version: "0.2.0.3",
+	Version: "0.2.0.4",
 	Description: "Shows how long is needed for warehouse and granary to fill up to its maximum capacity and alerts accordingly.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
