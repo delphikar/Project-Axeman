@@ -38,16 +38,29 @@ function Services() {
 		// Nothing to crawl is user is loged off
 		if (!IsLogedIn) return;
 
-		Log("Services: Crawling page...");
-
-		CrawlReports();
-		CrawlMessages();
-		CrawlVillageList();
-		CrawlPopulation();
-		CrawlLoyalty();
-		CrawlProduction();
-		CrawlStorage();
-		CrawlVillageType();
+		if (!MatchPages(
+		Enums.TravianPages.Home,
+		Enums.TravianPages.Login,
+		Enums.TravianPages.Logout)){
+			Log("Services: Crawling page...");
+			CrawlStorage();
+			CrawlProduction();
+			CrawlLoyalty();
+			CrawlVillageList();
+			CrawlMessages();
+			CrawlReports();		
+		}
+		if (MatchPages(
+		Enums.TravianPages.Player)){
+			Log("Services: Crawling Player page...");
+			CrawlPopulation();
+			CrawlVillagesDetails();
+		}
+		if (MatchPages(
+		Enums.TravianPages.VillageOut)){
+			Log("Services: Crawling Village Out page...");
+			CrawlVillageType();
+		}
 		// TODO Fields
 		// TODO Tasks
 		// TODO Military Units
@@ -58,11 +71,6 @@ function Services() {
 	// Crawls for active village storages and crop production/consumption
 	// </summary>
 	var CrawlStorage = function () {
-		if (MatchPages(	
-			Enums.TravianPages.Home,
-			Enums.TravianPages.Login,
-			Enums.TravianPages.Logout)) return;
-
 		Log("Services: Crawling village storage...");
 
 		var activeVillage = GetActiveVillage();
@@ -97,11 +105,6 @@ function Services() {
 	// Crawls for active village production from production table (not from script)
 	// </summary>
 	var CrawlProduction = function () {
-		if (MatchPages(
-			Enums.TravianPages.Home,
-			Enums.TravianPages.Login,
-			Enums.TravianPages.Logout)) return;
-
 		Log("Services: Crawling village production...");
 
 		var activeVillage = GetActiveVillage();
@@ -125,6 +128,7 @@ function Services() {
 
 		UpdateActiveVillage(activeVillage);
 	};
+<<<<<<< HEAD
 	
 	// <summary>
 	// Crawls for user population
@@ -137,16 +141,13 @@ function Services() {
 			
 		DLog("Services: Population of active village is [" + ActiveProfile.Population + "]");
 	};
+=======
+>>>>>>> 3a60d7cca12af738dcbf6dbd54be27928e1ad058
 
 	// <summary>
 	// Crawls for active village loyalty
 	// </summary>
 	var CrawlLoyalty = function () {
-		if (MatchPages(
-			Enums.TravianPages.Home,
-			Enums.TravianPages.Login,
-			Enums.TravianPages.Logout)) return;
-
 		Log("Services: Crawling village loyalty...");
 
 		// Get loyalty span text
@@ -170,11 +171,6 @@ function Services() {
 	// Crawls Village list data
 	// </summary>
 	var CrawlVillageList = function () {
-		if (MatchPages(
-			Enums.TravianPages.Home,
-			Enums.TravianPages.Login,
-			Enums.TravianPages.Logout)) return;
-
 		Log("Services: Crawling Villages list...");
 
 		// Go through all available entryes in village list
@@ -234,11 +230,6 @@ function Services() {
 	// Crawls for new user reports
 	// </summary>
 	var CrawlMessages = function () {
-		if (MatchPages(
-			Enums.TravianPages.Home,
-			Enums.TravianPages.Login,
-			Enums.TravianPages.Logout)) return;
-
 		var currentReportsCount = parseInt($(".messages .bubble-content").text(), 10) || 0;
 
 		// Check if on Messages page
@@ -256,11 +247,6 @@ function Services() {
 	// Crawls for new user reports
 	// </summary>
 	var CrawlReports = function () {
-		if (MatchPages(
-			Enums.TravianPages.Home,
-			Enums.TravianPages.Login,
-			Enums.TravianPages.Logout)) return;
-
 		var currentReportsCount = parseInt($(".reports .bubble-content").text(), 10) || 0;
 
 		// Check if on Reports page
@@ -275,11 +261,44 @@ function Services() {
 	};
 	
 	// <summary>
+	// Crawls user population
+	// </summary>
+	var CrawlPopulation = function () {
+		var pop =  parseInt($("#details tbody tr").eq(4).children().last().text(), 10) || 0;
+		ActiveProfile.Population = pop;
+
+		DLog("Services: Population of active village is [" + ActiveProfile.Population + "]");
+	};
+	
+	// <summary>
+	// Crawls for villages details
+	// </summary>
+	var CrawlVillagesDetails = function () {
+		$.each(ActiveProfile.Villages ,function (index, obj) {
+			var village = $("#villages tbody tr").find("td:contains('"+obj.Name+"')").parent();
+		
+			var checkMainCity = ($(".name", village).has(".mainVillage").length ? true : false);
+			ActiveProfile.Villages[index].IsMainCity = checkMainCity
+			DLog("Services: "+obj.Name+" "+(checkMainCity ? "is" : "isn't")+" main city");
+			
+			var villagePop =  parseInt($(".inhabitants", village).text(), 10) || 0;
+			ActiveProfile.Villages[index].Population = villagePop;
+			DLog("Services: Population of "+obj.Name+" is ["+villagePop+"]");
+			
+			var PositionX = $(".coordinateX", village).text();
+			PositionX = parseInt(PositionX.replace("(",""), 10) || 0;
+			ActiveProfile.Villages[index].Position.x  = PositionX;
+			var PositionY = $(".coordinateY", village).text();
+			PositionY = parseInt(PositionY.replace(")",""), 10) || 0;
+			ActiveProfile.Villages[index].Position.y  = PositionY;
+			DLog("Services: Coordinates for "+obj.Name+" are [("+PositionX+"|"+PositionY+")]");
+		});
+	};
+	
+	// <summary>
 	// Crawls village type
 	// </summary>
 	var CrawlVillageType = function () {
-		if (!MatchPages(Enums.TravianPages.VillageOut)) return;
-
 		var currentVillageType = $("village_map").attr("class") || "f3";
 	
 		var activeVillage = GetActiveVillage();
