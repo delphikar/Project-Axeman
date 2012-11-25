@@ -98,13 +98,14 @@ var VillageListEnhancementMetadata = {
 	Name: "VillageListEnhancement",
 	Alias: "Village List Enhancement",
 	Category: "Utility",
-	Version: "0.0.1.0",
+	Version: "0.0.0.1",
 	Description: "TODO",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
 	Flags: {
-		Alpha: true
+		Alpha: true,
+		Internal: true
 	},
 
 	Class: VillageListEnhancement

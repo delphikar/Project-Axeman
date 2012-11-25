@@ -2,6 +2,11 @@
 	$.each(
 		GlobalPluginsList,
 		function (index, obj) {
+			if (obj.Flags.Internal && !IsDevelopmentMode) {
+				console.warn("PluginsManagerPage: Internal plugin [" + obj.Name + "] ");
+				return true;
+			}
+
 			drawTable(obj);
 			actionTable(obj);
 		}

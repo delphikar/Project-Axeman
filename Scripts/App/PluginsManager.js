@@ -19,11 +19,11 @@ var GlobalPluginsList = new Array();
 
 function PluginsManager() {
 	// TODO comment
-	this.Initialize = function () {
+	this.Initialize = function() {
 		Log("PluginsManager: Initializing...");
 
 		this.RegisterPlugins(GlobalPluginsList);
-	}
+	};
 
 
 	/**************************************************************************
@@ -42,11 +42,11 @@ function PluginsManager() {
 				return;
 			}
 
-			RegisterPlugin(obj);
+			registerPlugin(obj);
 		});
 	};
 
-	var RegisterPlugin = function (pluginMetadata) {
+	function registerPlugin(pluginMetadata) {
 		var activeStateRequest = new Request("Background", "Data", "IsPluginActive" + pluginMetadata.Name, { Type: "get" });
 
 		// Send request and handle callback

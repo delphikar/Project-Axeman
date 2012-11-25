@@ -91,7 +91,7 @@ function ResourceCalculator() {
 					timeElement.html(timeDifference);
 					$(this).append(timeElement);
 
-					DLog("ResourceCalculator: Appended time deeference element for resource [r" + (rindex + 1) + "] difference [" + timeDifference + "]");
+					DLog("ResourceCalculator: Appended time deference element for resource [r" + (rindex + 1) + "] difference [" + timeDifference + "]");
 
 					// create refresh data
 					var data = {

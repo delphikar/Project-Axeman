@@ -159,7 +159,8 @@ var DevelopmentToolbarMetadata = {
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
 	Flags: {
-		Beta: true
+		Beta: true,
+		Internal: true
 	},
 
 	Class: DevelopmentToolbar
