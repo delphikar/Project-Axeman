@@ -31,7 +31,6 @@ USING AND LAUNCHING APP
 		Scripts/App/NotificationManager.js
 		Scripts/App/PluginsManager.js
 
-
 		<PLUGINS GO HERE>
 
 
@@ -44,25 +43,15 @@ USING AND LAUNCHING APP
 AVAILABLE PLUGINS
 	To add new plugin, you need to specify name and location of plugin script
 	on two places. On place is in manifest.json, you need to put your script 
-	filename including path to list of extension scripts. And here below.
+	filename including path to list of extension scripts and in PluginManager.html
+	page (and here below).
 
-	Total: (6)
+	Total: (7)
 
 	Services				(Plugins/Core/Services/Services.js)
 	DevelopmentToolbar 		(Plugins/Development/DevelopmentToolbar/DevelopmentToolbar.js)
 	Feedback				(Plugins/Support/Feedback/Feedback.js)
-<<<<<<< HEAD
-	FieldUpgradeIndicator	(Plugins/Economy/FieldUpgradeIndicator/FieldUpgradeIndicator.js)
 	ResourceCalculator		(Plugins/Economy/ResourceCalculator/ResourceClaculator.js)
 	ResourceIndicator		(Plugins/Economy/ResourceIndicator/ResourceIndicator.js)
-	VillageListEnhancement	(Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js)
-=======
 	UpgradeIndicator		(Plugins/Economy/UpgradeIndicator/UpgradeIndicator.js)
-	ResourceCalculator		(Plugins/Economy/ResourceCalculator/ResourceClaculator.js)
-	ResourceIndicator		(Plugins/Economy/ResourceIndicator/ResourceIndicator.js)
-
-
-TODO LIST (AleksandarDev)
-	- HelpPlugin (Insert FAQ of extensions to help.php)
-	- <span class="settle">1 Naseliti</span>
->>>>>>> 3a60d7cca12af738dcbf6dbd54be27928e1ad058
+	VillageListEnhancement	(Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js)

@@ -22,12 +22,12 @@ function UpgradeIndicator() {
 
 		Log("UpgradeIndicator: Registering UpgradeIndicator plugin...");
 
-		if (MatchPages(Enums.TravianPages.VillageOut))	FieldUpgradeIndicator();
-		if (MatchPages(Enums.TravianPages.VillageIn))	BuildingUpgradeIndicator();
+		if (MatchPages(Enums.TravianPages.VillageOut))	fieldUpgradeIndicator();
+		if (MatchPages(Enums.TravianPages.VillageIn))	buildingUpgradeIndicator();
 	};
 	
 
-	function FieldUpgradeIndicator(){
+	function fieldUpgradeIndicator(){
 		// Get village levels map
 		var villageMap = $("#village_map");
 		var villageType = ActiveProfile.Villages[ActiveVillageIndex].VillageOut.Type;
@@ -57,10 +57,10 @@ function UpgradeIndicator() {
 									// Check if village have warehouse/granary large enough
 									// to upgrade field
 									var canStoreResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[rrIndex];
-									console.warn("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + fieldUpgradeCost[rrIndex] + " for lvl." + (fieldLevel + 1));
+									DLog("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + fieldUpgradeCost[rrIndex] + " for lvl." + (fieldLevel + 1));
 									if (fieldUpgradeCost[rrIndex] > canStoreResource) {
-										console.warn("Can Store:" + canStoreResource);
-										console.warn("Cost: " + fieldUpgradeCost[rrIndex]);
+										DLog("Can Store: " + canStoreResource);
+										DLog("Cost: " + fieldUpgradeCost[rrIndex]);
 
 										upgradeState = "nonUpgradeable";
 										break;
@@ -98,13 +98,13 @@ function UpgradeIndicator() {
 		});
 	}
 
-	function BuildingUpgradeIndicator(){
+	function buildingUpgradeIndicator(){
 		// Get village levels map
 		var villageMap = $("#village_map");
 		var GIDs = Enums.VillageInGID;
 		var buildings = $("img", villageMap).not(".iso, .clickareas, #lswitch, .onTop");
-		buildings.each(function (Index, Object) {
-			var levelObject = $("#levels div", villageMap)[Index];
+		buildings.each(function (index) {
+			var levelObject = $("#levels div", villageMap)[index];
 			if (!$(levelObject).is(".underConstruction")) {
 				// Get current building level and GID
 				var buildingLevel = parseInt($(levelObject).text(), 10) || 0;
@@ -112,7 +112,7 @@ function UpgradeIndicator() {
 				var building = Enums.Buildings[GIDs[buildingGID]];
 				var buildingUpgradeCost = building[buildingLevel];
 
-				console.log("------"+buildingGID+": "+GIDs[buildingGID]);
+				DLog("------"+buildingGID+": "+GIDs[buildingGID]);
 				
 				var upgradeState = "upgradeable";
 				if(buildingLevel < building.length){
@@ -120,10 +120,10 @@ function UpgradeIndicator() {
 						// Check if village have warehouse/granary large enough
 						// to upgrade field
 						var canStoreResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[rrIndex];
-						console.warn("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + buildingUpgradeCost[rrIndex] + " for lvl." + (buildingLevel + 1));
+						DLog("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + buildingUpgradeCost[rrIndex] + " for lvl." + (buildingLevel + 1));
 						if (buildingUpgradeCost[rrIndex] > canStoreResource) {
-							console.warn("Can Store:" + canStoreResource);
-							console.warn("Cost: " + buildingUpgradeCost[rrIndex]);
+							DLog("Can Store:" + canStoreResource);
+							DLog("Cost: " + buildingUpgradeCost[rrIndex]);
 
 							upgradeState = "nonUpgradeable";
 							break;
@@ -220,8 +220,8 @@ var UpgradeIndicatorMetadata = {
 	Name: "UpgradeIndicator",
 	Alias: "Upgrade Indicator",
 	Category: "Economy",
-	Version: "0.0.1.5",
-	Description: "Know when you can upgrade fields and building without clicking for each. This plugin will highlight upgradeable fields and building for you.",
+	Version: "0.0.2.0",
+	Description: "Know when you can upgrade fields and building without clicking for each. This plugin will highlight upgradeable fields and buildings for you.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 

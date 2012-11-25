@@ -20,16 +20,29 @@ function StorageDetails() {
 
 				root.append(item);
 			}
+			
+			// Assign click to Table header
+			$(".PASDTableHeader").click(function() {
+				$("tr", $(this).parent().parent().parent()).each(function (index) {
+					if (index > 0) {
+						$(this).toggle();
+					}
+				});
+			});
 		}
 	};
 };
 
 // Class: Dump
 // Author: Shuns (www.netgrow.com.au/files)
-// Mod: kavillock
-// Last Updated: 12/11/24
+// Implemented to Project Axeman by
+//	kavillock
+// Last Updated: 25.11.2012.
 // Version: 1.1.2
-
+// TODO Comment
+// TODO Refactor
+// TODO Log
+// TODO Change style
 function dump(object, showTypes) {
 	var dump = '';
 	var st = typeof showTypes == 'undefined' ? true : showTypes;
@@ -48,13 +61,13 @@ function dump(object, showTypes) {
 				r += '<table' + _dumpStyles(t,'table') + '><tr><th colspan="2"' + _dumpStyles(t,'th') + '>' + t + '</th></tr>';
 				r += '<tr><td colspan="2"' + _dumpStyles(t,'td-value') + '><table' + _dumpStyles('arguments','table') + '><tr><td' + _dumpStyles('arguments','td-key') + '><i>RegExp: </i></td><td' + _dumpStyles(type,'td-value') + '>' + o + '</td></tr></table>';  
 				j++;
-			break;
+				break;
 			case 'date':
 				var t = type;
 				r += '<table' + _dumpStyles(t,'table') + '><tr><th colspan="2"' + _dumpStyles(t,'th') + '>' + t + '</th></tr>';
 				r += '<tr><td colspan="2"' + _dumpStyles(t,'td-value') + '><table' + _dumpStyles('arguments','table') + '><tr><td' + _dumpStyles('arguments','td-key') + '><i>Date: </i></td><td' + _dumpStyles(type,'td-value') + '>' + o + '</td></tr></table>';  
 				j++;
-			break;
+				break;
 			case 'function':
 				var t = type;
 				var a = o.toString().match(/^.*function.*?\((.*?)\)/im); 
@@ -62,8 +75,8 @@ function dump(object, showTypes) {
 				r += '<table' + _dumpStyles(t,'table') + '><tr><th colspan="2"' + _dumpStyles(t,'th') + '>' + t + '</th></tr>';
 				r += '<tr><td colspan="2"' + _dumpStyles(t,'td-value') + '><table' + _dumpStyles('arguments','table') + '><tr><td' + _dumpStyles('arguments','td-key') + '><i>Arguments: </i></td><td' + _dumpStyles(type,'td-value') + '>' + args + '</td></tr><tr><td' + _dumpStyles('arguments','td-key') + '><i>Function: </i></td><td' + _dumpStyles(type,'td-value') + '>' + o + '</td></tr></table>';  
 				j++;
-			break;
-				case 'domelement':
+				break;
+			case 'domelement':
 				var t = type;
 				r += '<table' + _dumpStyles(t,'table') + '><tr><th colspan="2"' + _dumpStyles(t,'th') + '>' + t + '</th></tr>';
 				r += '<tr><td' + _dumpStyles(t,'td-key') + '><i>Node Name: </i></td><td' + _dumpStyles(type,'td-value') + '>' + o.nodeName.toLowerCase() + '</td></tr>';  
@@ -71,13 +84,17 @@ function dump(object, showTypes) {
 				r += '<tr><td' + _dumpStyles(t,'td-key') + '><i>Node Value: </i></td><td' + _dumpStyles(type,'td-value') + '>' + o.nodeValue + '</td></tr>'; 					
 				r += '<tr><td' + _dumpStyles(t,'td-key') + '><i>innerHTML: </i></td><td' + _dumpStyles(type,'td-value') + '>' + o.innerHTML + '</td></tr>';  
 				j++;
-			break;		
+				break;		
 		}
 		if (/object|array/.test(type)) {
 			for (i in o) {
 				var t = _dumpType(o[i]);
 				if (j < 1) {
-					r += '<table' + _dumpStyles(type,'table') + '><tr><th colspan="2"' + _dumpStyles(type,'th') + '>' + type + '</th></tr>';
+					console.warn(o.length);
+					var info = '';
+					if (type == "array")
+						info = ' (' + o.length + ')';
+					r += '<table' + _dumpStyles(type,'table') + '><tr><th colspan="2"' + _dumpStyles(type,'th') + '><div class="PASDTableHeader">' + type + info + '</div></th></tr>';
 					j++;	  
 				}
 				if (typeof o[i] == 'object' && o[i] != null) { 
@@ -96,6 +113,7 @@ function dump(object, showTypes) {
 		return r;
 	};	
 };
+
 _dumpStyles = function(type, use) {
 	var r = '';
 	var table = 'font-size:xx-small;font-family:verdana,arial,helvetica,sans-serif;cell-spacing:2px;';
@@ -109,7 +127,7 @@ _dumpStyles = function(type, use) {
 		case 'object':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#0000cc;"';
+					r = ' style="' + table + 'background-color:#0000cc;width:100%;"';
 				break;
 				case 'th':
 					r = ' style="' + th + 'background-color:#4444cc;"';
@@ -125,7 +143,7 @@ _dumpStyles = function(type, use) {
 		case 'array':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#006600;"';
+					r = ' style="' + table + 'background-color:#006600;width:100%;"';
 				break;
 				case 'th':
 					r = ' style="' + th + 'background-color:#009900;"';
@@ -141,7 +159,7 @@ _dumpStyles = function(type, use) {
 		case 'function':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#aa4400;"';
+					r = ' style="' + table + 'background-color:#aa4400;width:100%;"';
 				break;
 				case 'th':
 					r = ' style="' + th + 'background-color:#cc6600;"';
@@ -157,7 +175,7 @@ _dumpStyles = function(type, use) {
 		case 'arguments':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#dddddd;cell-spacing:3;"';
+					r = ' style="' + table + 'background-color:#dddddd;cell-spacing:3;width:100%;"';
 				break;
 				case 'td-key':
 					r = ' style="' + th + 'background-color:#eeeeee;color:#000000;"';
@@ -167,7 +185,7 @@ _dumpStyles = function(type, use) {
 		case 'regexp':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#CC0000;cell-spacing:3;"';
+					r = ' style="' + table + 'background-color:#CC0000;cell-spacing:3;width:100%;"';
 				break;
 				case 'th':
 					r = ' style="' + th + 'background-color:#FF0000;"';
@@ -183,7 +201,7 @@ _dumpStyles = function(type, use) {
 		case 'date':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#663399;cell-spacing:3;"';
+					r = ' style="' + table + 'background-color:#663399;cell-spacing:3;width:100%;"';
 				break;
 				case 'th':
 					r = ' style="' + th + 'background-color:#9966CC;"';
@@ -199,7 +217,7 @@ _dumpStyles = function(type, use) {
 		case 'domelement':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#FFCC33;cell-spacing:3;"';
+					r = ' style="' + table + 'background-color:#FFCC33;cell-spacing:3;width:100%;"';
 				break;
 				case 'th':
 					r = ' style="' + th + 'background-color:#FFD966;"';
@@ -215,6 +233,7 @@ _dumpStyles = function(type, use) {
 	}
 	return r;
 };
+
 _dumpType = function (obj) {
 	var t = typeof(obj);
 		if (t == 'function') {

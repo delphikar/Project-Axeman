@@ -67,3 +67,12 @@
 .PATextBoxLight {
 	box-shadow: inset 0px 2px 2px #ECECEC, 0px 1px 1px white;
 }
+
+.PASDTableHeader {
+	color: white; 
+	cursor: pointer; 
+	text-decoration:underline;
+}
+	.PASDTableHeader:hover {
+		color: crimson;
+	}

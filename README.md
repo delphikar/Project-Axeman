@@ -1,11 +1,7 @@
 #Project Axeman
-_Current version 0.2.1.3_
+_Current version 0.2.2.1_
 
-<<<<<<< HEAD
-_Development version 0.2.2.0_
-=======
-_Development version 0.2.2.1_
->>>>>>> 3a60d7cca12af738dcbf6dbd54be27928e1ad058
+_Development version 0.2.3.0_
 
 
 ## Overview
@@ -27,7 +23,7 @@ _This extension uses [Google Chrome](http://www.google.com/chrome "Google Chrome
 
 - Warehouse na Granary capacity indicator
 - Calculating fields, buildings and units cost is now fast and easy
-- Fields upgrade indicator
+- Fields and buildings upgrade indicator
 - _And a lot more..._
 
 **Plugins to come**
@@ -54,12 +50,6 @@ Collaborators
 
 
 ## Changelog
-<<<<<<< HEAD
-- **Version 0.2.2** _(xx.11.2012)_
-	
-
-- **Version 0.2.1.3** _(22.11.2012.)_
-=======
 - **Version 0.2.2.1** _(25.11.2012.)_
 	- PluginManager check deafult state of plugin, on first run
 	- StorageDetais show data as table
@@ -75,9 +65,7 @@ Collaborators
 		- Fix Crawl Population
 	- UpgradeIndicator: FieldUpgradeIndicator take into account IsMainCity
 	
-
 - **Version 0.2.2** _(22.11.2012.)_
->>>>>>> 3a60d7cca12af738dcbf6dbd54be27928e1ad058
 	- Minor fixes
 	- Fix some typos
 	- Delete old & unused elements

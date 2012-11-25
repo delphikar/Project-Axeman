@@ -47,10 +47,7 @@ function ResourceIndicator() {
 			if (index == 4)
 				return true;
 			var actualProduction = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
-<<<<<<< HEAD
 			//console.log(actualProduction);
-=======
->>>>>>> 3a60d7cca12af738dcbf6dbd54be27928e1ad058
 
 			// Create element to append
 			var element = $("<div><b><p>");
@@ -140,11 +137,7 @@ var ResourceIndicatorMetadata = {
 	Name: "ResourceIndicator",
 	Alias: "Resource Indicator",
 	Category: "Economy",
-<<<<<<< HEAD
-	Version: "0.2.0.4",
-=======
-	Version: "0.2.0.3",
->>>>>>> 3a60d7cca12af738dcbf6dbd54be27928e1ad058
+	Version: "0.2.0.5",
 	Description: "Shows how long is needed for warehouse and granary to fill up to its maximum capacity and alerts accordingly.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

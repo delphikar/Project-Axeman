@@ -43,10 +43,10 @@ function Services() {
 		Enums.TravianPages.Login,
 		Enums.TravianPages.Logout)){
 			Log("Services: Crawling page...");
+			CrawlVillageList();
 			CrawlStorage();
 			CrawlProduction();
 			CrawlLoyalty();
-			CrawlVillageList();
 			CrawlMessages();
 			CrawlReports();		
 		}
@@ -128,7 +128,6 @@ function Services() {
 
 		UpdateActiveVillage(activeVillage);
 	};
-<<<<<<< HEAD
 	
 	// <summary>
 	// Crawls for user population
@@ -141,8 +140,6 @@ function Services() {
 			
 		DLog("Services: Population of active village is [" + ActiveProfile.Population + "]");
 	};
-=======
->>>>>>> 3a60d7cca12af738dcbf6dbd54be27928e1ad058
 
 	// <summary>
 	// Crawls for active village loyalty
@@ -274,23 +271,30 @@ function Services() {
 	// Crawls for villages details
 	// </summary>
 	var CrawlVillagesDetails = function () {
-		$.each(ActiveProfile.Villages ,function (index, obj) {
+		$.each(ActiveProfile.Villages, function (index, obj) {
+			// Get village detailc table
 			var village = $("#villages tbody tr").find("td:contains('"+obj.Name+"')").parent();
 		
+			// Crawl IsMainCity
 			var checkMainCity = ($(".name", village).has(".mainVillage").length ? true : false);
 			ActiveProfile.Villages[index].IsMainCity = checkMainCity
 			DLog("Services: "+obj.Name+" "+(checkMainCity ? "is" : "isn't")+" main city");
 			
+			// Crawl village population
 			var villagePop =  parseInt($(".inhabitants", village).text(), 10) || 0;
 			ActiveProfile.Villages[index].Population = villagePop;
 			DLog("Services: Population of "+obj.Name+" is ["+villagePop+"]");
 			
+			// Crawl village position X Coordinate
 			var PositionX = $(".coordinateX", village).text();
 			PositionX = parseInt(PositionX.replace("(",""), 10) || 0;
-			ActiveProfile.Villages[index].Position.x  = PositionX;
+			ActiveProfile.Villages[index].Position.x = PositionX;
+			
+			// Crawl village position Y coordinate
 			var PositionY = $(".coordinateY", village).text();
 			PositionY = parseInt(PositionY.replace(")",""), 10) || 0;
-			ActiveProfile.Villages[index].Position.y  = PositionY;
+			ActiveProfile.Villages[index].Position.y = PositionY;
+			
 			DLog("Services: Coordinates for "+obj.Name+" are [("+PositionX+"|"+PositionY+")]");
 		});
 	};
