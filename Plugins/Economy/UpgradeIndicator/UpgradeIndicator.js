@@ -22,8 +22,8 @@ function UpgradeIndicator() {
 
 		Log("UpgradeIndicator: Registering UpgradeIndicator plugin...");
 
-		if (MatchPages(Enums.TravianPages.VillageOut)) FieldUpgradeIndicator();
-		if (MatchPages(Enums.TravianPages.VillageIn)) BuildingUpgradeIndicator();
+		if (MatchPages(Enums.TravianPages.VillageOut))	FieldUpgradeIndicator();
+		if (MatchPages(Enums.TravianPages.VillageIn))	BuildingUpgradeIndicator();
 	};
 	
 
@@ -50,35 +50,39 @@ function UpgradeIndicator() {
 							// from Enums.Fields
 							var fieldUpgradeCost = Enums.Fields[rIndex][fieldLevel];
 
-							// TODO Add fully upgraded 
 							var upgradeState = "upgradeable";
-							for (var rrIndex = 0; rrIndex < 4; rrIndex++) {
-								// Check if village have warehouse/granary large enough
-								// to upgrade field
-								var canStoreResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[rrIndex];
-								console.warn("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + fieldUpgradeCost[rrIndex] + " for lvl." + (fieldLevel + 1));
-								if (fieldUpgradeCost[rrIndex] > canStoreResource) {
-									console.warn("Can Store:" + canStoreResource);
-									console.warn("Cost: " + fieldUpgradeCost[rrIndex]);
+							var maxFieldLvl = ActiveProfile.Villages[ActiveVillageIndex].IsMainCity ? 20 : 10;
+							if(fieldLevel < maxFieldLvl){
+								for (var rrIndex = 0; rrIndex < 4; rrIndex++) {
+									// Check if village have warehouse/granary large enough
+									// to upgrade field
+									var canStoreResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[rrIndex];
+									console.warn("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + fieldUpgradeCost[rrIndex] + " for lvl." + (fieldLevel + 1));
+									if (fieldUpgradeCost[rrIndex] > canStoreResource) {
+										console.warn("Can Store:" + canStoreResource);
+										console.warn("Cost: " + fieldUpgradeCost[rrIndex]);
 
-									upgradeState = "nonUpgradeable";
-									break;
-								}
-								else {
-									// Check if enough resources is stored to allow upgrade
-									var availableResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[rrIndex];
-									var costDiff = availableResource - fieldUpgradeCost[rrIndex];
-									if (costDiff < 0) {
-										upgradeState = "lowResources";
-										// NOTE: This can't break because we have to check for
-										// warehouse/granary cost difference even if we can't
-										// upgrade field. Can be case where we can't upgarade
-										// because of wood and we would break at first itteration
-										// but field clay cost is larger than what can be store. 
+										upgradeState = "nonUpgradeable";
+										break;
+									}
+									else {
+										// Check if enough resources is stored to allow upgrade
+										var availableResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[rrIndex];
+										var costDiff = availableResource - fieldUpgradeCost[rrIndex];
+										if (costDiff < 0) {
+											upgradeState = "lowResources";
+											// NOTE: This can't break because we have to check for
+											// warehouse/granary cost difference even if we can't
+											// upgrade field. Can be case where we can't upgarade
+											// because of wood and we would break at first itteration
+											// but field clay cost is larger than what can be store. 
+										}
 									}
 								}
 							}
-
+							else{
+								upgradeState = "maxUpgraded";
+							}
 							processed = true;
 							break;
 						}
