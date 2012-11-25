@@ -2,3 +2,21 @@
 
 - HelpPlugin (Insert FAQ of extensions to help.php)
 - <span class="settle">1 Naseliti</span>
+
+GA http://developer.chrome.com/trunk/extensions/tut_analytics.html
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-33221456-3']);
+  _gaq.push(['_trackPageview']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+  ga.src = 'https://ssl.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+
+
+manifest.json
+
+ "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
