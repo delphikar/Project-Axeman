@@ -79,8 +79,10 @@ function VillageListEnhancement() {
 	// TODO Comment
 	// TODO Log
 	// TODO Implement
-	var sortVillageListDescending = function() {
-
+	var sortVillageListDescending = function () {
+		$.each($("#villageList #villageListLinks li"), function() {
+			Warn($(this)[0]);
+		});
 	};
 	
 	// TODO Comment

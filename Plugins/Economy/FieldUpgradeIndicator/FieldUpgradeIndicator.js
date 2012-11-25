@@ -20,7 +20,7 @@ function FieldUpgradeIndicator() {
 		// TODO Refactor
 		// TODO Log
 		if (!IsLogedIn) {
-			Log("ResourcesIndicator: User isn't loged in...");
+			Log("FieldUpgradeIndicator: User isn't loged in...");
 			return;
 		}
 
