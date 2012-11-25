@@ -47,7 +47,6 @@ function ResourceIndicator() {
 			if (index == 4)
 				return true;
 			var actualProduction = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
-			console.log(actualProduction);
 
 			// Create element to append
 			var element = $("<div><b><p>");
