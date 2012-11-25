@@ -50,6 +50,9 @@ Collaborators
 
 
 ## Changelog
+- **Version 0.2.2.2** _(25.11.2012.)_
+	- Added Google Analytics
+
 - **Version 0.2.2.1** _(25.11.2012.)_
 	- PluginManager check deafult state of plugin, on first run
 	- StorageDetais show data as table
