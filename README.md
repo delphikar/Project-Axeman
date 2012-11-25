@@ -44,19 +44,27 @@ Developed by JustBuild Development
 
 Collaborators
 
+- Grzegorz Witczak _([kavillock](https://github.com/kavillock "Grzegorz Witczak on github"))_
 - Everton Moreth _([emoreth](https://github.com/emoreth "Everton Moreth on github"))_
 - Ignacio Munizaga _([thagat](https://github.com/emoreth "Everton Moreth on github"))_
-- Grzegorz Witczak _([kavillock](https://github.com/kavillock "Grzegorz Witczak on github"))_
 
 
 ## Changelog
-- **Version 0.2.2.1** _(24.11.2012.)_
+- **Version 0.2.2.1** _(25.11.2012.)_
 	- PluginManager check deafult state of plugin, on first run
 	- StorageDetais show data as table
 	- Enums have all buildings
 	- jQuery & jQueryUI update
 	- FieldUpgradeIndicator is now UpgradeIndicator
 		- Add VillageIn support
+	- Services:
+		- Crawl Villages Details
+			- Check Main City
+			- Crawl Village population
+			- Crawl Village Position
+		- Fix Crawl Population
+	- UpgradeIndicator: FieldUpgradeIndicator take into account IsMainCity
+	
 
 - **Version 0.2.2** _(22.11.2012.)_
 	- Minor fixes

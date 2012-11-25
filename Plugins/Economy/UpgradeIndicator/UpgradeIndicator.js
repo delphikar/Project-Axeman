@@ -226,7 +226,7 @@ var UpgradeIndicatorMetadata = {
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
 	Flags: {
-		Alpha: true
+		Beta: true
 	},
 
 	Class: UpgradeIndicator
