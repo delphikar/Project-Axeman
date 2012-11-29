@@ -17,7 +17,8 @@
 	],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 	"background": {
-		"page": "Pages/Background.html"
+		"page": "Pages/Background.html",
+		"persistent": false
 	},
 	"options_page": "Pages/PluginsManager.html",
 	"browser_action": {
@@ -114,6 +115,8 @@
 		"Plugins/Support/Feedback/FeedbackForm.html",
 		"Plugins/Utility/VillageListEnhancement/SortAscending.png",
 		"Plugins/Utility/VillageListEnhancement/SortDescending.png",
-		"Plugins/Utility/VillageListEnhancement/SortHierarchical.png"
+		"Plugins/Utility/VillageListEnhancement/SortHierarchical.png",
+		"Plugins/Development/DevelopmentToolbar/DevelopmentToolbarStyle.css",
+		"Plugins/Development/DevelopmentToolbar/Console.png"
 	]
 }

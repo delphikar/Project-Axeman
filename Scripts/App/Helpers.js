@@ -66,6 +66,8 @@ function Error(message) {
 
 	if (IsDevelopmentMode) {
 		console.error(message);
+		
+		(new Request("ConsoleOutput", "Error", null, message)).Send();
 	}
 };
 
@@ -78,6 +80,8 @@ function Warn(message) {
 
 	if (IsDevelopmentMode) {
 		console.warn(message);
+		
+		(new Request("ConsoleOutput", "Warning", null, message)).Send();
 	}
 };
 
@@ -90,6 +94,8 @@ function Log(message) {
 
 	if (IsDevelopmentMode) {
 		console.log(message);
+		
+		(new Request("ConsoleOutput", "Log", null, message)).Send();
 	}
 };
 
@@ -102,6 +108,8 @@ function DLog(message) {
 
 	if (IsDebugMode == true && IsDevelopmentMode == true) {
 		console.log(message);
+		
+		(new Request("ConsoleOutput", "Debug", null, message)).Send();
 	}
 };
 
@@ -197,8 +205,8 @@ function ConvertHoursToTime(hours) {
 	//_seconds = Math.floor(_seconds);
 
 	return (_hours < 10 ? '0' + _hours : _hours) + ":" +
-    (_minutes < 10 ? '0' + _minutes : _minutes) + ":" +
-    (_seconds < 10 ? '0' + _seconds : _seconds);
+	(_minutes < 10 ? '0' + _minutes : _minutes) + ":" +
+	(_seconds < 10 ? '0' + _seconds : _seconds);
 };
 
 function EnsureParams(object, required) {

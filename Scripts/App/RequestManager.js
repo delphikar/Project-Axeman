@@ -27,7 +27,7 @@ function Request(requestSign, requestCategory, requestName, requestData) {
 	 *
 	 **************************************************************************/
 	this.Send = function (callback) {
-		chrome.extension.sendRequest(this, callback || function () { });
+		chrome.extension.sendMessage(this, callback || function () { });
 	};
 }
 
@@ -47,13 +47,14 @@ function RequestManager() {
 	 * Adds reciever for specific sign
 	 *
 	 *************************************************************************/
-	this.Recieve = function(sign, callback) {
-		chrome.extension.onRequest.addListener(
-			function(request, sender, sendResponse) {
-				if (sign == request.Sign) {
+	this.Recieve = function (sign, callback) {
+		console.warn("Created port for " + sign);
+		chrome.extension.onMessage.addListener(
+			function (request, sender, sendResponse) {
+				if (sign == "*" || sign == request.Sign) {
 					callback(request, sender, sendResponse);
 				}
 			}
 		);
-	}
+	};
 }

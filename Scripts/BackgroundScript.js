@@ -43,8 +43,8 @@ function BackgroundScript() {
 			Error("BackgroundScript: localStorage not found! Try updating your browser!");
 		}
 
-		// Attach listener to "Background" request sign
-		requestManager.Recieve("Background", gotRequest);
+		// Attach listener to all request signs
+		requestManager.Recieve("*", gotRequest);
 	};
 
 	/// <summary>
@@ -54,23 +54,31 @@ function BackgroundScript() {
 	/// <param name="sender">Sender object</param>
 	/// <param name="sendResponse">sendResponse function</param>
 	var gotRequest = function (request, sender, sendResponse) {
-		DLog("BackgroundScript: Got request category [" + request.Category + "]");
+		console.log("BackgroundScript: Got request category [" + request.Category + "]");
 
-		// Supports following categories
-		//		Data
-		//		Action
-		switch (request.Category) {
-			case "Data": {
-				gotDataRequest(request, sendResponse);
-				break;
-			}
-			case "Action": {
-				gotActionRequest(request);
-				break;
-			}
-			default: {
-				Error("BackgroundScript: Unknown category [" + request.Category  + "]");
-				break;
+
+		if (request.Sign != "Background") {
+			chrome.tabs.sendMessage(sender.tab.id, request);
+		} else {
+			// Supports following categories
+			//		Data
+			//		Action
+			switch (request.Category) {
+			case "Data":
+				{
+					gotDataRequest(request, sendResponse);
+					break;
+				}
+			case "Action":
+				{
+					gotActionRequest(request);
+					break;
+				}
+			default:
+				{
+					Error("BackgroundScript: Unknown category [" + request.Category + "]");
+					break;
+				}
 			}
 		}
 	};
@@ -80,7 +88,7 @@ function BackgroundScript() {
 	/// </summary>
 	/// <param name="request">Request object</param>
 	var gotActionRequest = function (request) {
-		DLog("BackgroundScript: Got Action request [" + request.Name + "]");
+		console.log("BackgroundScript: Got Action request [" + request.Name + "]");
 
 		if (IsNullOrEmpty(request.Name)) {
 			Error("BackgroundScript: Invalid action name [" + request.Name + "]");
@@ -97,7 +105,7 @@ function BackgroundScript() {
 	/// <param name="request">Request object</param>
 	/// <param name="sendResponse">Response function</param>
 	var gotDataRequest = function (request, sendResponse) {
-		DLog("BackgroundScript: Got Data request [" + request.Data.Type + "]");
+		console.log("BackgroundScript: Got Data request [" + request.Data.Type + "]");
 
 		if (request.Data.Type == "get") {
 			sendResponse(getObject(request.Name));
@@ -137,7 +145,7 @@ function BackgroundScript() {
 	var setObject = function (key, value) {
 		try {
 			localStorage.setItem(key, JSON.stringify(value));
-			DLog("BackgroundScript: Set Data [" + key + "] Value [" + value + "]");
+			console.log("BackgroundScript: Set Data [" + key + "] Value [" + value + "]");
 		}
 		catch (exception) {
 			if (exception.name === 'QUOTA_EXCEEDED_ERR' ||
@@ -159,14 +167,14 @@ function BackgroundScript() {
 	var getObject = function (key) {
 		var value = localStorage.getItem(key);
 		var parsedValue = value && JSON.parse(value);
-		DLog("BackgroundScript: Got Data [" + key + "] Value [" + parsedValue + "]");
+		console.log("BackgroundScript: Got Data [" + key + "] Value [" + parsedValue + "]");
 		return parsedValue;
 	};
 };
 
 // TODO: Comment function
 //function GotNotificationRequest(request) {
-//	DLog("BackgroundScript: Got Notification request.");
+//	console.log("BackgroundScript: Got Notification request.");
 
 //	if (request.actionName == "Show") {
 //		notificationManager.Show(request.requestData);
