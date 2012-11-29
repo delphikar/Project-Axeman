@@ -139,106 +139,106 @@ _dumpStyles = function(type, use) {
 		case 'object':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#0000cc;width:100%;"';
+					r = ' style="' + table + 'background:#333;width:100%;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#4444cc;"';
+					r = ' style="' + th + 'background:#444;"';
 				break;
 				case 'td-key':
-					r = ' style="' + td + 'background-color:#ccddff;"';
+					r = ' style="' + td + 'background:#E5E5E5;"';
 				break;
 				case 'td-value':
-					r = ' style="' + td + 'background-color:#fff;"';
+					r = ' style="' + td + 'background:#fff;"';
 				break;
 			}
 		break;
 		case 'array':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#006600;width:100%;"';
+					r = ' style="' + table + 'background:#888; width:100%;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#009900;"';
+					r = ' style="' + th + 'background:#999;"';
 				break;
 				case 'td-key':
-					r = ' style="' + td + 'background-color:#ccffcc;"';
+					r = ' style="' + td + 'background:#F3F3F3;"';
 				break;
 				case 'td-value':
-					r = ' style="' + td + 'background-color:#fff;"';
+					r = ' style="' + td + 'background:#fff;"';
 				break;
 			}	
 		break;
 		case 'function':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#aa4400;width:100%;"';
+					r = ' style="' + table + 'background:#aa4400;width:100%;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#cc6600;"';
+					r = ' style="' + th + 'background:#cc6600;"';
 				break;
 				case 'td-key':
-					r = ' style="' + td + 'background-color:#fff;"';
+					r = ' style="' + td + 'background:#fff;"';
 				break;
 				case 'td-value':
-					r = ' style="' + td + 'background-color:#fff;"';
+					r = ' style="' + td + 'background:#fff;"';
 				break;
 			}	
 		break;
 		case 'arguments':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#dddddd;cell-spacing:3;width:100%;"';
+					r = ' style="' + table + 'background:#dddddd;cell-spacing:3;width:100%;"';
 				break;
 				case 'td-key':
-					r = ' style="' + th + 'background-color:#eeeeee;color:#000000;"';
+					r = ' style="' + th + 'background:#eeeeee; color:#000000;"';
 				break;	  
 			}	
 		break;
 		case 'regexp':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#CC0000;cell-spacing:3;width:100%;"';
+					r = ' style="' + table + 'background:#CC0000;cell-spacing:3;width:100%;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#FF0000;"';
+					r = ' style="' + th + 'background:#FF0000;"';
 				break;
 				case 'td-key':
-					r = ' style="' + th + 'background-color:#FF5757;color:#000000;"';
+					r = ' style="' + th + 'background:#FF5757;color:#000000;"';
 				break;
 				case 'td-value':
-					r = ' style="' + td + 'background-color:#fff;"';
+					r = ' style="' + td + 'background:#fff;"';
 				break;		  
 			}	
 		break;
 		case 'date':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#663399;cell-spacing:3;width:100%;"';
+					r = ' style="' + table + 'background:#663399;cell-spacing:3;width:100%;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#9966CC;"';
+					r = ' style="' + th + 'background:#9966CC;"';
 				break;
 				case 'td-key':
-					r = ' style="' + th + 'background-color:#B266FF;color:#000000;"';
+					r = ' style="' + th + 'background:#B266FF;color:#000000;"';
 				break;
 				case 'td-value':
-					r = ' style="' + td + 'background-color:#fff;"';
+					r = ' style="' + td + 'background:#fff;"';
 				break;		  
 			}	
 		break;
 		case 'domelement':
 			switch (use) {
 				case 'table':  
-					r = ' style="' + table + 'background-color:#FFCC33;cell-spacing:3;width:100%;"';
+					r = ' style="' + table + 'background:#FFCC33;cell-spacing:3;width:100%;"';
 				break;
 				case 'th':
-					r = ' style="' + th + 'background-color:#FFD966;"';
+					r = ' style="' + th + 'background:#FFD966;"';
 				break;
 				case 'td-key':
-					r = ' style="' + th + 'background-color:#FFF2CC;color:#000000;"';
+					r = ' style="' + th + 'background:#FFF2CC;color:#000000;"';
 				break;
 				case 'td-value':
-					r = ' style="' + td + 'background-color:#fff;"';
+					r = ' style="' + td + 'background:#fff;"';
 				break;		  
 			}	
 		break;	  
