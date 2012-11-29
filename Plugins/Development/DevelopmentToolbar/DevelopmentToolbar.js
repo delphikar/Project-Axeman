@@ -34,6 +34,11 @@ _gaq.push(['_trackEvent', 'Plugin', 'Development/DevelopmentToolbar']);
  *
  *****************************************************************************/
 function DevelopmentToolbar() {
+	//
+	// Variables
+	//
+	var requestManager = new RequestManager();
+
 	/**************************************************************************
 	 *
 	 * Registers Developer toolbar plugin
@@ -51,111 +56,138 @@ function DevelopmentToolbar() {
 		// Activate plugin message
 		Log("DevelopmentToolbar: Extension is in development mode - plugin set to active.");
 
+		// Attaches itself to request manager
+		chrome.extension.onMessage.addListener(recieveConsoleRequest);
+
 		// Creates new development toolbar source code
 		var toolbar = this.GetNewToolbar(
- 			this.GetNewLabel("Project - Axeman"),
- 			this.GetNewButton("PluginManager", GetURL("/Pages/PluginsManager.html")),
-			this.GetNewButton("Popup", GetURL("/Pages/Popup.html")),
-			this.GetNewButton("StorageDetails", GetURL("/Pages/StorageDetails.html"))
- 		);
+			this.GetNewLabel("Project - Axeman").css("padding", "12px"),
+			this.GetNewButton("PluginManager", GetURL("/Pages/PluginsManager.html")),
+			this.GetNewButton("Popup page", GetURL("/Pages/Popup.html")),
+			this.GetNewButton("StorageDetails", GetURL("/Pages/StorageDetails.html")),
+			this.GetNewImageButton("Console.png", function() {}).attr("id", "DTConsoleToggle").css("float", "right")
+		);
 
+		// Create stylesheet link DOM object
+		var stylesheetLink = $("<link>");
+		stylesheetLink.attr("href", GetURL("Plugins/Development/DevelopmentToolbar/DevelopmentToolbarStyle.css"));
+		stylesheetLink.attr("type", "text/css");
+		stylesheetLink.attr("rel", "stylesheet");
+		
+		// Create console output DOM object
+		var consoleOutput = $("<div>");
+		consoleOutput.attr("class", "DTConsoleOutput");
+		consoleOutput.css("visibility", "hidden");
+		consoleOutput.append($("<div>").attr("id", "DTConsoleOutputContainer"));
+		
 		// Appends style and code to current page
-		$("head").append(this.GetDevelopmentToolbarStyle());
+		$("head").append(stylesheetLink);
 		$("body").append(toolbar);
+		$("body").append(consoleOutput);
+
+		// Apply click event to Console toggle button
+		$("#DTConsoleToggle").click(function () {
+			var console = $(".DTConsoleOutput");
+			if (console.css("visibility") == "visible")
+				console.css("visibility", "hidden");
+			else console.css("visibility", "visible");
+
+			$(this).attr("class", console.css("visibility") == "visible" ? "DTButtonImageToggled" : "DTButtonImage");
+		});
+
+		console.warn(arguments.callee.caller.name);
 	};
 
-	// TODO: Comment function
-	this.GetDevelopmentToolbarStyle = function () {
-		var style =
-			'<style type="text/css">' +
-				// Toolbar style
-				'.DTBase {' +
-					'position:fixed;' +
-					'z-index:1000;' +
-					'bottom: 0px; right: 0px; left: 0px;' +
-					'padding: 5px;' +
-					'background: -webkit-gradient(linear, left top, left bottom, from(#D3D3D3), to(#919191));' +
-				'}' +
-				// Button style
-				'.DTButton:link, ' +
-				'.DTButton:hover, ' +
-				'.DTButton:visited, ' +
-				'.DTButton:active, ' +
-				'.DTButton {' +
-					'color: lightgray;' +
-					'background: -webkit-gradient(linear, left top, left bottom, from(#747474), to(#4B4B4B));' +
-					'padding: 2px 8px 2px 8px;' +
-					'border-radius: 10px;' +
-				'}' +
-				// Label style
-				'.DTLabelNormal:link, ' +
-				'.DTLabelNormal:hover, ' +
-				'.DTLabelNormal:visited, ' +
-				'.DTLabelNormal:active, ' +
-				'.DTLabelNormal {' +
-					'padding: 0px 10px;' +
-					'color: black;' +
-				'}' +
-				// InfoLabel style
-				'.DTLabelInfo:link, ' +
-				'.DTLabelInfo:hover, ' +
-				'.DTLabelInfo:visited, ' +
-				'.DTLabelInfo:active, ' +
-				'.DTLabelInfo {' +
-					'color: gray;' +
-				'}' +
-				// WarnLabel style
-				'.DTLabelWarn:link, ' +
-				'.DTLabelWarn:hover, ' +
-				'.DTLabelWarn:visited, ' +
-				'.DTLabelWarn:active, ' +
-				'.DTLabelWarn {' +
-					'color: red;' +
-				'}' +
-			'</style>';
+	// TODO Comment
+	// TODO Implement
+	// TODO Log
+	var recieveConsoleRequest = function (request, sender, sendRespons) {
+		if (request.Sign != "ConsoleOutput") return;
 
-		return style;
+		// Create and append new console element
+		var style = "DTConsoleOutput" + request.Category;
+		$("#DTConsoleOutputContainer").append($("<div>").attr("class", style).append(request.Data));
+
+		// Scroll to last console element
+		$("#DTConsoleOutputContainer").scrollTop($("#DTConsoleOutputContainer")[0].scrollHeight);
 	};
 
 	// TODO: Comment function
 	this.GetNewLabel = function (content) {
 		DLog("DevelopmentToolbar: Creating new label '" + content + "'");
 
-		return '<a class="DTLabelNormal" href="#">' + content + '</a>';
+		var label = $("<a>");
+		label.attr("class", "DTLabelNormal");
+		label.attr("href", "#");
+		label.append(content);
+
+		return label;
 	};
 
 	// TODO: Comment function
 	this.GetNewLabelInfo = function (content) {
 		DLog("DevelopmentToolbar: Creating new InfoLabel '" + content + "'");
 
-		return '<a class="DTLabelNormal DTLabelInfo" href="#">' + content + '</a>';
+		var label = $("<a>");
+		label.attr("class", "DTLabelInfo");
+		label.attr("href", "#");
+		label.append(content);
+
+		return label;
 	};
 
 	// TODO: Comment function
 	this.GetNewLabelWarn = function (content) {
 		DLog("DevelopmentToolbar: Creating new WarnLabel '" + content + "'");
 
-		return '<a class="DTLabelNormal DTLabelWarn" href="#">' + content + '</a>';
+		var label = $("<a>");
+		label.attr("class", "DTLabelWarn");
+		label.attr("href", "#");
+		label.append(content);
+
+		return label;
 	};
 
 	// TODO: Comment function
 	this.GetNewToolbar = function () {
 		DLog("DevelopmentToolbar: Creating new Toolbar with [" + arguments.length + "] components.");
 
-		var toolbarSource = '<div class="DTBase" id="DevelopmentToolbar">';
+		var toolbar = $("<div>");
+		toolbar.attr("id", "DevelopmentToolbar");
+		toolbar.attr("class", "DTBase");
+		
 		for (var index = 0; index < arguments.length; index++) {
-			toolbarSource += arguments[index];
+			toolbar.append(arguments[index]);
 		}
-		toolbarSource += '</dev>';
 
-		return toolbarSource;
+		return toolbar;
 	};
 
 	// TODO: Comment function
 	this.GetNewButton = function (content, reference) {
 		DLog("DevelopmentToolbar: Creating new Button of content '" + content + "'");
 
-		return '<a class="DTButton" target="_blank" href="' + reference + '">' + content + '</a>&nbsp;&nbsp;&nbsp;&nbsp;'
+		var button = $("<a>");
+		button.attr("class", "DTButton");
+		button.attr("href", reference);
+		button.attr("target", "_blank");
+		button.append(content);
+
+		return button;
+	};
+
+	// TODO Comment
+	this.GetNewImageButton = function(content, action) {
+		DLog("DevelopmentToolbar: Creating new Button of content '" + content + "'");
+
+		var image = $("<img>");
+		image.attr("src", GetURL("Plugins/Development/DevelopmentToolbar/" + content));
+
+		var button = $("<div>");
+		button.attr("class", "DTButtonImage");
+		button.append(image);
+
+		return button;
 	};
 }
 
@@ -164,7 +196,7 @@ var DevelopmentToolbarMetadata = {
 	Name: "DevelopmentToolbar",
 	Alias: "Development Toolbar",
 	Category: "Development",
-	Version: "0.2.1.1",
+	Version: "0.3.0.0",
 	Description: "You can quickly access extension development pages from bottom of the page. It will even give you some additional information about script.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
