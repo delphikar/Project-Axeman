@@ -41,14 +41,18 @@
 				"Scripts/App/PluginsManager.js",
 				"Plugins/Core/Services/Services.js",
 				"Plugins/Development/DevelopmentToolbar/DevelopmentToolbar.js",
+				"Plugins/Development/_Development/_Development.js",
 				"Plugins/Support/Feedback/Feedback.js",
 				"Plugins/Economy/ResourceIndicator/ResourceIndicator.js",
 				"Plugins/Economy/ResourceCalculator/ResourceCalculator.js",
 				"Plugins/Economy/UpgradeIndicator/UpgradeIndicator.js",
 				"Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js",
-				"Plugins/Development/_Development/_Development.js",
+				"Plugins/Utility/MarketplaceImprovement/MarketplaceImprovement.js",
 				"Scripts/App/App.js",
 				"Scripts/App/AppLauncher.js"
+			],
+			"css": [
+				"Pages/jQueryUI.css"
 			],
 			"matches": [
 				"http://*.travian.ae/*",

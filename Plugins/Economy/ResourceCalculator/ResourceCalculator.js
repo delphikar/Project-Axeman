@@ -64,8 +64,8 @@ function ResourceCalculator() {
 			var production = resources.Production[rindex];
 			var storage = resources.Storage[rindex];
 
-			$(".contractCosts").each(function (cindex) {
-				$("span:eq(" + rindex + ")", this).each(function () {
+			$(".contractCosts, .information, .regenerateCosts").each(function (cindex) {
+				$(".showCosts span:eq(" + rindex + ")", this).each(function () {
 					// Get cost difference
 					var res = parseInt($(this).text(), 10) || 0;
 					var diff = inWarehouse - res;

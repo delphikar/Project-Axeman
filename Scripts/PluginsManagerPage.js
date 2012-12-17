@@ -9,8 +9,6 @@ _gaq.push(['_trackPageview']);
 	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 
-
-
 $(document).ready(function () {
 	$.each(
 		GlobalPluginsList,
@@ -24,11 +22,14 @@ $(document).ready(function () {
 			actionTable(obj);
 		}
 	);
+	$( ".Container" ).tabs({ fx: {opacity: 'toggle', duration: 300} });
 });
 
 function drawTable(obj) {
-	if($("."+obj.Category).length == 0)
-		$("#PluginsTable").append("<div class='PluginCat "+obj.Category+"'><h1>"+obj.Category+"</h1></div>");
+	if($("."+obj.Category).length == 0){
+		$(".Container ul").append('<li><a href="#'+obj.Category+'">'+obj.Category+'</a></li>');
+		$(".Container").append("<div id='"+obj.Category+"' class='PluginCat "+obj.Category+"'></div>");
+	}
 	var pluginItem = "\
 		<div class='PluginItem" + (obj.Flags.Alpha ? " AlphaFlag" : "") + (obj.Flags.Beta ? " BetaFlag" : "") + "'>\
 			<div style='float:left;' class='PluginOptions'>\

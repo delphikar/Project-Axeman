@@ -1,5 +1,5 @@
 #Project Axeman
-_Current version 0.2.2.2_
+_Current version 0.2.2.3_
 
 _Development version 0.2.3.0_
 
@@ -50,6 +50,17 @@ Collaborators
 
 
 ## Changelog
+- **Version 0.2.2.3** _(17.12.2012.)_
+	- Change jQueryUI CSS:
+		- Style reminiscent of a travian.
+		- Deafult loaded on all pages.
+	- New Plugin: MarketplaceImprovement.
+	- Services:
+		- Fix CrawlVillageType.
+	- Plugins Manager new style.
+	- ResourceCalculator:
+		- Add calculator to Academy & Hero regeneration.
+
 - **Version 0.2.2.2** _(25.11.2012.)_
 	- Added Google Analytics
 
