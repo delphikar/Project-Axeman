@@ -58,11 +58,10 @@ function ResourceIndicator() {
 			if (index == 4)
 				return true;
 			var actualProduction = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
-			//console.log(actualProduction);
 
 			// Create element to append
 			var element = $("<div><b><p>");
-			$("p", element).attr("id", "ResourceIndicator" + index);
+			$("p", element).addClass("ResourceIndicatorFillTime");
 			$("p", element).css("text-align", "right");
 			$("p", element).html("never");
 
@@ -71,75 +70,65 @@ function ResourceIndicator() {
 			}
 			else {
 				var current = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[index];
-
+				var timeLeft = 0;
 				if (actualProduction > 0) {
 					var max = ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[index]
-					var timeLeft = (max - current) / actualProduction;
-
-					$("p", element).html(ConvertHoursToTime(timeLeft));
-					$(this).append(element);
+					timeLeft = (max - current) / actualProduction;
 				}
 				else {
-					var timeLeft = current / Math.abs(actualProduction);
+					timeLeft = current / Math.abs(actualProduction);
 
 					$("p", element).css("color", "red");
 					$("p", element).addClass("negative");
-					$("p", element).html(ConvertHoursToTime(timeLeft));
-					$(this).append(element);
 				}
+				$("p", element).attr("data-timeleft", timeLeft * 3600);
+				$(this).append(element);
 			}
 			DLog("ResourcesIndicator: Appended to resource [l" + (index + 1) + "]");
 		});
 
 		// Initial refresh
-		RefreshFunction("ResourceIndicator");
+		RefreshFunction();
 
 		var interval = 1000;
-		setInterval(RefreshFunction, interval, "ResourceIndicator");
+		setInterval(RefreshFunction, interval);
 		DLog("ResourcesIndicator: Timer registered to interval [" + interval + "]");
 	};
 
 	/// <summary>
 	/// Called in intervals to refresh times on elements
 	/// </summary>
-	/// <param name="id">Elements id tag</param>
 	/// <param name="cneg">Color for negative value</param>
 	/// <param name="czero">Color for hours >= 3</param>
 	/// <param name="calmost">Color for hours < 3</param>
 	/// <param name="cclose">Color for hours < 0.75</param>
 	/// <param name="cother">Color for hours = 0</param>
-	function RefreshFunction(id, cneg, czero, calmost, cclose, cother) {
-		for (var index = 0; index < 4; index++) {
-			$("#" + id + index).each(function () {
-				// Get current time from element
-				var hours = ConvertTimeToHours($(this).text());
+	function RefreshFunction(cneg, czero, calmost, cclose, cother) {
+		$(".ResourceIndicatorFillTime").each(function () {
+			// Get current time from element
+			var secondsLeft = parseInt($(this).attr("data-timeleft"), 10);
+			if (secondsLeft >= 0) {
+				if (secondsLeft > 0) {
+					secondsLeft--;
+					$(this).attr("data-timeleft", secondsLeft);
+				}
+				$(this).html(ConvertSecondsToTime(secondsLeft));
+			}
 
-				// Not updating if 00:00:00
-				if (hours > 0) {
-					// Subtracts one second and writes new text to element
-					hours -= 0.0002777006777777; // 1 s -> 1/~3600 (3601 because of calculation error)
-					$(this).html(ConvertHoursToTime(hours));
-				}
-				else if (hours < 0) {
-					hours = 0;
-				}
-				
-				if($(this).hasClass("negative")){
-					$(this).css("color", cneg || "red");
-				}
-				else{
+			if ($(this).hasClass("negative")) {
+				$(this).css("color", cneg || "#C00");
+			}
+			else {
 				// Changes element style (color) depending on current time state
-					if (hours === 0)
-						$(this).css("color", czero || "black");
-					else if (hours < 0.75)
-						$(this).css("color", calmost || "#B20C08");
-					else if (hours < 3)
-						$(this).css("color", cclose || "#A6781C");
-					else
-						$(this).css("color", cother || "#0C9E21");
-				}
-			});
-		}
+				if (secondsLeft === 0)
+					$(this).css("color", czero || "#C00");
+				else if (secondsLeft < 2700)
+					$(this).css("color", calmost || "#B20C08");
+				else if (secondsLeft < 10800)
+					$(this).css("color", cclose || "#A6781C");
+				else $(this).css("color", cother || "#0C9E21");
+			}
+		});
 	};
 };
 
@@ -148,7 +137,7 @@ var ResourceIndicatorMetadata = {
 	Name: "ResourceIndicator",
 	Alias: "Resource Indicator",
 	Category: "Economy",
-	Version: "0.2.0.5",
+	Version: "0.2.1.0",
 	Description: "Shows how long is needed for warehouse and granary to fill up to its maximum capacity and alerts accordingly.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

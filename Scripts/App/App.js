@@ -21,30 +21,34 @@ _gaq.push(['_trackEvent', 'App', 'Application used']);
 })();
 
 
-/// <summary>
-/// App class
-/// This is start class for content script
-/// </summary>
 function App() {
+	/// <summary>
+	/// App class
+	/// This is start class for content script
+	/// </summary>
+
 	var loadNumber = 1;
 	var currentLoad = 0;
 	var pluginsManager = new PluginsManager();
 
-	/// <summary>
-	/// Initializes App object
-	/// </summary>
 	this.Initialize = function () {
+		/// <summary>
+		/// Initializes App object
+		/// </summary>
+
 		Log("App: Initialization started...");
 
-		// Default settings
+		// Disables browser caching of ajax calls so that changes made on 
+		// plugins manager page are available on next restart
 		$.ajaxSetup({ cache: false });
 
+		// TODO Remove is not needed any more (moved to contentscript.css)
 		// Inject Project Axeman styles
-		var stylesheet = $("<link>");
-		stylesheet.attr("href", GetURL("Pages/PAStyles.css"));
-		stylesheet.attr("type", "text/css");
-		stylesheet.attr("rel", "stylesheet");
-		$("head").append(stylesheet);
+		//var stylesheet = $("<link>");
+		//stylesheet.attr("href", GetURL("Pages/PAStyle.css"));
+		//stylesheet.attr("type", "text/css");
+		//stylesheet.attr("rel", "stylesheet");
+		//$("head").append(stylesheet);
 
 		// Initialize Modal View
 		this.InitializeModalView();
@@ -53,26 +57,29 @@ function App() {
 		// Get active page
 		this.GetActivePage();
 
+		// Initiates loading
 		this.Load();
 
 		// Send request to check if this is first play
 		(new Request("Background", "Action", "IsFirstPlay")).Send();
 	};
 
-	/// <summary>
-	/// Loads all variables needed for further initialization
-	/// </summary>
 	this.Load = function () {
+		/// <summary>
+		/// Loads all variables needed for further initialization
+		/// </summary>
+
 		Log("App: Loading...");
 
 		// Loading available user profiles
 		LoadProfiles();
 	};
 
-	/// <summary>
-	/// Sends request and loads available user profiles
-	/// </summary>
 	var LoadProfiles = function () {
+		/// <summary>
+		/// Sends request and loads available user profiles
+		/// </summary>
+
 		DLog("App: Requesting profiles list...");
 
 		var profilesRequest = new Request("Background", "Data", "Profiles", { Type: "get" });
@@ -96,11 +103,12 @@ function App() {
 		});
 	};
 
-	/// <summary>
-	/// Increments number of current loads and checks if it is equal 
-	/// to needed loads, if so calls initialization finalization
-	/// </summary>
 	var CheckFinishedLoading = function () {
+		/// <summary>
+		/// Increments number of current loads and checks if it is equal 
+		/// to needed loads, if so calls initialization finalization
+		/// </summary>
+
 		DLog("App: Loaded [" + (currentLoad + 1) + " of " + loadNumber + "]");
 
 		if (++currentLoad >= loadNumber) {
@@ -109,20 +117,22 @@ function App() {
 		}
 	};
 
-	/// <summary>
-	/// Finazlizes initialization process
-	/// </summary>
 	var InitializationFinalize = function () {
+		/// <summary>
+		/// Finazlizes initialization process
+		/// </summary>
+
 		Log("App: Finalizing initialization...");
 
 		// Register plugins
 		pluginsManager.Initialize();
 	};
 
-	/// <summary>
-	/// Gets pathnames of current page and saves it to variables
-	/// </summary>
 	this.GetActivePage = function () {
+		/// <summary>
+		/// Gets pathnames of current page and saves it to variables
+		/// </summary>
+
 		Log("App: Reading current page...");
 
 		var currentAddress = window.location.hostname;
@@ -140,13 +150,14 @@ function App() {
 		_gaq.push(['_trackEvent', 'Server', currentAddress]);
 	};
 
-	/// <summary>
-	/// Initializes Moval View
-	/// This function will inject modalview <div> tag onto page. This will
-	/// be used to slide in/out pages so that user can change settings
-	/// or see some additional information.
-	/// </summary>
 	this.InitializeModalView = function () {
+		/// <summary>
+		/// Initializes Moval View
+		/// This function will inject modalview <div> tag onto page. This will
+		/// be used to slide in/out pages so that user can change settings
+		/// or see some additional information.
+		/// </summary>
+
 		Log("App: Initializing ModalView");
 
 		// Appends modal view 
@@ -173,12 +184,13 @@ function App() {
 		Log("App: ModalView injected to the page");
 	};
 
-	/// <summary>
-	/// Slides in ModalView if it is hidden and shows given content on it
-	/// </summary>
-	/// <param name="content">Content string</param>
-	/// <returns>Returns true if modalview is successfully shown</returns>
 	this.ShowModalView = function (content) {
+		/// <summary>
+		/// Slides in ModalView if it is hidden and shows given content on it
+		/// </summary>
+		/// <param name="content">Content string</param>
+		/// <returns>Returns true if modalview is successfully shown</returns>
+
 		// Return if modelview is already active
 		if (app.isModalViewActive == true) {
 			DLog("App: Modal already oppened!");
@@ -203,11 +215,12 @@ function App() {
 		return true;
 	};
 
-	/// <summary>
-	/// Slides out ModalView if it is shown
-	/// </summary>
-	/// <returns>Returns true if modalview is successfully hidden</returns>
 	this.HideModalView = function () {
+		/// <summary>
+		/// Slides out ModalView if it is shown
+		/// </summary>
+		/// <returns>Returns true if modalview is successfully hidden</returns>
+
 		// Return if modalview is already hidden
 		if (app.isModalViewActive == false) {
 			DLog("App: Modal already hidden!");

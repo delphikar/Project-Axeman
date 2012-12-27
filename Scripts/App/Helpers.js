@@ -65,9 +65,10 @@ function Error(message) {
 	/// <param name="message">Message to write</param>
 
 	if (IsDevelopmentMode) {
-		console.error(message);
+		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
+		console.error(category + message);
 		
-		(new Request("ConsoleOutput", "Error", null, message)).Send();
+		(new Request("ConsoleOutput", "Error", null, { Message: message, Category: arguments[1] })).Send();
 	}
 };
 
@@ -79,9 +80,10 @@ function Warn(message) {
 	/// <param name="message">Message to write</param>
 
 	if (IsDevelopmentMode) {
-		console.warn(message);
+		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
+		console.warn(category + message);
 		
-		(new Request("ConsoleOutput", "Warning", null, message)).Send();
+		(new Request("ConsoleOutput", "Warning", null, { Message: message, Category: arguments[1] })).Send();
 	}
 };
 
@@ -93,9 +95,10 @@ function Log(message) {
 	/// <param name="message">Message to write</param>
 
 	if (IsDevelopmentMode) {
-		console.log(message);
+		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
+		console.log(category + message);
 		
-		(new Request("ConsoleOutput", "Log", null, message)).Send();
+		(new Request("ConsoleOutput", "Log", null, { Message: message, Category: arguments[1] })).Send();
 	}
 };
 
@@ -107,17 +110,19 @@ function DLog(message) {
 	/// <param name="message">Message to write</param>
 
 	if (IsDebugMode == true && IsDevelopmentMode == true) {
-		console.log(message);
+		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
+		console.log(category + message);
 		
-		(new Request("ConsoleOutput", "Debug", null, message)).Send();
+		(new Request("ConsoleOutput", "Debug", null, { Message: message, Category: arguments[1] })).Send();
 	}
 };
 
-/// <summary>
-/// Writes and warning containing a copy of given object
-/// </summary>
-/// <param name="obj">Object to debug</param>
-function Debug(obj) {
+function DebugObj(obj) {
+	/// <summary>
+	/// Writes and warning containing a copy of given object
+	/// </summary>
+	/// <param name="obj">Object to debug</param>
+
 	Warn(JSON.parse(JSON.stringify(obj)));
 };
 
@@ -160,17 +165,18 @@ function IsNullOrEmpty(obj) {
 	return obj == null || !obj || obj.length == 0;
 };
 
-/**
- * Transforms given time string into hours number
- *
- * @author Aleksandar Toplek
- *
- * @param {String} time     Time as string
- *
- * @return {Number} Hours as number
- *                  For input [02:19:59] output would be [2.333055555555556]
- */
 function ConvertTimeToHours(time) {
+	/**
+	 * Transforms given time string into hours number
+	 *
+	 * @author Aleksandar Toplek
+	 *
+	 * @param {String} time     Time as string
+	 *
+	 * @return {Number} Hours as number
+	 *                  For input [02:19:59] output would be [2.333055555555556]
+	 */
+
 	var split = time.split(":");
 
 	var hours = parseInt(split[0], 10) + (parseInt(split[1], 10) / 60) + (parseInt(split[2], 10) / 3600);
@@ -178,35 +184,28 @@ function ConvertTimeToHours(time) {
 	return hours;
 };
 
-/**
- * Transforms given hours number to time string
- *
- * @author Aleksandar Toplek
- *
- * @param {Number} hours    Number representing hours (e.g. 1.253343333, ...)
- *
- * @return {String} Time as string
- *                  For input [2.333055555555556] output would be [02:19:59]
- *
- * @private
- */
-function ConvertHoursToTime(hours) {
-	var _hours = hours;
-	_hours = Math.floor(_hours);
-	hours -= _hours;
-	hours *= 60;
+function ConvertSecondsToTime(seconds) {
+	// TODO Comment
 
-	var _minutes = hours;
-	_minutes = Math.floor(_minutes);
-	hours -= _minutes;
-	hours *= 60;
+	var hours = Math.floor(seconds / 3600);
+	var minutes = Math.floor((seconds - hours * 3600) / 60);
+	var seconds = Math.floor(seconds - minutes * 60 - hours * 3600);
 
-	var _seconds = parseInt(hours, 10);
-	//_seconds = Math.floor(_seconds);
+	return hours.PadLeft(2) + ":" +
+			minutes.PadLeft(2) + ":" +
+			seconds.PadLeft(2);
+};
 
-	return (_hours < 10 ? '0' + _hours : _hours) + ":" +
-	(_minutes < 10 ? '0' + _minutes : _minutes) + ":" +
-	(_seconds < 10 ? '0' + _seconds : _seconds);
+Number.prototype.PadLeft = function (length, digit) {
+	// TODO Comment
+
+	var str = '' + this;
+
+	while (str.length < length) {
+		str = (digit || '0') + str;
+	}
+
+	return str;
 };
 
 function EnsureParams(object, required) {

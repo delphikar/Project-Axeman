@@ -94,8 +94,6 @@ function DevelopmentToolbar() {
 
 			$(this).attr("class", console.css("visibility") == "visible" ? "DTButtonImageToggled" : "DTButtonImage");
 		});
-
-		console.warn(arguments.callee.caller.name);
 	};
 
 	// TODO Comment
@@ -106,7 +104,10 @@ function DevelopmentToolbar() {
 
 		// Create and append new console element
 		var style = "DTConsoleOutput" + request.Category;
-		$("#DTConsoleOutputContainer").append($("<div>").attr("class", style).append(request.Data));
+		var category = request.Data.Category !== undefined ? request.Data.Category + ": " : "";
+		var lineMessage = $("<div>").append(category + request.Data.Message || request.Data);
+		var consoleLine = $("<div>").attr("class", style).append(lineMessage);
+		$("#DTConsoleOutputContainer").append(consoleLine);
 
 		// Scroll to last console element
 		$("#DTConsoleOutputContainer").scrollTop($("#DTConsoleOutputContainer")[0].scrollHeight);

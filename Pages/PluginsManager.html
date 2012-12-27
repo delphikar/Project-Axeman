@@ -3,8 +3,8 @@
 	<head>
 		<title>Plugins manager</title>
 
-		<!-- jQuery scripts -->
-		<link type="text/css" href="jQueryUI.css" rel="stylesheet" />
+				<!-- jQuery scripts -->
+		<link type="text/css" href="jQueryUIStyle.css" rel="stylesheet" />
 		<script type="text/javascript" src="../Scripts/jQuery.js"></script>
 		<script type="text/javascript" src="../Scripts/jQueryUI.js"></script>
 
@@ -19,7 +19,7 @@
 		<script type="text/javascript" src="../Scripts/App/PluginsManager.js"></script>
 		
 		<script type="text/javascript" src="../Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js"></script>
-		<script type="text/javascript" src="../Plugins/Utility/MarketplaceImprovement/MarketplaceImprovement.js"></script>
+		<script type="text/javascript" src="../Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancements.js"></script>
 		<script type="text/javascript" src="../Plugins/Economy/ResourceIndicator/ResourceIndicator.js"></script>
 		<script type="text/javascript" src="../Plugins/Economy/ResourceCalculator/ResourceCalculator.js"></script>
 		<script type="text/javascript" src="../Plugins/Economy/UpgradeIndicator/UpgradeIndicator.js"></script>
@@ -32,153 +32,48 @@
 		<script type="text/javascript" src="../Scripts/PluginsManagerPage.js"></script>
 
 		<!-- Extension styles -->
-		<link type="text/css" href="PAStyles.css" rel="stylesheet" />
+		<link type="text/css" href="PAStyle.css" rel="stylesheet" />
 
 		<style type="text/css">
-			html, body{
-				background: #a2bb7a;
-				margin: 0;
-				padding: 0;
-			}
-
 			body {
-				font-family: "Segoe UI", Helvetica, Arial, FreeSans, san-serif;
-				font-size: 85%;
-				color: black;
-				background-image: url(http://i.imgur.com/m5wT5.png), url(http://i.imgur.com/Tv5cS.png);
-				background-repeat: repeat-x;
-				background-position: top, bottom;
-				background-color: #CBF4B2;
-			}
-			
-			.ui-widget{
-				font-size: 100% !important;
+				font-family:'Segoe UI'; 
+				font-size:85%;
 			}
 
-			.ClearBoth {
-				clear: both;
+			.PluginsTable {
+				margin: 20px;
 			}
 
-			h1 {
-				font-size: 3.8em;
-				color: #0C9E21;
-				margin: 0;
-			}
-				h1 .small {
-					font-size: 0.4em;
-				}
-				h1 a {
-					text-decoration: none;
-				}
-
-			h2 {
-				font-size: 1.5em;
-				color: #0C9E21;
-			}
-
-			h3 {
-				color: #0C9E21;
-			}
-
-			a {
-				color: #0C9E21;
-			}
-
-			pre {
-				background: #064207;
-				color: #fff;
-				padding: 15px;
-			}
-
-			li {
-				line-height: 1.33em;
-			}
-
-			ul {
-				padding-bottom: .75em;
-			}
-
-			.Header {
-				font-size: 3em;
-				line-height: 1.6em;
-				text-shadow: 0 0 10px #CCC;
-				padding: 8px 110px 0;
-			}
-				
-			.GitHubRibbon {
-				position: absolute;
-				top: 0;
-				right: 0;
-				border: 0;
-			}
-
-			.Container {
-				width: 720px;
-				margin: 50px auto auto auto;
-				background: none;
-				border: none;
-			}
-				
-			.Container .ui-tabs-nav{
-				padding-left: 10px !important;
-			}
-
-			.Content {
-				padding: 10px 40px 30px 40px !important;
-				color: black;
-				background: white !important;
-				margin-top: 25px;
-				-webkit-box-shadow: 0 0 20px #AAA;
-			}
-
-				.Content p {
-					text-align: justify;
-				}
-
-				.Content a {
-					color: #0C9E21;
-				}
-				
 			.PluginItem {
 				background-color: #f8f8f8;
 				margin: 25px 0px;
 				padding: 15px;
+
 				-webkit-border-radius: 10px;
+
 				-webkit-box-shadow: 2px 2px 15px #bbb;
+
+				width: 590px;
 			}
-
-			.AlphaFlag,
-			.BetaFlag,
-			.Flag {
-				background-repeat:no-repeat;
-				background-position: right bottom;
-			}
-
-				.AlphaFlag {
-					background-image:url(../Images/PluginAlphaMark.png);
-				}
-
-				.BetaFlag {
-					background-image:url(../Images/PluginBetaMark.png);
-				}
-
+			
 			.PluginOptions img {
 				margin-bottom: 15px;
 				width: 64px;
 				height: 64px;
 			}
 
-			.Disabled {
-				-webkit-filter: grayscale(1);
-			}
 
+			.PluginOptions {
+				text-align:center; 
+				vertical-align:top;
+			}
+			
 			.PluginInfo {
-				width: 570px;
-				color: black;
+				width: 520px;
 			}
 
 			.PluginVersion {
-				text-align:right;
+				text-align:right; 
 				color:#656565;
 			}
 
@@ -191,63 +86,67 @@
 				padding-right: 75px;
 			}
 
-			.Footer {
-				width: 720px;
-				height: 50px;
-				margin: 0 auto;
-				padding-top: 20px;
-				color: black;
-				font-weight: bold;
-				line-height: 50px;
+			.Disabled {
+				-webkit-filter: grayscale(1);
 			}
 
-			.Footer a {
-				color: black;
+			.AlphaFlag,
+			.BetaFlag,
+			.Flag {
+				background-repeat:no-repeat; 
+				background-position: right bottom; 
 			}
 
-			.Footer #right {
-				float:right;
-				text-align:right;
-				line-height: 1.5em;
+			.AlphaFlag {
+				background-image:url(../Images/PluginAlphaMark.png); 
+			}
+			
+			.BetaFlag {
+				background-image:url(../Images/PluginBetaMark.png); 
 			}
 
-			.Footer #right a {
-				display: inline-block;
+			.FilterBar {
+				width:200px;
+				height:24px;
+				
+				margin-left:auto;
+				margin-right:auto;
 			}
-
-			.Footer #left {
-				float:left;
-			}
+			
 		</style>
 
 	</head>
-	<body>	
-		<!-- Header -->
-		<h1 class="Header">
-			<a>Plugin manager</a>
-		</h1>
-		<div class="ClearBoth"></div>
-		
-		<!-- Container -->
-		<div class="Container">
-			<ul></ul>
-		</div>
-
-		<!-- Footer -->
-		<div class="Footer">
-				<div id="left">
-					<p>
+	<body>
+		<div class="PASection" style="width:664px; margin-left:auto; margin-right:auto;">
+			<!-- Page header -->
+			<div><h1 style="padding:5px 5px 5px 25px">Plugins manager</h1></div>
+			
+			<!-- Page content -->
+			<div class="PASection" style="margin:-1px; padding: 30px 0">
+				<!-- Filter bar -->
+				<div style="text-align:center;">
+					<input type="text" class="PATextBoxLight FilterBar" placeholder="Search for available plugins" disabled="disabled" />
+				</div>
+				<!-- Plugins container -->
+				<div id="PluginsTable" class="PluginsTable"></div>
+			</div>
+			
+			<!-- Page footer -->
+			<div style="margin-left:10px; padding:5px; color:#959595;">
+				<div style="float:left;">
+					<p style="width:100%;">
 						&copy; 2012 JustBuild Development
 					</p>
 				</div>
-				<div id="right">
-					<p>
+				<div style="float:right;">
+					<p style="text-align:right;">
 						<a href="https://github.com/JustBuild/Project-Axeman">GitHub</a><br>
 						<a href="https://github.com/JustBuild/Project-Axeman/wiki/Support-%26-FAQ">FAQ</a><br>
-						<a href="mailto:justbuilddev@gmail.com?subject=Project Axeman - Plugins manager">Support</a><br>
+						<a href="mailto:justbuilddev@gmail.com?subject=Project Axeman - Plugins manager">Support</a>
 					</p>
 				</div>
 				<br style="clear:both;">
+			</div>
 		</div>
 	</body>
 </html>

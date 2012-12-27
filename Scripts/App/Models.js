@@ -97,6 +97,8 @@ Models.Profile = function () {
 
 	this.Messages = new Models.MessagesCollection();
 	this.Reports = new Models.ReportsCollection();
+
+	//this.Plugins = new Array();
 };
 
 Models.MessagesCollection = function () {
@@ -131,6 +133,12 @@ Models.Report = function () {
 	this.Date = "unknown";
 };
 
+// TODO Implement into PluginsManager
+//Models.ProfilePlugin = function () {
+//	this.IsActive = true;
+//	this.Settings = {};
+//};
+
 Models.PluginMetadata = {
 	Name: "",
 	Alias: "",
@@ -141,8 +149,8 @@ Models.PluginMetadata = {
 	Site: "",
 
 	Settings: {
-		HasSettings: false,
-		SourceURL: "",
+		//HasSettings: false,
+		//SourceURL: "",
 		Changeable: true
 	},
 	

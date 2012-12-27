@@ -4,7 +4,7 @@
  * Author:
  * 		Aleksandar Toplek
  *
- * Coolaborators:
+ * Collaborators:
  * 		Grzegorz Witczak
  *
  * Created on:
@@ -44,7 +44,7 @@ function ResourceCalculator() {
 
 		Log("ResourceCalculator: Registering ResourceCalculator plugin...");
 
-		
+
 		BuildCostCalculator();
 		UnitCostCalculator();
 	};
@@ -58,7 +58,7 @@ function ResourceCalculator() {
 
 		Log("ResourceCalculator: Build cost appending...");
 
-		for (var rindex = 0; rindex < 4; rindex++) {
+		for (var rindex = 0; rindex < 6; rindex++) {
 			var resources = ActiveProfile.Villages[ActiveVillageIndex].Resources;
 			var inWarehouse = resources.Stored[rindex];
 			var production = resources.Production[rindex];
@@ -66,6 +66,13 @@ function ResourceCalculator() {
 
 			$(".contractCosts, .information, .regenerateCosts").each(function (cindex) {
 				$(".showCosts span:eq(" + rindex + ")", this).each(function () {
+					// Insert empty divs to get right layout
+					if (rindex > 3) {
+						$(this).append($("<div>").append("empty").css("visibility", "hidden"));
+						$(this).append($("<div>").append("empty").css("visibility", "hidden"));
+						return true;
+					}
+
 					// Get cost difference
 					var res = parseInt($(this).text(), 10) || 0;
 					var diff = inWarehouse - res;
@@ -73,7 +80,7 @@ function ResourceCalculator() {
 
 					// Crete element
 					var costElement = $("<div>");
-					costElement.attr("id", "ResourceCalculatorBuildCostC" + cindex + "R" + rindex);
+					costElement.attr("class", "ResourceCalculatorBuildCost");
 					costElement.css({
 						"color": color,
 						"text-align": "right"
@@ -84,79 +91,74 @@ function ResourceCalculator() {
 					DLog("ResourceCalculator - Appended cost element for resource [r" + (rindex + 1) + "] difference [" + diff + "]");
 
 					// Get time difference
-					if(production < 0 || storage < res){
+					if (production < 0 || storage < res) {
 						var timeDifference = "never";
 					}
-					else{
+					else {
 						var ratio = 0;
 						if (diff < 0) {
 							ratio = (-diff) / production;
 						}
-						var timeDifference = ConvertHoursToTime(ratio);
+						var timeDifference = ConvertSecondsToTime(ratio * 3600);
 					}
 
-					// create elements
+					// Create elements
 					var timeElement = $("<div>");
-					timeElement.attr("id", "ResourceCalculatorBuildFillTimeC" + cindex + "R" + rindex);
+					timeElement.addClass("ResourceCalculatorBuildFillTime");
+					timeElement.attr("data-timeleft", ratio * 3600);
 					timeElement.css("text-align", "right");
-					timeElement.html(timeDifference);
+					timeElement.append("time");
 					$(this).append(timeElement);
 
-					DLog("ResourceCalculator: Appended time deference element for resource [r" + (rindex + 1) + "] difference [" + timeDifference + "]");
-
-					// create refresh data
-					var data = {
-						CostElementID: "ResourceCalculatorBuildCostC" + cindex + "R",
-						TimeElementID: "ResourceCalculatorBuildFillTimeC" + cindex + "R",
-						ColorZero: "#0C9E21",
-						ColorLow: "#AEBF61",
-						ColorMedium: "#A6781C",
-						ColorHigh: "#B20C08"
-					};
-
-					// Initial refresh
-					RefreshBuildFunction(data);
-
-					// Set interval only once for each contract
-					if (rindex === 0) {
-						setInterval(RefreshBuildFunction, 1000, data);
-					}
+					DLog("Appended time deference element for resource [r" + (rindex + 1) + "] difference [" + timeDifference + "]", "ResourceCalculator");
 				});
 			});
 		}
+
+		// Create refresh data
+		var data = {
+			ColorZero: "#0C9E21",
+			ColorLow: "#AEBF61",
+			ColorMedium: "#A6781C",
+			ColorHigh: "#B20C08"
+		};
+
+		// Initial refresh
+		RefreshBuildFunction(data);
+
+		// Set interval only once for each contract
+		setInterval(RefreshBuildFunction, 1000, data);
 	};
-	
+
 	/// <summary>
 	/// Called in intervals to refresh times on elements and
 	/// resource difference
 	/// </summary>
 	/// <param name="data">Data object</param>
 	var RefreshBuildFunction = function (data) {
-		for (var index = 0; index < 4; index++) {
-			$("#" + data.TimeElementID + index).each(function () {
-				if (hours != "never"){
-					// Get current time from element
-					var hours = ConvertTimeToHours($(this).text());
-
-					// Not updating if 00:00:00
-					if (hours > 0) {
-						// Subtracts one second and writes new text to element
-						hours -= 0.0002777006777777; // 1 s -> 1/~3600 (3601 because of calculation error)
-						$(this).html(ConvertHoursToTime(hours));
-					}
-
-					// Changes element style (color) depending on current time state
-					if (hours === 0)
-						$(this).css("color", data.ColorZero || "#B20C08");
-					else if (hours < 0.75)
-						$(this).css("color", data.ColorLow || "#B20C08");
-					else if (hours < 3)
-						$(this).css("color", data.ColorMedium || "#CCA758");
-					else
-						$(this).css("color", data.ColorHigh || "black");
+		// Go through all timeleft indicators
+		$(".ResourceCalculatorBuildFillTime").each(function () {
+			var secondsLeft = parseInt($(this).attr("data-timeleft"), 10);
+			if (secondsLeft >= 0) {
+				if (secondsLeft > 0) {
+					secondsLeft--;
+					$(this).attr("data-timeLeft", secondsLeft);
+					$(this).html(ConvertSecondsToTime(secondsLeft));
 				}
-			});
-		}
+				else $(this).css("visibility", "hidden");
+			}
+			else {
+				$(this).html("never");
+			}
+
+			if (secondsLeft == 0)
+				$(this).css("color", data.ColorZero || "#B20C08");
+			else if (secondsLeft < 2700)
+				$(this).css("color", data.ColorLow || "#B20C08");
+			else if (secondsLeft < 10800)
+				$(this).css("color", data.ColorMedium || "#CCA758");
+			else $(this).css("color", data.ColorHigh || "black");
+		});
 	};
 
 	/// <summary>
@@ -178,7 +180,7 @@ function ResourceCalculator() {
 				costElement.css("color", "#0C9E21");
 				costElement.css("text-align", "right");
 				costElement.html("(0)");
-				$(costs[iindex*5+rindex]).append(costElement);
+				$(costs[iindex * 5 + rindex]).append(costElement);
 			});
 		}
 
@@ -202,15 +204,15 @@ function ResourceCalculator() {
 			// Go through all inputs
 			data.Inputs.each(function (iindex) {
 				// Get resource cost
-				var costElement = $(data.UnitCosts[iindex*5+rindex]);
+				var costElement = $(data.UnitCosts[iindex * 5 + rindex]);
 				var resourceCost = parseInt(costElement.text(), 10);
 
 				// Get quantity
 				var quantityValue = $(this).attr("value");
 				var quantity = parseInt(quantityValue, 10) || 1;
-				
+
 				// Change quantity zero to one for intuitive results
-				if (quantity == 0) 
+				if (quantity == 0)
 					quantity = 1;
 
 				// Calculate difference
@@ -230,7 +232,7 @@ var ResourceCalculatorMetadata = {
 	Name: "ResourceCalculator",
 	Alias: "Resource Calculator",
 	Category: "Economy",
-	Version: "0.2.0.2",
+	Version: "0.2.1.0",
 	Description: "Shows you how much of each resource is needed to build field, building or train army. ",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

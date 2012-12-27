@@ -42,6 +42,8 @@ function PopupPage() {
 	};
 
 	this.AddNewProfile = function (server, username, uid, tribe) {
+		// TODO Comment
+
 		Log("PopupPage: Adding new user.");
 
 		// Create profile and populate fields
@@ -74,6 +76,8 @@ function PopupPage() {
 	};
 
 	this.RefreshProfiles = function () {
+		// TODO Comment
+
 		// Get a list of available profiles
 		var profiles = this.GetProfiles();
 
@@ -105,19 +109,21 @@ function PopupPage() {
 	};
 
 	this.RemoveProfile = function (server, uid) {
+		// TODO Comment
+
+		DLog("Profile remove requested for [" + server + "](" + uid + ")", "PopupPage");
+
 		// Get a list of available profiles
 		var profiles = this.GetProfiles();
 		var newProfiles = new Array();
 
-		// Go through all available profiles and check
-		// if that profile is matching with given 
-		// parameters (server and UID)
+		// Go through all available profiles and check if that profile is not 
+		// matching with given parameters (server and UID), in that case keep it
 		for (var index in profiles) {
-			var profile = profiles[index];
+			if ((profiles[index].ServerAddress == server && profiles[index].UID == uid) == false) {
+				newProfiles[newProfiles.length] = profiles[index];
 
-			if (profile.ServerAddress == server &&
-				profile.UID != uid) {
-				newProfiles[newProfiles.length] = profile;
+				DLog("Profile not removed [" + profiles[index].server + "](" + profiles[index].UID + ")", "PopupPage");
 			}
 		}
 
@@ -125,6 +131,9 @@ function PopupPage() {
 	};
 
 	this.GenerateView = function (profile) {
+		// TODO Comment
+		// TODO Replace table with divs
+
 		if (profile == null) return "<tr><td>NoData</td></tr>";
 
 		var source = 

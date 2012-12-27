@@ -42,19 +42,22 @@ function Services() {
 		// TODO Request refresh
 	};
 
-	// <summary>
-	// This function will crawl current page and get all available
-	// data from it and save it to current profile
-	// </summary>
 	var CrawlPage = function () {
+		// <summary>
+		// This function will crawl current page and get all available
+		// data from it and save it to current profile
+		// </summary>
+
 		// Nothing to crawl is user is loged off
 		if (!IsLogedIn) return;
 
 		if (!MatchPages(
-		Enums.TravianPages.Home,
-		Enums.TravianPages.Login,
-		Enums.TravianPages.Logout)){
-			Log("Services: Crawling page...");
+			Enums.TravianPages.Home,
+			Enums.TravianPages.Login,
+			Enums.TravianPages.Logout)) {
+
+			Log("Crawling page...", "Services");
+
 			CrawlVillageList();
 			CrawlStorage();
 			CrawlProduction();
@@ -63,14 +66,18 @@ function Services() {
 			CrawlReports();		
 		}
 		if (MatchPages(
-		Enums.TravianPages.Player)){
-			Log("Services: Crawling Player page...");
+			Enums.TravianPages.Player)){
+
+			Log("Crawling Player page...", "Services");
+
 			CrawlPopulation();
 			CrawlVillagesDetails();
 		}
 		if (MatchPages(
-		Enums.TravianPages.VillageOut)){
-			Log("Services: Crawling Village Out page...");
+			Enums.TravianPages.VillageOut)){
+
+			Log("Crawling Village Out page...", "Services");
+
 			CrawlVillageType();
 		}
 		// TODO Fields
@@ -79,11 +86,12 @@ function Services() {
 		// TODO Movements
 	};
 
-	// <summary>
-	// Crawls for active village storages and crop production/consumption
-	// </summary>
 	var CrawlStorage = function () {
-		Log("Services: Crawling village storage...");
+		// <summary>
+		// Crawls for active village storages and crop production/consumption
+		// </summary>
+
+		Log("Crawling village storage...", "Services");
 
 		var activeVillage = GetActiveVillage();
 
@@ -107,17 +115,18 @@ function Services() {
 			}
 		});
 
-		DLog("Services: Stored in Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Stored + "] and crop [" + activeVillage.Resources.Consumption + " of " + activeVillage.Resources.TotalCropProduction + "]");
-		DLog("Services: Storage of Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Storage + "]");
+		DLog("Stored in Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Stored + "] and crop [" + activeVillage.Resources.Consumption + " of " + activeVillage.Resources.TotalCropProduction + "]", "Services");
+		DLog("Storage of Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Storage + "]", "Services");
 
 		UpdateActiveVillage(activeVillage);
 	};
 
-	// <summary>
-	// Crawls for active village production from production table (not from script)
-	// </summary>
 	var CrawlProduction = function () {
-		Log("Services: Crawling village production...");
+		// <summary>
+		// Crawls for active village production from production table (not from script)
+		// </summary>
+
+		Log("Crawling village production...", "Services");
 
 		var activeVillage = GetActiveVillage();
 
@@ -134,9 +143,9 @@ function Services() {
 				activeVillage.Resources.Production[index - 1] = m[index];
 			};
 
-			DLog("Services: Production of Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Production + "]");
+			DLog("Production of Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Production + "]", "Services");
 		}
-		else Warn("Services: Can't parse production script!");
+		else Warn("Can't parse production script!", "Services");
 
 		UpdateActiveVillage(activeVillage);
 	};
@@ -273,10 +282,17 @@ function Services() {
 	// Crawls user population
 	// </summary>
 	var CrawlPopulation = function () {
+		// Check if we are looking at current user profile
+		var detailsUID = ActivePageQuery.replace("?uid=", "");
+		if (ActiveProfile.UID != detailsUID) {
+			DLog("Not in current user profile details", "Services");
+			return;
+		}
+
 		var pop =  parseInt($("#details tbody tr").eq(4).children().last().text(), 10) || 0;
 		ActiveProfile.Population = pop;
 
-		DLog("Services: Population of active village is [" + ActiveProfile.Population + "]");
+		DLog("Services: Population of active profile is [" + ActiveProfile.Population + "]");
 	};
 	
 	// <summary>
@@ -442,8 +458,8 @@ var ServicesMetadata = {
 	Name: "Services",
 	Alias: "Services",
 	Category: "Core",
-	Version: "0.0.1.5",
-	Description: "Takes care of all variables and randomly changes pages.",
+	Version: "0.0.1.9",
+	Description: "Takes care of all data retrieving and is requeired for all plugins",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 

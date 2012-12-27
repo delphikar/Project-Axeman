@@ -4,7 +4,7 @@
  * Author:
  * 		Aleksandar Toplek
  * 
- * Coolaborators:
+ * Collaborators:
  * 		Grzegorz Witczak
  *
  * Created on:
@@ -39,7 +39,9 @@ function UpgradeIndicator() {
 	};
 	
 
-	function fieldUpgradeIndicator(){
+	function fieldUpgradeIndicator() {
+		// TODO Simplify - Nesting too deep
+
 		// Get village levels map
 		var villageMap = $("#village_map");
 		var villageType = ActiveProfile.Villages[ActiveVillageIndex].VillageOut.Type;
@@ -110,7 +112,9 @@ function UpgradeIndicator() {
 		});
 	}
 
-	function buildingUpgradeIndicator(){
+	function buildingUpgradeIndicator() {
+		// TODO Simplify - Nesting too deep
+
 		// Get village levels map
 		var villageMap = $("#village_map");
 		var GIDs = Enums.VillageInGID;
@@ -170,7 +174,9 @@ function UpgradeIndicator() {
 	/// Generate level circle, which shows
 	/// possible expansion status
 	/// </summary>
-	function generateLevelObject(levelObject, upgradeState){
+	function generateLevelObject(levelObject, upgradeState) {
+		// TODO Insert css rather than code generate
+
 		//generate blank cicrcle
 		var css;
 		$(levelObject).css({
@@ -232,7 +238,7 @@ var UpgradeIndicatorMetadata = {
 	Name: "UpgradeIndicator",
 	Alias: "Upgrade Indicator",
 	Category: "Economy",
-	Version: "0.0.2.0",
+	Version: "0.2.0.1",
 	Description: "Know when you can upgrade fields and building without clicking for each. This plugin will highlight upgradeable fields and buildings for you.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

@@ -1,22 +1,48 @@
-﻿
+﻿########################################################################
+#
+# TODO
+#
+########################################################################
+
+- [DONE] Rename MarketplaceImprovements to MarketplaceEnhancement
+- Take a look at MarketplaceImprovements code
+- Fix plugin manager appends string and should object
+- Prepend "INTERNAL" before name in plugins manager
+- [DONE] Check deleting accounts problem
+- Storage details replace tables with div and reverse to previous colors
+- [DONE] Replace conversion with data-time in warehouse/granary indicator
+- Plugin manager unable to toggle plugins
 
 - HelpPlugin (Insert FAQ of extensions to help.php)
 - <span class="settle">1 Naseliti</span>
 
+Changes (26.12.2012.-28.12.2012.)
+	- Fixed: Profile population bug
+	- Fixed: Profile delete removes all accounts bug
+	- Fixed: Popup page now has margin 0 instead of default
+	- Helpers methods used to log now support categories
+	- MarketplaceImprovements renamed to MarketplaceEnhancements
+	- Improvements on Resource Calculator and Indicator
+	- Fixed: ResourceCalculator layout
+
+
+
+########################################################################
+#
+# Google Analytics
+#
+########################################################################
+
 GA http://developer.chrome.com/trunk/extensions/tut_analytics.html
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', 'UA-33221456-3']);
+		_gaq.push(['_trackPageview']);
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-33221456-3']);
-  _gaq.push(['_trackPageview']);
-
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = 'https://ssl.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-
-
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = 'https://ssl.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
 
 manifest.json
-
- "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+		"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",

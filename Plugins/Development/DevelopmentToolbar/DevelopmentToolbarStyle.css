@@ -6,9 +6,7 @@
 
 	background: rgb(49, 49, 52);
 
-	-moz-box-shadow: 0px -1px 10px #222;
 	-webkit-box-shadow: 0px -1px 10px #222;
-	box-shadow: 0px -1px 10px #222;
 }
 
 .DTButton:link, 
@@ -44,25 +42,16 @@
 	border-style: solid;
 }
 	.DTButtonImage img {
-/* ReSharper disable CssNotResolved */
 		-webkit-filter: grayscale(1);
-/* ReSharper restore CssNotResolved */
 		margin: 40% 25%;
 	}
 	.DTButtonImageToggled:hover img,
 	.DTButtonImage:hover img {
-/* ReSharper disable CssNotResolved */
 		-webkit-filter: grayscale(0);
-/* ReSharper restore CssNotResolved */
-
 		-webkit-box-shadow: 0px 0px 3px cornflowerblue;
-		-moz-box-shadow: 0px 0px 3px cornflowerblue;
-		box-shadow: 0px 0px 3px cornflowerblue;
 	}
 	.DTButtonImageToggled img {
-/* ReSharper disable CssNotResolved */
 		-webkit-filter: grayscale(0);
-/* ReSharper restore CssNotResolved */
 		margin: 40% 25%;
 	}
 
@@ -108,15 +97,13 @@
 	z-index: 999;
 
 	height: 200px;
-	width: 500px;
+	width: 50%;
 
 	padding: 10px;
 
 	background: rgb(39, 39, 42);
 
-	-moz-box-shadow: -1px -1px 10px #222;
 	-webkit-box-shadow: -1px -1px 10px #222;
-	box-shadow: -1px -1px 10px #222;
 }
 	.DTConsoleOutput > div {		
 		width: 100%;
@@ -137,6 +124,11 @@
 }
 .DTConsoleOutputError {
 	color: crimson;
+}
+
+.DTConsoleOutputFunction {
+	color: cornflowerblue;
+	font-size: 85%;
 }
 
 
