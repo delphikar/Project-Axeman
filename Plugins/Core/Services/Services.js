@@ -315,7 +315,7 @@ function Services() {
 	// Crawls village type
 	// </summary>
 	var CrawlVillageType = function () {
-		var currentVillageType = $("village_map").attr("class") || "f3";
+		var currentVillageType = $("#village_map").attr("class") || "f3";
 	
 		var activeVillage = GetActiveVillage();
 		activeVillage.VillageOut.Type = currentVillageType;

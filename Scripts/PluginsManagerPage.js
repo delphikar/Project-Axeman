@@ -9,8 +9,6 @@ _gaq.push(['_trackPageview']);
 	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 
-
-
 $(document).ready(function () {
 	$.each(
 		GlobalPluginsList,
@@ -24,11 +22,19 @@ $(document).ready(function () {
 			actionTable(obj);
 		}
 	);
+	//$( ".Container" ).tabs({ fx: {opacity: 'toggle', duration: 300} });
 });
 
 function drawTable(obj) {
-	if($("."+obj.Category).length == 0)
-		$("#PluginsTable").append("<div class='PluginCat "+obj.Category+"'><h1>"+obj.Category+"</h1></div>");
+	if ($("." + obj.Category).length == 0) 
+		$("#PluginsTable").append("<div class='PluginCat " + obj.Category + "'><h1>" + obj.Category + "</h1></div>");
+
+	//if ($("." + obj.Category).length == 0) {
+		//$(".Container ul").append('<li><a href="#'+obj.Category+'">'+obj.Category+'</a></li>');
+		//$(".Container").append("<div id='"+obj.Category+"' class='PluginCat "+obj.Category+"'></div>");
+	//}
+
+	// Build plugin object
 	var pluginItem = "\
 		<div class='PluginItem" + (obj.Flags.Alpha ? " AlphaFlag" : "") + (obj.Flags.Beta ? " BetaFlag" : "") + "'>\
 			<div style='float:left;' class='PluginOptions'>\
@@ -57,7 +63,9 @@ function drawTable(obj) {
 			</div>\
 			<br style='clear:both;'>\
 		</div>";
-	$($("."+obj.Category)).append(pluginItem);
+
+	// Insert plugin to correct category
+	$("." + obj.Category).append(pluginItem);
 }
 
 function actionTable(obj) {
@@ -68,17 +76,17 @@ function actionTable(obj) {
 
 	// Gets active state
 	var activeState = getActiveState(obj);
-
+	
 	// Assigns that state to control
 	if (activeState == "On") $("#PluginActive" + obj.Name).attr("checked", true);
 	else $("#PluginActive" + obj.Name).attr("checked", false);
 
 	// On click event
 	$("#PluginActive" + obj.Name).button().click(function () {
-		var currentState = $("#PluginActive" + obj.Name).attr("checked") == null ? "Off" : "On";
-		$("#PluginActiveLabel" + obj.Name + " span").text(currentState == "On" ? "On" : "Off");
-		$("#PluginImage" + obj.Name).attr("class", (currentState == "On" ? " " : "Disabled"));
-		localStorage.setItem("IsPluginActive" + obj.Name, JSON.stringify({ State: currentState }));
+		var nextState = $("#PluginActiveLabel" + obj.Name + " span").text() == "On" ? "Off" : "On";
+		$("#PluginActiveLabel" + obj.Name + " span").text(nextState == "On" ? "On" : "Off");
+		$("#PluginImage" + obj.Name).attr("class", (nextState == "On" ? " " : "Disabled"));
+		localStorage.setItem("IsPluginActive" + obj.Name, JSON.stringify({ State: nextState }));
 	});
 	
 	// Is plugin Changeable
@@ -91,6 +99,7 @@ function actionTable(obj) {
 
 function getActiveState(obj) {
 	var activeState = null;
+
 	var stateObject = JSON.parse(localStorage.getItem("IsPluginActive" + obj.Name));
 	if (stateObject === null) {
 		activeState = obj.Default.State;

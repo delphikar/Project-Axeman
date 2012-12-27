@@ -1,7 +1,7 @@
 #Project Axeman
-_Current version 0.2.2.2_
+_Current version 0.2.2.3_
 
-_Development version 0.2.3.0_
+_Development version 0.2.3_
 
 
 ## Overview
@@ -50,6 +50,29 @@ Collaborators
 
 
 ## Changelog
+- **Version 0.2.2.3** _(28.12.2012.)_
+	- MarketplaceEnhancements
+		- New plugin MarketplaceImprovements (Alpha, Internal)
+		- MarketplaceImprovements renamed to MarketplaceEnhancements
+	- Change jQueryUI CSS
+		- Style reminiscent of a travian
+		- Deafult loaded on all pages
+	- PAStyle now default loaded on all pages (except extension pages)
+	- Services
+		- Fix CrawlVillageType.
+	- Plugins Manager 
+		- New style in development
+		- Fixed some problems with toggling plugins
+	- ResourceCalculator:
+		- Add calculator to Academy and Hero page
+		- Fix Less timers (more speed)
+		- Fix Layout
+	- Popup.html
+		- Fix Profile population bug
+		- Fix Profile delete removes all accounts bug
+		- Fix page now has margin 0 instead of default
+	- Helpers methods used to log now support categories
+
 - **Version 0.2.2.2** _(25.11.2012.)_
 	- Added Google Analytics
 
