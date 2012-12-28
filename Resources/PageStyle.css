@@ -1,4 +1,9 @@
-﻿body {
+﻿/********************************************************
+ *
+ * Page layout style
+ *
+ *******************************************************/
+body {
 	font-family: "Segoe UI", Helvetica, Arial, FreeSans, san-serif;
 	font-size: 85%;
 	color: black;
@@ -52,6 +57,12 @@
 	padding: 40px 150px 40px 40px;
 }
 
+
+/********************************************************
+ *
+ * Menu style
+ *
+ *******************************************************/
 .Menu {
 	color: #888;
 	border-top: 1px solid #DDD;
@@ -90,6 +101,12 @@
 	border-top: 1px solid #0C9E21 !important;
 }
 
+
+/********************************************************
+ *
+ * Miscellaneous styles
+ *
+ *******************************************************/
 h1 {
 	font-size: 3.8em;
 	color: #0C9E21;
@@ -141,6 +158,10 @@ hr {
 	border-bottom: 1px solid #aaa;
 }
 
+.ClearBoth {
+	clear: both;
+}
+
 .List {
 	
 }
@@ -149,10 +170,12 @@ hr {
 		margin: 8px 0;
 	}
 
-.ClearBoth {
-	clear: both;
-}
 
+/********************************************************
+ *
+ * Galery style
+ *
+ ********************************************************/
 .Gallery {
 	height: 400px;
 	width: 640px;
@@ -180,16 +203,19 @@ hr {
 	margin-top: -150px;
 	padding: 10px 30px 10px 15px;
 							
-	font-size: 24px;
+	font-size: 1.9em;
 	color: #EEE;
 	background: #333;
 							
 	opacity: 0.9;
 							
 	max-width: 380px;
+
+	cursor: default;
 }
 	.GalleryItemDetails > div {
-		font-size: 16px;
+		font-size: 0.6em;
+		margin-bottom: 8px;
 	}
 
 .GalleryButton {
@@ -219,6 +245,12 @@ hr {
 	margin-left: 20px;
 }
 
+
+/********************************************************
+ *
+ * Payment box style
+ *
+ ********************************************************/
 .PaymentBox {
 	margin: 10px auto;
 	background: #FAFAFA;
@@ -228,9 +260,40 @@ hr {
 	display: table;
 }
 
+
+/********************************************************
+ *
+ * Plugins list style
+ *
+ ********************************************************/
 .PluginsList {
 	
 }
 	.PluginsList > li {
 
+	}
+
+
+/********************************************************
+ *
+ * Top donators table style
+ *
+ ********************************************************/
+.TopDonatorsTable {
+	background-color: #FAFAFA;
+	margin: 10px auto;
+	border-collapse: collapse;
+}
+.TopDonatorsTable,
+.TopDonatorsTable td,
+.TopDonatorsTable th,
+.TopDonatorsTable tr {
+	border: 1px solid #AAA;
+	padding: 3px;
+}
+	.TopDonatorsTable > thead {
+		background-color: #EAEAEA;
+	}	
+	.TopDonatorsTable > tbody > tr:hover {
+		background-color: rgba(12, 158, 33, 0.2);
 	}
