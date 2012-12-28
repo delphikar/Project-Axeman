@@ -5,6 +5,7 @@
 
 		<title>Project Axeman @ GitHub</title>
 		<script type="text/javascript" src="Scripts/jQuery.js"></script>
+		<script type="text/javascript" src="Scripts/jQueryUI.js"></script>
 
 		<!-- Google Analytics -->
 		<script type="text/javascript">
@@ -34,6 +35,7 @@
 				margin: 20px auto auto auto;
 				background: white;
 				-webkit-box-shadow: 0 0 20px #AAA;
+				box-shadow: 0 0 20px #AAA;
 			}
 
 			.Content {
@@ -48,6 +50,7 @@
 
 			.Header {
 				font-size: 4em;
+				-webkit-text-shadow: 0 0 10px #CCC;
 				text-shadow: 0 0 10px #CCC;
 				padding: 40px 150px 40px 40px;
 			}
@@ -71,6 +74,8 @@
 						color: #888;
 						border-top: 1px solid #DDD;
 						-webkit-transition: color 0.1s linear, border-top 0.2s linear;
+						-moz-transition: color 0.1s linear, border-top 0.2s linear;
+						-o-transition: color 0.1s linear, border-top 0.2s linear;
 						transition: color 0.1s linear, border-top 0.2s linear;
 					}
 
@@ -78,6 +83,8 @@
 							color: #0C9E21;
 							border-top: 1px solid #0C9E21;
 							-webkit-transition: color 0.2s linear, border-top 0.2s linear;
+							-moz-transition: color 0.2s linear, border-top 0.2s linear;
+							-o-transition: color 0.2s linear, border-top 0.2s linear;
 							transition: color 0.2s linear, border-top 0.2s linear;
 						}
 
@@ -99,6 +106,7 @@
 				font-size: 3.8em;
 				color: #0C9E21;
 				margin: 0;
+				cursor: default;
 			}
 				h1 .small {
 					font-size: 0.4em;
@@ -110,10 +118,12 @@
 			h2 {
 				font-size: 1.5em;
 				color: #0C9E21;
+				cursor: default;
 			}
 
 			h3 {
 				color: #0C9E21;
+				cursor: default;
 			}
 
 			a {
@@ -165,43 +175,42 @@
 				
 				background: #FAFAFA;
 				-webkit-box-shadow: 0 0 20px #AAA;
-				
+				box-shadow: 0 0 20px #AAA;
+
 				margin-bottom: 30px;
 				
 				overflow: hidden;
 			}
-				.Gallery > ul {
-					padding: 0;
-					margin: 0;
+				.GalleryItem {
+					display: inline-block;				
+					position: absolute;		
 				}
-					.Gallery > ul > li {
-						display: block;						
+					.GalleryItem > img {
+						width: 640px;
+						height: 400px;
 					}
-						.Gallery > ul > li img {
-							width: 640px;
-							height: 400px;
-						}
-						.Gallery > ul > li > div {
-							float:left;
-							position: absolute;
-							margin-top: -150px;
-							padding: 10px 30px 10px 15px;
-							
-							font-size: 24px;
-							color: #EEE;
-							background: #333;
-							
-							opacity: 0.9;
-							
-							max-width: 380px;
-						}
-						.Gallery > ul > li > div > div {
-							font-size: 16px;
-						}
-			#PreviousInGallery,	
-			#NextInGallery {
+
+			.GalleryItemDetails {
+				float:left;
 				position: absolute;
-				margin-top: -220px;
+				margin-top: -150px;
+				padding: 10px 30px 10px 15px;
+							
+				font-size: 24px;
+				color: #EEE;
+				background: #333;
+							
+				opacity: 0.9;
+							
+				max-width: 380px;
+			}
+				.GalleryItemDetails > div {
+					font-size: 16px;
+				}
+
+			.GalleryButton {
+				position: absolute;
+				margin-top: 198px;
 				padding: 5px 5px 5px 7px;
 
 				color: #EEE;
@@ -213,15 +222,15 @@
 				
 				cursor: pointer;
 			}
-				#PreviousInGallery:hover,
-				#NextInGallery:hover {
+				.GalleryButton:hover {
 					opacity: 1;
 				}
-			#NextInGallery {
+
+			.GalleryButtonNext {
 				float:left;
 				margin-left: 584px;
 			}
-			#PreviousInGallery {
+			.GalleryButtonPrev {
 				float:left;
 				margin-left: 20px;
 			}
@@ -287,66 +296,82 @@
 
 				<!-- Gallery -->
 				<div class="Gallery">
-					<ul>
-						<li>
-							<a href="javascript:ScrollToPlugin('PluginResourceIndicator');"><img src="Resources/Images/Gallery/Capture1.png" /></a>
-							<div>Resource Indicator
+					<div class="GalleryItem">
+						<img src="Resources/Images/Gallery/Capture1.png" />
+						<a href="javascript:ScrollToPlugin('PluginResourceIndicator');">
+							<div class="GalleryItemDetails">Resource Indicator
 								<div>Plugin that will warn you when there is no more space in the warehouse or granary</div>
 							</div>
-						</li>
-						<li style="display:none">
-							<img src="Resources/Images/Gallery/Capture2.png" />
-							<div>Game Launcher
+						</a>
+					</div>
+					<div class="GalleryItem" style="display: none">
+						<img src="Resources/Images/Gallery/Capture2.png" />
+						<a href="#">
+							<div class="GalleryItemDetails">Game Launcher
 								<div>Gives you quick acces to all your games</div>
 							</div>
-						</li>
-						<li style="display:none">
-							<a href="javascript:ScrollToPlugin('ResourceCalculator');"><img src="Resources/Images/Gallery/Capture3.png" /></a>
-							<div>Resource Calculator - Buildings
+						</a>
+					</div>
+					<div class="GalleryItem" style="display: none">
+						<img src="Resources/Images/Gallery/Capture3.png" />
+						<a href="javascript:ScrollToPlugin('ResourceCalculator');">
+							<div class="GalleryItemDetails">Resource Calculator - Buildings
 								<div>Calculates needed resource to build field or building and shows how much time is needed to collect that amount of resources</div>
 							</div>
-						</li>
-						<li style="display:none">
-							<a href="javascript:ScrollToPlugin('ResourceCalculator');"><img src="Resources/Images/Gallery/Capture4.png" /></a>
-							<div>Resource Calculator - Units
+						</a>
+					</div>
+					<div class="GalleryItem" style="display: none">
+						<img src="Resources/Images/Gallery/Capture4.png" />
+						<a href="javascript:ScrollToPlugin('ResourceCalculator');">
+							<div class="GalleryItemDetails">Resource Calculator - Units
 								<div>Shows you how much of each resource is needed to train given amount of units</div>
 							</div>
-						</li>
-						<li style="display:none">
-							<a href="javascript:ScrollToPlugin('Feedback');"><img src="Resources/Images/Gallery/Capture5.png" /></a>
-							<div>Feedback
+						</a>
+					</div>
+					<div class="GalleryItem" style="display: none">
+						<img src="Resources/Images/Gallery/Capture5.png" />
+						<a href="javascript:ScrollToPlugin('Feedback');">
+							<div class="GalleryItemDetails">Feedback
 								<div>Send us feedback directly from game using this plugin</div>
 							</div>
-						</li>
-						<li style="display:none">
-							<img src="Resources/Images/Gallery/Capture6.png" />
-							<div>Plugins Manager
-								<div>Customize your game by enabling or disabling individual plugins</div>
-							</div>
-						</li>
-					</ul>
-					<div id="PreviousInGallery"><span>3</span></div>
-					<div id="NextInGallery"><span>4</span></div>
+						</a>
+					</div>
+					<div class="GalleryItem" style="display: none">
+						<img src="Resources/Images/Gallery/Capture6.png" />
+						<div class="GalleryItemDetails">Plugins Manager
+							<div>Customize your game by enabling or disabling individual plugins</div>
+						</div>
+					</div>
+
+					<div class="GalleryButton GalleryButtonNext"><span>4</span></div>
+					<div class="GalleryButton GalleryButtonPrev"><span>3</span></div>
+
 					<script type="text/javascript">
 						function HandleImageMove(next) {
-							var galleryItems = $(".Gallery li")
-							for (var index = 0; index < galleryItems.length; index++) {
-								var element = $(galleryItems[index]);
-								if (element.css("display") != "none") {
-									element.css("display", "none");
-									var nextIndex = next ? index + 1 : index - 1;
-									if (nextIndex < 0) nextIndex += galleryItems.length;
-									var nextIndexFixed = nextIndex % galleryItems.length;
-									console.warn(nextIndexFixed);
-									$(galleryItems[nextIndexFixed]).css("display", "block");
+							// Get gallera, gallery items and current item index
+							var gallery = $(".Gallery:first");
+							var galleryItems = $(".GalleryItem", gallery);
+							var galleryCurrentItemIndex = parseInt(gallery.attr("data-current"), 10) || 0;
 
-									break;
-								}
-							}
+							// Calculate next item index
+							var galleryCurrentItemIndexToShow = galleryCurrentItemIndex + (next ? 1 : -1);
+							if (galleryCurrentItemIndexToShow < 0) galleryCurrentItemIndexToShow = galleryItems.length - 1;
+							galleryCurrentItemIndexToShow %= galleryItems.length;
+
+							// Get items to show/hide
+							var itemToHide = $(galleryItems[galleryCurrentItemIndex]);
+							var itemToShow = $(galleryItems[galleryCurrentItemIndexToShow]);
+
+							// Animate items
+							itemToHide.hide("slide", { direction: next ? "left" : "right" }, "slow");
+							itemToShow.show("slide", { direction: next ? "right" : "left" }, "slow");
+
+							// Save current element index
+							gallery.attr("data-current", galleryCurrentItemIndexToShow);
 						};
 
-						$("#NextInGallery").click(function () { HandleImageMove(true); });
-						$("#PreviousInGallery").click(function () { HandleImageMove(false); });
+						$(".GalleryButtonNext").click(function () { HandleImageMove(true); });
+						$(".GalleryButtonPrev").click(function () { HandleImageMove(false); });
 					</script>
 				</div>
 
@@ -471,8 +496,8 @@
 
 		<!-- Footer -->
 		<div class="Footer">
-			(c) 2012 JustBuild Development<br />
-			Design by <a target="_blank" style="color:#AAA;" href="mailto:aleksandar.toplek@gmail.com?subject=Project Axeman page design">Aleksandar Toplek</a>
+			<label>&copy; 2013 JustBuild Development<br /></label>
+			<label>Design by <a target="_blank" style="color:#AAA;" href="http://toplek.net/">Aleksandar Toplek</a></label>
 		</div>		
 
 	</body>
