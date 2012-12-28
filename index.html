@@ -225,6 +225,15 @@
 				float:left;
 				margin-left: 20px;
 			}
+
+			.PaymentBox {
+				margin: 10px auto;
+				background: #FAFAFA;
+				border: 1px solid #AAA;
+				box-shadow: 0 0 8px #AAA;
+				padding: 10px;
+				display: table;
+			}
 	  </style>
 
 		<script type="text/javascript">
@@ -370,6 +379,27 @@
 				</p>
 				<a href="https://github.com/JustBuild/Project-Axeman/zipball/master"><img style="background-image: url(Resources/Images/zip.png);" border="0" width="90" src="Resources/Images/ChromeDownload.png" /></a>
 				<a href="https://github.com/JustBuild/Project-Axeman/tarball/master"><img style="background-image: url(Resources/Images/tar.png);"  border="0" width="90" src="Resources/Images/ChromeDownload.png" /></a>
+				
+				<h2>Support development</h2>
+				<p>You can support further development of this extension by donating small amout to us. This donation will be shaderd among all collaborators on GitHub.</p>
+				<div class="PaymentBox">
+					<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+						<input type="hidden" name="cmd" value="_s-xclick">
+						<table>
+							<tr><td><input type="hidden" name="on0" value="Why?">Why?</td></tr><tr><td><select name="os0">
+								<option value="I like what you do">I like what you do $0.99 USD</option>
+								<option value="I want to support you">I want to support you $4.99 USD</option>
+								<option value="I'm sponsoring you">I'm sponsoring you $19.99 USD</option>
+							</select> </td></tr>
+							<tr><td><input type="hidden" name="on1" value="Displayed name">Displayed name</td></tr><tr><td><input type="text" name="os1" maxlength="200"></td></tr>
+						</table>
+						<input type="hidden" name="currency_code" value="USD">
+						<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+						">
+						<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" style="display:table; margin:20px auto 0 auto;">
+						<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+					</form>
+				</div>
 			</div>
 
 			<!-- Contribute menu content -->
