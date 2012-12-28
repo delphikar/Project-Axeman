@@ -1,0 +1,236 @@
+﻿body {
+	font-family: "Segoe UI", Helvetica, Arial, FreeSans, san-serif;
+	font-size: 85%;
+	color: black;
+	background-color: #FAFAFA;
+}
+
+.Container {
+	width: 720px;
+	margin: 30px auto 30px auto;
+	background: white;
+	-webkit-box-shadow: 0 0 20px #AAA;
+	box-shadow: 0 0 20px #AAA;
+}
+
+.Footer {
+	text-align: center;
+	padding: 20px;
+	font-style: italic;
+
+	background: #FAFAFA;
+	border-top: 1px solid #CCC;
+	box-shadow: inset 0 2px 5px #AAA;
+
+	color: #888;
+}
+	.Footer a {
+		color: #AAA;
+	}
+		.Footer a:hover {
+			color: #666;
+		}
+
+.Content {
+	padding: 10px 40px 30px 40px;
+	border-top: 1px solid #DDD;
+}
+	.Content p {
+		text-align: justify;
+	}
+
+.GitHubRibbon {
+	position: relative;
+	float: right;
+	border: 0;
+}
+
+.Header {
+	font-size: 4em;
+	-webkit-text-shadow: 0 0 10px #CCC;
+	text-shadow: 0 0 10px #CCC;
+	padding: 40px 150px 40px 40px;
+}
+
+.Menu {
+	color: #888;
+	border-top: 1px solid #DDD;
+}
+
+	.Menu > ul {
+		margin: 0;
+	}
+
+		.Menu > ul > li {
+			position: relative;
+			display: block;
+			float: left;
+			padding: 10px 16px;
+			margin-top: -1px;
+			cursor: pointer;
+			color: #888;
+			border-top: 1px solid #DDD;
+			-webkit-transition: color 0.1s linear, border-top 0.2s linear;
+			-moz-transition: color 0.1s linear, border-top 0.2s linear;
+			-o-transition: color 0.1s linear, border-top 0.2s linear;
+			transition: color 0.1s linear, border-top 0.2s linear;
+		}
+
+			.Menu > ul > li:hover {
+				color: #0C9E21;
+				border-top: 1px solid #0C9E21;
+				-webkit-transition: color 0.2s linear, border-top 0.2s linear;
+				-moz-transition: color 0.2s linear, border-top 0.2s linear;
+				-o-transition: color 0.2s linear, border-top 0.2s linear;
+				transition: color 0.2s linear, border-top 0.2s linear;
+			}
+
+.MenuSelection {
+	color: #0C9E21 !important;
+	border-top: 1px solid #0C9E21 !important;
+}
+
+h1 {
+	font-size: 3.8em;
+	color: #0C9E21;
+	margin: 0;
+	cursor: default;
+}
+	h1 .small {
+		font-size: 0.4em;
+	}
+	h1 a {
+		text-decoration: none;
+	}
+
+h2 {
+	font-size: 1.5em;
+	color: #0C9E21;
+	cursor: default;
+}
+
+h3 {
+	color: #0C9E21;
+	cursor: default;
+}
+
+a {
+	color: #0C9E21;
+}
+
+.description {
+	font-size: 1.2em;
+	margin-bottom: 30px;
+	margin-top: 30px;
+	font-style: italic;
+}
+
+.download {
+	float: right;
+}
+
+pre {
+	background: #064207;
+	color: #fff;
+	padding: 15px;
+}
+
+hr {
+	border: 0;
+	width: 80%;
+	border-bottom: 1px solid #aaa;
+}
+
+.List {
+	
+}
+	.List > li {
+		display:block;
+		margin: 8px 0;
+	}
+
+.ClearBoth {
+	clear: both;
+}
+
+.Gallery {
+	height: 400px;
+	width: 640px;
+				
+	background: #FAFAFA;
+	-webkit-box-shadow: 0 0 20px #AAA;
+	box-shadow: 0 0 20px #AAA;
+
+	margin-bottom: 30px;
+				
+	overflow: hidden;
+}
+	.GalleryItem {
+		display: inline-block;				
+		position: absolute;		
+	}
+		.GalleryItem > img {
+			width: 640px;
+			height: 400px;
+		}
+
+.GalleryItemDetails {
+	float:left;
+	position: absolute;
+	margin-top: -150px;
+	padding: 10px 30px 10px 15px;
+							
+	font-size: 24px;
+	color: #EEE;
+	background: #333;
+							
+	opacity: 0.9;
+							
+	max-width: 380px;
+}
+	.GalleryItemDetails > div {
+		font-size: 16px;
+	}
+
+.GalleryButton {
+	position: absolute;
+	margin-top: 198px;
+	padding: 5px 5px 5px 7px;
+
+	color: #EEE;
+	background: #333;
+	opacity: 0.4;
+				
+	font-family: Webdings;
+	font-size: 24px;
+				
+	cursor: pointer;
+}
+	.GalleryButton:hover {
+		opacity: 1;
+	}
+
+.GalleryButtonNext {
+	float:left;
+	margin-left: 584px;
+}
+.GalleryButtonPrev {
+	float:left;
+	margin-left: 20px;
+}
+
+.PaymentBox {
+	margin: 10px auto;
+	background: #FAFAFA;
+	border: 1px solid #AAA;
+	box-shadow: 0 0 8px #AAA;
+	padding: 10px;
+	display: table;
+}
+
+.PluginsList {
+	
+}
+	.PluginsList > li {
+
+	}

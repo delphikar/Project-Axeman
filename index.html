@@ -1,15 +1,17 @@
 ﻿<!DOCTYPE html>
 <html>
 	<head>
-		<meta charset='utf-8'>
+		<meta charset='utf-8' />
 
 		<title>Project Axeman @ GitHub</title>
+
+		<link href="Resources/PageStyle.css" rel="stylesheet" type="text/css" />
+
 		<script type="text/javascript" src="Scripts/jQuery.js"></script>
 		<script type="text/javascript" src="Scripts/jQueryUI.js"></script>
 
 		<!-- Google Analytics -->
 		<script type="text/javascript">
-
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-33221456-1']);
 			_gaq.push(['_trackPageview']);
@@ -19,231 +21,7 @@
 				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
-
 		</script>
-
-		<style type="text/css">
-			body {
-				font-family: "Segoe UI", Helvetica, Arial, FreeSans, san-serif;
-				font-size: 85%;
-				color: black;
-				background-color: #FAFAFA;
-			}
-
-			.Container {
-				width: 720px;
-				margin: 20px auto auto auto;
-				background: white;
-				-webkit-box-shadow: 0 0 20px #AAA;
-				box-shadow: 0 0 20px #AAA;
-			}
-
-			.Content {
-				padding: 10px 40px 20px 40px;
-			}
-
-			.GitHubRibbon {
-				position: relative;
-				float: right;
-				border: 0;
-			}
-
-			.Header {
-				font-size: 4em;
-				-webkit-text-shadow: 0 0 10px #CCC;
-				text-shadow: 0 0 10px #CCC;
-				padding: 40px 150px 40px 40px;
-			}
-
-			.Menu {
-				color: #888;
-				border-top: 1px solid #DDD;
-			}
-
-				.Menu > ul {
-					margin: 0;
-				}
-
-					.Menu > ul > li {
-						position: relative;
-						display: block;
-						float: left;
-						padding: 10px 16px;
-						margin-top: -1px;
-						cursor: pointer;
-						color: #888;
-						border-top: 1px solid #DDD;
-						-webkit-transition: color 0.1s linear, border-top 0.2s linear;
-						-moz-transition: color 0.1s linear, border-top 0.2s linear;
-						-o-transition: color 0.1s linear, border-top 0.2s linear;
-						transition: color 0.1s linear, border-top 0.2s linear;
-					}
-
-						.Menu > ul > li:hover {
-							color: #0C9E21;
-							border-top: 1px solid #0C9E21;
-							-webkit-transition: color 0.2s linear, border-top 0.2s linear;
-							-moz-transition: color 0.2s linear, border-top 0.2s linear;
-							-o-transition: color 0.2s linear, border-top 0.2s linear;
-							transition: color 0.2s linear, border-top 0.2s linear;
-						}
-
-			.MenuSelection {
-				color: #0C9E21 !important;
-				border-top: 1px solid #0C9E21 !important;
-			}
-
-			.Content {
-				padding: 10px 40px 30px 40px;
-				border-top: 1px solid #DDD;
-			}
-
-				.Content p {
-					text-align: justify;
-				}
-
-			h1 {
-				font-size: 3.8em;
-				color: #0C9E21;
-				margin: 0;
-				cursor: default;
-			}
-				h1 .small {
-					font-size: 0.4em;
-				}
-				h1 a {
-					text-decoration: none;
-				}
-
-			h2 {
-				font-size: 1.5em;
-				color: #0C9E21;
-				cursor: default;
-			}
-
-			h3 {
-				color: #0C9E21;
-				cursor: default;
-			}
-
-			a {
-				color: #0C9E21;
-			}
-
-			.description {
-				font-size: 1.2em;
-				margin-bottom: 30px;
-				margin-top: 30px;
-				font-style: italic;
-			}
-
-			.download {
-				float: right;
-			}
-
-			pre {
-				background: #064207;
-				color: #fff;
-				padding: 15px;
-			}
-
-			hr {
-				border: 0;
-				width: 80%;
-				border-bottom: 1px solid #aaa;
-			}
-
-			.List > li {
-				display:block;
-				margin: 10px 0;
-			}
-
-			.Footer {
-				color: #AAA;
-				text-align: center;
-				padding-top: 10px;
-				font-style: italic;
-			}
-
-			.ClearBoth {
-				clear: both;
-			}
-
-			.Gallery {
-				height: 400px;
-				width: 640px;
-				
-				background: #FAFAFA;
-				-webkit-box-shadow: 0 0 20px #AAA;
-				box-shadow: 0 0 20px #AAA;
-
-				margin-bottom: 30px;
-				
-				overflow: hidden;
-			}
-				.GalleryItem {
-					display: inline-block;				
-					position: absolute;		
-				}
-					.GalleryItem > img {
-						width: 640px;
-						height: 400px;
-					}
-
-			.GalleryItemDetails {
-				float:left;
-				position: absolute;
-				margin-top: -150px;
-				padding: 10px 30px 10px 15px;
-							
-				font-size: 24px;
-				color: #EEE;
-				background: #333;
-							
-				opacity: 0.9;
-							
-				max-width: 380px;
-			}
-				.GalleryItemDetails > div {
-					font-size: 16px;
-				}
-
-			.GalleryButton {
-				position: absolute;
-				margin-top: 198px;
-				padding: 5px 5px 5px 7px;
-
-				color: #EEE;
-				background: #333;
-				opacity: 0.4;
-				
-				font-family: Webdings;
-				font-size: 24px;
-				
-				cursor: pointer;
-			}
-				.GalleryButton:hover {
-					opacity: 1;
-				}
-
-			.GalleryButtonNext {
-				float:left;
-				margin-left: 584px;
-			}
-			.GalleryButtonPrev {
-				float:left;
-				margin-left: 20px;
-			}
-
-			.PaymentBox {
-				margin: 10px auto;
-				background: #FAFAFA;
-				border: 1px solid #AAA;
-				box-shadow: 0 0 8px #AAA;
-				padding: 10px;
-				display: table;
-			}
-	  </style>
 
 		<script type="text/javascript">
 			function ScrollToPlugin(name) {
@@ -409,6 +187,7 @@
 				<p>You can support further development of this extension by donating small amout to us. This donation will be shaderd among all collaborators on GitHub.</p>
 				<div class="PaymentBox">
 					<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+						<img src="Resources/Images/paypal_logo.gif" style="margin: 10px 5px;" />
 						<input type="hidden" name="cmd" value="_s-xclick">
 						<table>
 							<tr><td><input type="hidden" name="on0" value="Why?">Why?</td></tr><tr><td><select name="os0">
@@ -416,7 +195,7 @@
 								<option value="I want to support you">I want to support you $4.99 USD</option>
 								<option value="I'm sponsoring you">I'm sponsoring you $19.99 USD</option>
 							</select> </td></tr>
-							<tr><td><input type="hidden" name="on1" value="Displayed name">Displayed name</td></tr><tr><td><input type="text" name="os1" maxlength="200"></td></tr>
+							<tr><td><input type="hidden" name="on1" value="Displayed name">Displayed name</td></tr><tr><td><input type="text" name="os1" maxlength="200" style="width: 100%; margin: 2px 0;"></td></tr>
 						</table>
 						<input type="hidden" name="currency_code" value="USD">
 						<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIIIQYJKoZIhvcNAQcEoIIIEjCCCA4CAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYAytfoFcebcEp/8sho2gXVOp7JTweUA1tlyhFSML17PlU5Qg9hIc7bwvlkHSKIVGBuaGT6bGwzorFP+1qozjZGhD6EMM3+1xlRmQxTPn4L/DpwG6CjUOyumLL+S1Lv2PuZlBfd3LxLXDOibHHbc4usE7CHq8gBptXziFeFAHfpzvjELMAkGBSsOAwIaBQAwggGdBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECATMOWx2WP5pgIIBeA4sSyQix5YGPXrZlYpJgWG/5FDv+RY1lPqi6QrQhZ1ltgJMttxjJKFLw9wQgB1z8LSNfd8puqeydWCCxNV6LMj91z84Nfwugof5BPTMSNcowQr0f+N/OtCs7+0TCQFkXUrUZPNpZcM4tL+pvANt5kyPMqS/exBR0u8inp81zSYf/4RDj4INSsQepTzubhlPtkf1l7zIruwDdqoRVYBlbw0JqSz6Rsc7yQOJUieaM7eMG2R0v+cUIzvfnTI1/z70rxTYZSLh5qbtIyKn/HgnKwrFtlk1x1FMDQsoH9jUewe7TM+0N1owGw0TPNv5LTlMtgq1YA8Doqwq3ue3/pSQShxSB0Z267XIHqWPKRq8D7NaV0DCqEXr1MVfjRXAs8nHmnt1qVmmCdCkb41c7iyLWsIkZThSy14u7y/xsxetk5H3Nz2fh+2jQD2LmOql8wuxhSO7UGlACjqHSoDspPeO7FF3VVuot/6jZZudN8w0TvP6h2IZfojsHpOgggOHMIIDgzCCAuygAwIBAgIBADANBgkqhkiG9w0BAQUFADCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wHhcNMDQwMjEzMTAxMzE1WhcNMzUwMjEzMTAxMzE1WjCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMFHTt38RMxLXJyO2SmS+Ndl72T7oKJ4u4uw+6awntALWh03PewmIJuzbALScsTS4sZoS1fKciBGoh11gIfHzylvkdNe/hJl66/RGqrj5rFb08sAABNTzDTiqqNpJeBsYs/c2aiGozptX2RlnBktH+SUNpAajW724Nv2Wvhif6sFAgMBAAGjge4wgeswHQYDVR0OBBYEFJaffLvGbxe9WT9S1wob7BDWZJRrMIG7BgNVHSMEgbMwgbCAFJaffLvGbxe9WT9S1wob7BDWZJRroYGUpIGRMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbYIBADAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GBAIFfOlaagFrl71+jq6OKidbWFSE+Q4FqROvdgIONth+8kSK//Y/4ihuE4Ymvzn5ceE3S/iBSQQMjyvb+s2TWbQYDwcp129OPIbD9epdr4tJOUNiSojw7BHwYRiPh58S1xGlFgHFXwrEBb3dgNbMUa+u4qectsMAXpVHnD9wIyfmHMYIBmjCCAZYCAQEwgZQwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tAgEAMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0xMjEyMjgxMzAzNTdaMCMGCSqGSIb3DQEJBDEWBBQP2F/36AIgL09ZH8OzPgwlTnVuNzANBgkqhkiG9w0BAQEFAASBgBiwtpCZoNbt8FBABQJK9h1zied2vtaDPc3OHbiWakXLZsSxVGUcVt6fOwCwetGIOMF8T1Ch34idoeM42ZpuDZpdsCk5+mK6JKu5IyBhzs7olxWymo1dXL9TbPv7IOpwGQb3fQWYdNXCNfqgyQVWZ4wGlbum7MZT07Xyud57mNMq-----END PKCS7-----
@@ -430,22 +209,20 @@
 			<!-- Contribute menu content -->
 			<div id="ContributeContent" class="Content" style="display:none;">
 				<p>
-					If you have great idea or you just want to help, you can also clone the project with <a href="http://git-scm.com">Git</a> by running:
+					If you have great a idea or you just want to help us, you can fork the project on GitHub and start working on your plugin right away by using <a href="http://git-scm.com">Git</a> and cloning this repo:
 					<pre>$ git clone git://github.com/JustBuild/Project-Axeman</pre>
 				</p>
 			</div>
 
 			<div id="PluginsContent" class="Content" style="display:none;">
 				<p>
-					Plugins are scripts that are independent. They can be enabled or disabled without making any changes other scripts. This 
-					is nice feature to users and developers. Developers can now add functionality without knowing rest of the extension in 
-					details.
+					Plugins are independent scripts, a part of Projext-Axeman extension, that can change page content and add functionality to the game. Plugins can be enabled and disabled without making any changes to other scripts or extension. This means that everyone can build their own plugin without need to know every detail about extension or other plugins.
 				</p>
 				<p>
-					We have created some scripts that we thing will be useful to you. Have a look at list below.
+					Thanks to community of active collaborators, we have created a number of plugins that we think will be useful to you. Take a look at the list below.
 				</p>
 				<h2>List of plugins</h2>
-				<ul>
+				<ul class="PluginsList">
 					<li>Core
 						<ul>
 							<li><a href="#PluginServices">Services</a></li>
@@ -469,11 +246,11 @@
 					</li>
 				</ul>
 
-				<h2 id="PluginServices">Services</h2>
+				<!--<h2 id="PluginServices">Services</h2>
 				<h2 id="PluginDevelopmentToolbar">Development Toolbar</h2>
 				<h2 id="PluginFeedback">Feedback</h2>
 				<h2 id="PluginResourceIndicator">Resource Indicator</h2>
-				<h2 id="PluginResourceCalculator">Resource Calculator</h2>
+				<h2 id="PluginResourceCalculator">Resource Calculator</h2>-->
 			</div>
 
 			<!-- About menu content -->
@@ -483,21 +260,20 @@
 					<li>Aleksandar Toplek (<a href="http://github.com/AleksandarDev">AleksandarDev</a>)<br /></li>
 				</ul>
 		    
-				<h2>Contributors</h2>
+				<h2>Collaborators</h2>
 				<p>We need all help we can get. These are brave people that are helping us to make Project Axeman even better. Be one of them and <a href="https://github.com/JustBuild/Project-Axeman">Fork us on GutHub</a>!</p>
-				<ul>
+				<ul class="List">
+					<li>Grzegorz Witczak (<a href="http://github.com/kavillock">kavillock</a>)</li>
 					<li>Everton Moreth (<a href="http://github.com/emoreth">emoreth</a>)<br /></li>
 					<li>Ignacio Munizaga (<a href="https://github.com/thagat">thagat</a>)<br /></li>
-					<li><a href="http://github.com/kavillock">kavillock</a></li>
 				</ul>
 			</div>
 
-		</div>
-
-		<!-- Footer -->
-		<div class="Footer">
-			<label>&copy; 2013 JustBuild Development<br /></label>
-			<label>Design by <a target="_blank" style="color:#AAA;" href="http://toplek.net/">Aleksandar Toplek</a></label>
+			<!-- Footer -->
+			<div class="Footer">
+				<label>&copy; 2013 JustBuild Development<br /></label>
+				<label>Design by <a target="_blank" href="http://toplek.net/">Aleksandar Toplek</a></label>
+			</div>
 		</div>		
 
 	</body>
