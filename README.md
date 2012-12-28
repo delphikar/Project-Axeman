@@ -50,6 +50,8 @@ Collaborators
 
 
 ## Changelog
+- **Version 0.2.3** _(**.**.201*.)_
+
 - **Version 0.2.2.3** _(28.12.2012.)_
 	- MarketplaceEnhancements
 		- New plugin MarketplaceImprovements (Alpha, Internal)
@@ -73,8 +75,10 @@ Collaborators
 		- Fix page now has margin 0 instead of default
 	- Helpers methods used to log now support categories
 
+
 - **Version 0.2.2.2** _(25.11.2012.)_
 	- Added Google Analytics
+
 
 - **Version 0.2.2.1** _(25.11.2012.)_
 	- PluginManager check deafult state of plugin, on first run
@@ -91,6 +95,7 @@ Collaborators
 		- Fix Crawl Population
 	- UpgradeIndicator: FieldUpgradeIndicator take into account IsMainCity
 	
+
 - **Version 0.2.2** _(22.11.2012.)_
 	- Minor fixes
 	- Fix some typos
@@ -112,18 +117,23 @@ Collaborators
 		- Village type from profile
 		- Fix problem with new fields "deafult: 0"	
 
+
 - **Version 0.2.1.1** _(12.07.2012.)_
 	- Fixed FieldUpgradeIndicator not showing marks on right position
+
 
 - **Version 0.2.1.0** _(11.07.2012.)_
 	- Added FieldUpgradeIndicator plugin
 	- Minor fixes
 
+
 - **Version 0.2.0.3** _(06.07.2012.)_
 	- Disabled DevelopmentMode by default (_bug from last build_)
 
+
 - **Version 0.2.0.2** _(06.07.2012.)_
 	- Fixed ModelView not showinf problem
+
 
 - **Version 0.2.0.1** _(05.07.2012.)_
 	- Fixed resources production crawling (now from script) on almost every page
@@ -133,6 +143,7 @@ Collaborators
 	- Added "Feedback" text on top of feedback page
 	- Updated BackgroundScript
 	- BackgroundScript now supports Action category
+
 
 - **Version 0.2.0.0** _(03.07.2012.)_
 	- README and LICENSE file changes	

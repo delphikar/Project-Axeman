@@ -58,7 +58,7 @@ function ResourceCalculator() {
 
 		Log("ResourceCalculator: Build cost appending...");
 
-		for (var rindex = 0; rindex < 6; rindex++) {
+		for (var rindex = 0; rindex < 5; rindex++) {
 			var resources = ActiveProfile.Villages[ActiveVillageIndex].Resources;
 			var inWarehouse = resources.Stored[rindex];
 			var production = resources.Production[rindex];
