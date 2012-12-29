@@ -58,6 +58,44 @@ body {
 }
 
 
+
+/********************************************************
+ *
+ * PageSidebar style
+ *
+ *******************************************************/
+.PageSidebar {
+	position: absolute;
+	margin: 0 720px;
+	width: 250px;
+	background-color: white;
+	box-shadow: 0 0 20px #AAA;
+	border-top: 1px solid #DDD
+}
+.PageSidebarAntiShadow {
+	background-color: white;
+	width: 20px;
+	height: 100%;
+	position: absolute;
+	margin-left: -20px;
+	border-right: 1px solid #DDD;
+	color: transparent;
+}
+
+.PageSidebarToggle {
+	padding: 10px 10px;
+	background-color: #EEE;
+
+	cursor: pointer;
+}
+	.PageSidebarToggle:hover {
+		background: #DDD;
+	}
+		.PageSidebarToggle:hover .PageSidebarToggleTitle {
+			
+		}
+
+
 /********************************************************
  *
  * Menu style
@@ -210,14 +248,15 @@ hr {
 	opacity: 0.9;
 							
 	max-width: 380px;
-
-	cursor: default;
 }
 	.GalleryItemDetails > div {
 		font-size: 0.6em;
 		margin-bottom: 8px;
 	}
 
+.Gallery:hover .GalleryButton {
+	opacity: 0.4;
+}
 .GalleryButton {
 	position: absolute;
 	margin-top: 198px;
@@ -225,7 +264,7 @@ hr {
 
 	color: #EEE;
 	background: #333;
-	opacity: 0.4;
+	opacity: 0;
 				
 	font-family: Webdings;
 	font-size: 24px;
@@ -233,7 +272,7 @@ hr {
 	cursor: pointer;
 }
 	.GalleryButton:hover {
-		opacity: 1;
+		opacity: 1 !important;
 	}
 
 .GalleryButtonNext {

@@ -25,10 +25,13 @@
 
 		<script type="text/javascript">
 			function ScrollToPlugin(name) {
-				$('#PluginsMenuItem').click();
+				ScrollToHeader("PluginsMenuItem", name);
+			};
+			function ScrollToHeader(page, header) {
+				$('#' + page).click();
 				$('html, body').animate({
-					scrollTop: $("#" + name).offset().top
-				}, 2000);
+					scrollTop: $("#" + header).offset().top
+				}, 1000);
 			};
 		</script>
 	</head>
@@ -65,7 +68,43 @@
 				</script>
 			</div>
 			<div class="ClearBoth"></div>
-    
+
+			<div class="PageSidebar">
+				<div class="PageSidebarAntiShadow">.</div>
+
+				<!-- Sidebar toggle button -->
+				<div class="PageSidebarToggle"><div>&lt;&lt;</div></div>
+				<script type="text/javascript">
+					$(".PageSidebarToggle").click(function () {
+						// Hide sidebar if width larger than 45px
+						if ($(".PageSidebar").width() > 45) {
+							$(".PageSidebarContent").slideToggle(null, null, function () {
+								$(".PageSidebar").animate({ width: 45 }, 500).css("overflow", "visible");
+								$(".PageSidebarToggle > div").fadeOut(250, function () {
+									$(".PageSidebarToggle > div").html("&gt;&gt;");
+									$(".PageSidebarToggle > div").fadeIn(250);
+								});
+							});
+						}
+						else {
+							$(".PageSidebar").animate({ width: 250 }, 500, function () {
+								$(".PageSidebarContent").slideToggle();
+							}).css("overflow", "visible");
+							$(".PageSidebarToggle > div").fadeOut(250, function () {
+								$(".PageSidebarToggle > div").html("&lt;&lt;");
+								$(".PageSidebarToggle > div").fadeIn(250);
+							});
+						}
+					});
+				</script>
+
+				<div class="PageSidebarContent">
+					<!-- Tweeter feed -->
+					<a class="twitter-timeline" href="https://twitter.com/search?q=%23ProjectAxeman" data-widget-id="284774123362713601">Tweets about "#ProjectAxeman"</a>
+					<script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = "//platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");</script>
+				</div>
+			</div>
+
 			<div id="HomeContent" class="Content">
 				<!-- Header subtitles -->
 				<div class="description">
@@ -204,7 +243,7 @@
 						<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
 					</form>
 				</div>
-				<p><i>All donators will be listed on this page and will be added to the README file of Project-Axeman.</i></p>
+				<p><i>All donators will be listed on this page and added to the README file of Project-Axeman. If you are collaborator, you will recieve part of each donation so that we can keep this project alive and up-to-date.</i></p>
 				<p><i>Each sponsor's name will be written next to the collaborators list (if not requested otherwise).</i><br />Sponsors <i>can also request one <b>custom plugin</b> or feature that will be market as HIGH-PRIORITY.</i></p>
 				<p>If you would like to donate amount that is not specified, please contact us <a href="mailto:justbuilddev@gmail.com&subject=Project-Axeman%20Donation%20Request">JustBuildDev@gmail.com</a></p>
 
@@ -293,7 +332,7 @@
 				<label>&copy; 2013 JustBuild Development<br /></label>
 				<label>Design by <a target="_blank" href="http://toplek.net/">Aleksandar Toplek</a></label>
 			</div>
-		</div>		
+		</div>
 
 	</body>
 </html>
