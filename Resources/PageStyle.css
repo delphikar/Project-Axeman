@@ -72,6 +72,11 @@ body {
 	box-shadow: 0 0 20px #AAA;
 	border-top: 1px solid #DDD
 }
+.PageSidebar ins {
+	margin: 5px auto !important;
+	display: table !important;
+}
+
 .PageSidebarAntiShadow {
 	background-color: white;
 	width: 20px;
