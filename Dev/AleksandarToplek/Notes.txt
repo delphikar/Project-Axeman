@@ -4,28 +4,83 @@
 #
 ########################################################################
 
-- [DONE] Rename MarketplaceImprovements to MarketplaceEnhancement
 - Take a look at MarketplaceImprovements code
-- Fix plugin manager appends string and should object
 - Prepend "INTERNAL" before name in plugins manager
-- [DONE] Check deleting accounts problem
 - Storage details replace tables with div and reverse to previous colors
-- [DONE] Replace conversion with data-time in warehouse/granary indicator
-- Plugin manager unable to toggle plugins
+- Check if in development before GA call
 
 - HelpPlugin (Insert FAQ of extensions to help.php)
 - <span class="settle">1 Naseliti</span>
 
-Changes (26.12.2012.-28.12.2012.)
-	- Fixed: Profile population bug
-	- Fixed: Profile delete removes all accounts bug
-	- Fixed: Popup page now has margin 0 instead of default
-	- Helpers methods used to log now support categories
-	- MarketplaceImprovements renamed to MarketplaceEnhancements
-	- Improvements on Resource Calculator and Indicator
-	- Fixed: ResourceCalculator layout
+########################################################################
+#
+# Plugin data
+#
+########################################################################
+
+.village2 2nd and on...
+<img class="rocket rocket_tur" src="img/x.gif" alt="">
+purp, yell, oran, green, red
+
+stime peace bird
+classes to ".content" "peace peaceActive"
+
+QUEST MASTER
+-- active --
+<div class="questMaster">
+	<div id="anm" style="width:120px; height:140px; visibility:hidden;"></div>
+<div id="qge">
+	<img onclick="qst_showQuest(6); " src="img/x.gif" id="qgei" class="master nation2 active" alt="To the task">
+</div></div>
+-- inactive (calm down) --
+<div class="questMaster">
+	<div id="anm" style="width:120px; height:140px; visibility:hidden;"></div>
+<div id="qge">
+	<img onclick="qst_handle();" src="img/x.gif" id="qgei" class="master nation2" alt="To the task">
+</div></div>
+
+Changes 0.2.3
+	- PluginsManager.html	
+		- Moved to seperate directory
+		- Seperated styles from html
+		- Replaced PluginItem string generating to jQuery objects
+		- Implemented Internal and featured flags (needs graphics)
+		- Added "INTERNAL" text left of plugin alias
+		- Functions moved to inner scope
+	- Fix Google analytics now tracking in development mode
+	- Fix Google analytics now called upon plugin registration rathet than script loading
+	- Added NavigationManager application class
+	- ResourceCalculator
+		- Fix Now works for units again
+		- Fix Layout for crop consumption
+		- Optimized by removing timer in unit quantity change and replaced with event
+	-----
 
 
+
+########################################################################
+#
+# jQuery element selector
+#
+########################################################################
+
+		$("head").append("<style type='text/css'>.ElementHighlighter{ pointer-events:visible !important; background-color: rgba(255,0,0,0.4) !important; -webkit-box-shadow: rgba(255, 0, 0, 0.8) 0px 0px 5px inset !important;cursor: crosshair !important; }</style>");
+
+		$('html>body div, a, input, p, strong').bind('mouseover', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			$(e.target).addClass('ElementHighlighter');
+		});
+		$('html>body div, a, input, p, strong').bind('mouseout', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			$(e.target).removeClass('ElementHighlighter');
+		});
+		$('html>body div, a, input, p, strong').bind('click', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			console.log($(e.target));
+		});
 
 ########################################################################
 #

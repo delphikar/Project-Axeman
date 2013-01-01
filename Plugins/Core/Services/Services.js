@@ -11,18 +11,6 @@
  *
  *****************************************************************************/
 
-// Google analytics
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-33221456-3']);
-_gaq.push(['_trackEvent', 'Plugin', 'Core/Services']);
-
-(function () {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = 'https://ssl.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-
-
 // <summary>
 // Plugin that takes care of all built-in models (fill and update), refreshes page and changes views randomly.
 // </summary>
@@ -40,6 +28,19 @@ function Services() {
 		CrawlPage();
 		UpdateProfile();
 		// TODO Request refresh
+
+		if (!IsDevelopmentMode) {
+			// Google analytics
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-33221456-3']);
+			_gaq.push(['_trackEvent', 'Plugin', 'Core/Services']);
+
+			(function () {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = 'https://ssl.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		}
 	};
 
 	var CrawlPage = function () {

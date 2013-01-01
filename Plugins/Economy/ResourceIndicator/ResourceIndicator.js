@@ -9,17 +9,6 @@
  *
  *****************************************************************************/
 
-// Google analytics
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-33221456-3']);
-_gaq.push(['_trackEvent', 'Plugin', 'Economy/ResourceIndicator']);
-
-(function () {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = 'https://ssl.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-
 /// <summary>
 /// Informs user about warehouse and granary 
 /// overflow by showing time untill filled under
@@ -93,6 +82,19 @@ function ResourceIndicator() {
 		var interval = 1000;
 		setInterval(RefreshFunction, interval);
 		DLog("ResourcesIndicator: Timer registered to interval [" + interval + "]");
+
+		if (!IsDevelopmentMode) {
+			// Google analytics
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-33221456-3']);
+			_gaq.push(['_trackEvent', 'Plugin', 'Economy/ResourceIndicator']);
+
+			(function () {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = 'https://ssl.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		}
 	};
 
 	/// <summary>

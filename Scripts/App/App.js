@@ -42,14 +42,6 @@ function App() {
 		// plugins manager page are available on next restart
 		$.ajaxSetup({ cache: false });
 
-		// TODO Remove is not needed any more (moved to contentscript.css)
-		// Inject Project Axeman styles
-		//var stylesheet = $("<link>");
-		//stylesheet.attr("href", GetURL("Pages/PAStyle.css"));
-		//stylesheet.attr("type", "text/css");
-		//stylesheet.attr("rel", "stylesheet");
-		//$("head").append(stylesheet);
-
 		// Initialize Modal View
 		this.InitializeModalView();
 		this.isModalViewActive = false;

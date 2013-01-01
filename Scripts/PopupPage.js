@@ -20,7 +20,7 @@ $(document).ready(function () {
 function PopupPage() {
 	this.Initialize = function () {
 		$("#Plugins").click(function () {
-			chrome.tabs.create({ url: GetURL("Pages/PluginsManager.html"), active: true });
+			chrome.tabs.create({ url: GetURL("Pages/PluginsManager/PluginsManager.html"), active: true });
 		});
 
 		$("#ModalNewProfileClose").click(function () {

@@ -17,16 +17,6 @@
  *
  *****************************************************************************/
 
-// Google analytics
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-33221456-3']);
-_gaq.push(['_trackEvent', 'Plugin', 'Development/DevelopmentToolbar']);
-
-(function () {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = 'https://ssl.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
 
 /******************************************************************************
  *
@@ -62,7 +52,7 @@ function DevelopmentToolbar() {
 		// Creates new development toolbar source code
 		var toolbar = this.GetNewToolbar(
 			this.GetNewLabel("Project - Axeman").css("padding", "12px"),
-			this.GetNewButton("PluginManager", GetURL("/Pages/PluginsManager.html")),
+			this.GetNewButton("PluginManager", GetURL("/Pages/PluginsManager/PluginsManager.html")),
 			this.GetNewButton("Popup page", GetURL("/Pages/Popup.html")),
 			this.GetNewButton("StorageDetails", GetURL("/Pages/StorageDetails.html")),
 			this.GetNewImageButton("Console.png", function() {}).attr("id", "DTConsoleToggle").css("float", "right")
@@ -94,6 +84,19 @@ function DevelopmentToolbar() {
 
 			$(this).attr("class", console.css("visibility") == "visible" ? "DTButtonImageToggled" : "DTButtonImage");
 		});
+
+		if (!IsDevelopmentMode) {
+			// Google analytics
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-33221456-3']);
+			_gaq.push(['_trackEvent', 'Plugin', 'Development/DevelopmentToolbar']);
+
+			(function () {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = 'https://ssl.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		}
 	};
 
 	// TODO Comment

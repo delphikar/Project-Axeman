@@ -1,7 +1,7 @@
 {
 	"name": "Project Axeman",
 	"description": "Travian 4 extension that adds some 'missing' features to the game.",
-	"version": "0.2.2.3",
+	"version": "0.2.3",
 	"manifest_version": 2,
 	"homepage_url": "http://github.com/JustBuild/Project-Axeman",
 	"icons": {
@@ -20,7 +20,7 @@
 		"page": "Pages/Background.html",
 		"persistent": false
 	},
-	"options_page": "Pages/PluginsManager.html",
+	"options_page": "Pages/PluginsManager/PluginsManager.html",
 	"browser_action": {
 		"default_icon": "Icons/icon48.png",
 		"default_title": "Project Axeman",
@@ -38,6 +38,7 @@
 				"Scripts/App/Models.js",
 				"Scripts/App/RequestManager.js",
 				"Scripts/App/NotificationManager.js",
+				"Scripts/App/NavigationManager.js",
 				"Scripts/App/PluginsManager.js",
 				"Plugins/Core/Services/Services.js",
 				"Plugins/Development/DevelopmentToolbar/DevelopmentToolbar.js",

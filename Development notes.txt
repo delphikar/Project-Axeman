@@ -6,7 +6,7 @@ RELEASE TODO LIST
 
 LIBRARIES USED
 
-	jQuery current version:		1.8.3
+	jQuery current version:		1.9.0b1
 	jQueryUI current version:	1.9.1
 
 
@@ -17,7 +17,7 @@ APPLICATION DIAGRAM available at
 USING AND LAUNCHING APP
 
 	For using plugins you need to include following scripts:
-		Total: (5)
+		Total: (8)
 		(in that order)
 
 		Scripts/App/Enums.js
@@ -27,6 +27,7 @@ USING AND LAUNCHING APP
 		
 		Scripts/App/RequestManager.js
 		Scripts/App/NotificationManager.js
+		Scripts/App/NavigationManager.js
 		Scripts/App/PluginsManager.js
 
 		<PLUGINS GO HERE>
@@ -44,7 +45,7 @@ AVAILABLE PLUGINS
 	filename including path to list of extension scripts and in PluginManager.html
 	page (and here below).
 
-	Total: (7)
+	Total: (8)
 
 	Services				(Plugins/Core/Services/Services.js)
 	DevelopmentToolbar 		(Plugins/Development/DevelopmentToolbar/DevelopmentToolbar.js)
@@ -53,3 +54,4 @@ AVAILABLE PLUGINS
 	ResourceIndicator		(Plugins/Economy/ResourceIndicator/ResourceIndicator.js)
 	UpgradeIndicator		(Plugins/Economy/UpgradeIndicator/UpgradeIndicator.js)
 	VillageListEnhancement	(Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js)
+	MarketplaceEnhancements	(Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancements.js)

@@ -16,23 +16,7 @@ function Development() {
 	this.Register = function () {
 		Log("Development: Registering Development plugin...");
 
-		$("head").append("<style type='text/css'>.ElementHighlighter{ pointer-events:visible !important; background-color: rgba(255,0,0,0.4) !important; -webkit-box-shadow: rgba(255, 0, 0, 0.8) 0px 0px 5px inset !important;cursor: crosshair !important; }</style>");
 
-		$('html>body div, a, input, p, strong').bind('mouseover', function (e) {
-			e.preventDefault();
-			e.stopPropagation();
-			$(e.target).addClass('ElementHighlighter');
-		});
-		$('html>body div, a, input, p, strong').bind('mouseout', function (e) {
-			e.preventDefault();
-			e.stopPropagation();
-			$(e.target).removeClass('ElementHighlighter');
-		});
-		$('html>body div, a, input, p, strong').bind('click', function (e) {
-			e.preventDefault();
-			e.stopPropagation();
-			console.log($(e.target));
-		});
 	};
 }
 

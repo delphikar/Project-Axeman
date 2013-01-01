@@ -12,17 +12,6 @@
  *
  *****************************************************************************/
 
-// Google analytics
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-33221456-3']);
-_gaq.push(['_trackEvent', 'Plugin', 'Economy/ResourceCalculator']);
-
-(function () {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = 'https://ssl.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-
 /// <summary>
 /// Informs user how much resources is needed 
 /// to build or train field, building or unit
@@ -47,6 +36,20 @@ function ResourceCalculator() {
 
 		BuildCostCalculator();
 		UnitCostCalculator();
+
+
+		if (!IsDevelopmentMode) {
+			// Google analytics
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-33221456-3']);
+			_gaq.push(['_trackEvent', 'Plugin', 'Economy/ResourceCalculator']);
+
+			(function () {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = 'https://ssl.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		}
 	};
 
 	var BuildCostCalculator = function () {
@@ -161,68 +164,70 @@ function ResourceCalculator() {
 		});
 	};
 
-	/// <summary>
-	/// Units cost calculator appends empty placeholders
-	/// </summary>
 	var UnitCostCalculator = function () {
+		/// <summary>
+		/// Units cost calculator appends empty placeholders
+		/// </summary>
+
 		DLog("ResourceCalculator: Unit cost appending...");
 
 		// Refresh rate in ms
 		var refreshRate = 128;
 
 		var inputs = $("input[name*='t']");
-		var costs = $(".details > .showCosts span[class*='resources']");
+		var costs = $(".details > .showCosts");
 
-		for (var rindex = 0; rindex < 4; rindex++) {
-			$.each(inputs, function (iindex) {
+		$.each(inputs, function (iindex) {
+			// Append resource cost change element
+			for (var rindex = 0; rindex < 5; rindex++) {
+				// Layout fix for crop cost
+				if (rindex > 3) {
+					$($("span:eq(" + rindex + ")", costs)).append($("<div>").append("empty").css("visibility", "hidden"));
+					continue;
+				}
+
+				// Create element to show resource difference
 				var costElement = $("<div>");
-				costElement.attr("id", "ResourceCalculatorU" + iindex + "R" + rindex);
+				costElement.addClass("ResourceCalculatorR" + rindex);
 				costElement.css("color", "#0C9E21");
 				costElement.css("text-align", "right");
 				costElement.html("(0)");
-				$(costs[iindex * 5 + rindex]).append(costElement);
-			});
-		}
+				$($("span:eq(" + rindex + ")", costs)).append(costElement);
+			}
 
-		var data = {
-			ElementID: "ResourceCalculatorU",
-			Inputs: inputs,
-			UnitCosts: costs
-		};
-		//console.warn(data);
-		setInterval(RefreshUnitsFunction, refreshRate, data);
+			// Attach function on textbox change
+			$(this).live("input", function () {
+				RefreshUnitsFunction($(inputs[iindex]), $(costs[iindex]));
+			});
+
+			// Initial call
+			RefreshUnitsFunction($(inputs[iindex]), $(costs[iindex]));
+		});
 	};
 
-	/// <summary>
-	/// Refreshes units cost elements
-	/// </summary>
-	/// <param name="data">Refresh data object</param>
-	var RefreshUnitsFunction = function (data) {
+	var RefreshUnitsFunction = function (input, cost) {
+		/// <summary>
+		/// Refreshes units cost elements
+		/// </summary>
+		/// <param name="input">Input element to refresh from (used for quantity)</param>
+		/// <param name="cost">Cost element to update</param>
+
+		// Get quantity requested
+		var quantity = parseInt(input.val(), 10) || 1;
+
 		for (var rindex = 0; rindex < 4; rindex++) {
 			var inWarehouse = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[rindex];
 
-			// Go through all inputs
-			data.Inputs.each(function (iindex) {
-				// Get resource cost
-				var costElement = $(data.UnitCosts[iindex * 5 + rindex]);
-				var resourceCost = parseInt(costElement.text(), 10);
+			// Get resource cost of one unit
+			var resourceCost = parseInt($("span:eq(" + rindex + ")", cost).text(), 10) || 0;
 
-				// Get quantity
-				var quantityValue = $(this).attr("value");
-				var quantity = parseInt(quantityValue, 10) || 1;
+			// Calculate difference
+			var diff = inWarehouse - resourceCost * quantity;
+			var color = diff < 0 ? "#B20C08" : "#0C9E21";
 
-				// Change quantity zero to one for intuitive results
-				if (quantity == 0)
-					quantity = 1;
-
-				// Calculate difference
-				var diff = inWarehouse - resourceCost * quantity;
-				var color = diff < 0 ? "#B20C08" : "#0C9E21";
-
-				// Update elements
-				$("#" + data.ElementID + iindex + "R" + rindex).html("(" + diff + ")");
-				$("#" + data.ElementID + iindex + "R" + rindex).css("color", color);
-			});
+			// Update elements
+			$(".ResourceCalculatorR" + rindex, cost).html("(" + diff + ")");
+			$(".ResourceCalculatorR" + rindex, cost).css("color", color);
 		}
 	};
 };
@@ -232,7 +237,7 @@ var ResourceCalculatorMetadata = {
 	Name: "ResourceCalculator",
 	Alias: "Resource Calculator",
 	Category: "Economy",
-	Version: "0.2.1.0",
+	Version: "0.2.2.0",
 	Description: "Shows you how much of each resource is needed to build field, building or train army. ",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
