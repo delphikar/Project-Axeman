@@ -55,6 +55,12 @@ Changes 0.2.3
 		- Fix Layout for crop consumption
 		- Optimized by removing timer in unit quantity change and replaced with event
 	-----
+	- Created Utils directory
+		- Added pageslide jQuery plugin
+			- Implemented pageslide as App modal view
+	- Removed duplicates
+	- Updated jQuery to 1.9.0b1
+	-----
 
 
 

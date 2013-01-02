@@ -44,11 +44,7 @@ function Feedback() {
 
 		// Show popup on feedback image click
 		$("#PAFeedback").click(function () {
-			$.get(GetURL("Plugins/Support/Feedback/FeedbackForm.html"),
-				function (response) {
-					app.ShowModalView(response);
-				}
-			);
+			app.ShowModalView("Plugins/Support/Feedback/FeedbackForm.html");
 		});
 
 		if (!IsDevelopmentMode) {

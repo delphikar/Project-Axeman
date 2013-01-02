@@ -32,6 +32,7 @@
 			"js": [
 				"Scripts/jQuery.js",
 				"Scripts/jQueryUI.js",
+				"Utils/pageslide/jquery.pageslide.js",
 				"Scripts/App/Enums.js",
 				"Scripts/App/Variables.js",
 				"Scripts/App/Helpers.js",
@@ -54,7 +55,8 @@
 			],
 			"css": [
 				"Pages/jQueryUIStyle.css",
-				"Pages/PAStyle.css"
+				"Pages/PAStyle.css",
+				"Utils/pageslide/jquery.pageslide.css"
 			],
 			"matches": [
 				"http://*.travian.ae/*",
@@ -116,6 +118,7 @@
 		}
 	],
 	"web_accessible_resources": [		
+		"Utils/pageslide/jquery.pageslide.css",
 		"Plugins/Support/Feedback/Image.png",
 		"Plugins/Support/Feedback/FeedbackForm.html",
 		"Plugins/Utility/VillageListEnhancement/SortAscending.png",

@@ -30,6 +30,7 @@ function App() {
 	var loadNumber = 1;
 	var currentLoad = 0;
 	var pluginsManager = new PluginsManager();
+	var modalViewAnimationLength = 500;
 
 	this.Initialize = function () {
 		/// <summary>
@@ -150,59 +151,45 @@ function App() {
 		/// or see some additional information.
 		/// </summary>
 
-		Log("App: Initializing ModalView");
-
-		// Appends modal view 
-		var modalViewElement = $("<div>");
-		modalViewElement.attr("id", "PAModalView");
-		modalViewElement.addClass("ModalView");
-		$("body").append(modalViewElement);
+		Log("Initializing ModalView", "App");
 
 		// Attach function to click and keyup events
 		// so that we close modalview when user clicks
 		// outside of modalview (on document not on modalview)
-		$(document).bind('click keyup', function (e) {
+		$(document).live('click keyup', function (e) {
 			// If this is a keyup event, let's see if it's an ESC key
 			if (e.type == "keyup" && e.keyCode != 27) return;
-
+			
 			// Make sure it's visible, and we're not modal	    
-			if (app.isModalViewActive == true &&						// Check if modal is active
-				e.target.className != "ModalView" &&					// Check that click target is not modal view
-				$(e.target).parents().index($("#PAModalView")) < 0) {	// Check that click target are not modal view children
-				app.HideModalView();
-			}
+			app.HideModalView();
 		});
 
-		Log("App: ModalView injected to the page");
+		Log("ModalView initialized", "App");
 	};
 
-	this.ShowModalView = function (content) {
+	this.ShowModalView = function (page) {
 		/// <summary>
 		/// Slides in ModalView if it is hidden and shows given content on it
 		/// </summary>
-		/// <param name="content">Content string</param>
+		/// <param name="page">Page to show in modal view</param>
 		/// <returns>Returns true if modalview is successfully shown</returns>
 
 		// Return if modelview is already active
 		if (app.isModalViewActive == true) {
-			DLog("App: Modal already oppened!");
+			DLog("Modal already oppened!", "App");
 			return false;
 		}
 
-		DLog("App: Opening ModalView...");
-
-		// Changes content of modelview
-		$("#PAModalView").html(content);
+		DLog("Opening ModalView...", "App");
 
 		// Slide modal view in
-		var animationDuration = 500;
-		$("#PAModalView").show("slide", { direction: "right" }, animationDuration);
+		$.pageslide({ direction: "left", href: GetURL(page), iframe: false, speed: modalViewAnimationLength, modal: true });
 
 		// Selay setting modal view to shown for length of animation
 		setTimeout(function() {
 			app.isModalViewActive = true;
-			DLog("App: ModalView shown");
-		}, animationDuration);
+			DLog("ModalView shown", "App");
+		}, modalViewAnimationLength);
 		
 		return true;
 	};
@@ -215,19 +202,18 @@ function App() {
 
 		// Return if modalview is already hidden
 		if (app.isModalViewActive == false) {
-			DLog("App: Modal already hidden!");
+			DLog("Modal already hidden!", "App");
 			return false;
 		}
 
 		// Slide modal view away
-		var animationDuration = 500;
-		$("#PAModalView").hide("slide", { direction: "right" }, animationDuration);
+		$.pageslide.close();
 		
 		// Delay setting modal view to hidden for length of animation
 		setTimeout(function() {
 			app.isModalViewActive = false;
-			DLog("App: ModalView hidden");
-		}, animationDuration);
+			DLog("ModalView hidden", "App");
+		}, modalViewAnimationLength);
 
 		return true;
 	};
