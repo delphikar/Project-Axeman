@@ -9,17 +9,6 @@
  *
  ******************************************************************************/
 
-// Google analytics
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-33221456-3']);
-_gaq.push(['_trackEvent', 'App', 'Application used']);
-
-(function () {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = 'https://ssl.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-
 
 function App() {
 	/// <summary>
@@ -55,6 +44,19 @@ function App() {
 
 		// Send request to check if this is first play
 		(new Request("Background", "Action", "IsFirstPlay")).Send();
+
+		if (!IsDevelopmentMode) {
+			// Google analytics
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-33221456-3']);
+			_gaq.push(['_trackEvent', 'App', 'Application used']);
+
+			(function () {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = 'https://ssl.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		}
 	};
 
 	this.Load = function () {
@@ -139,8 +141,6 @@ function App() {
 		ActiveServerAddress = currentAddress;
 		ActivePage = GetKeyByValue(Enums.TravianPages, currentPath);
 		ActivePageQuery = currentQuery;
-		
-		_gaq.push(['_trackEvent', 'Server', currentAddress]);
 	};
 
 	this.InitializeModalView = function () {

@@ -9,19 +9,6 @@
  *
  *****************************************************************************/
 
-// Google analytics
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-33221456-3']);
-_gaq.push(['_trackPageview']);
-
-(function () {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = 'https://ssl.google-analytics.com/ga.js';
-	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-
-
-
 var backgroundScript = new BackgroundScript();
 backgroundScript.Initialize();
 
@@ -40,11 +27,25 @@ function BackgroundScript() {
 		// Check if localStorage is supported
 		if (typeof (localStorage) == 'undefined') {
 			isLocalStorageSupported = false;
-			Error("BackgroundScript: localStorage not found! Try updating your browser!");
+			console.error("localStorage not found! Try updating your browser!");
 		}
 
 		// Attach listener to all request signs
-		requestManager.Recieve("*", gotRequest);
+		requestManager.Recieve("*", GotRequest);
+
+
+		if (!IsDevelopmentMode) {
+			// Google analytics
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-33221456-3']);
+			_gaq.push(['_trackPageview']);
+
+			(function () {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = 'https://ssl.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		}
 	};
 
 	/// <summary>
@@ -53,8 +54,8 @@ function BackgroundScript() {
 	/// <param name="request">Request object</param>
 	/// <param name="sender">Sender object</param>
 	/// <param name="sendResponse">sendResponse function</param>
-	var gotRequest = function (request, sender, sendResponse) {
-		console.log("BackgroundScript: Got request category [" + request.Category + "]");
+	var GotRequest = function (request, sender, sendResponse) {
+		console.log("Got request category [" + request.Category + "]");
 
 
 		if (request.Sign != "Background") {
@@ -66,17 +67,17 @@ function BackgroundScript() {
 			switch (request.Category) {
 			case "Data":
 				{
-					gotDataRequest(request, sendResponse);
+					GotDataRequest(request, sendResponse);
 					break;
 				}
 			case "Action":
 				{
-					gotActionRequest(request);
+					GotActionRequest(request);
 					break;
 				}
 			default:
 				{
-					Error("BackgroundScript: Unknown category [" + request.Category + "]");
+					console.error("Unknown category [" + request.Category + "]");
 					break;
 				}
 			}
@@ -87,14 +88,14 @@ function BackgroundScript() {
 	/// Handles action requests
 	/// </summary>
 	/// <param name="request">Request object</param>
-	var gotActionRequest = function (request) {
-		console.log("BackgroundScript: Got Action request [" + request.Name + "]");
+	var GotActionRequest = function (request) {
+		console.log("Got Action request [" + request.Name + "]");
 
 		if (IsNullOrEmpty(request.Name)) {
-			Error("BackgroundScript: Invalid action name [" + request.Name + "]");
+			console.error("Invalid action name [" + request.Name + "]");
 		}
 		else if (!ActionsAvailable[request.Name]) {
-			Error("BackgroundScript: Unknown action [" + request.Name + "]");
+			console.error("Unknown action [" + request.Name + "]");
 		}
 		else ActionsAvailable[request.Name]();
 	};
@@ -104,28 +105,28 @@ function BackgroundScript() {
 	/// </summary>
 	/// <param name="request">Request object</param>
 	/// <param name="sendResponse">Response function</param>
-	var gotDataRequest = function (request, sendResponse) {
-		console.log("BackgroundScript: Got Data request [" + request.Data.Type + "]");
+	var GotDataRequest = function (request, sendResponse) {
+		console.log("Got Data request [" + request.Data.Type + "]");
 
 		if (request.Data.Type == "get") {
-			sendResponse(getObject(request.Name));
+			sendResponse(GetObject(request.Name));
 		}
 		else if (request.Data.Type == "set") {
-			setObject(request.Name, request.Data.Value);
+			SetObject(request.Name, request.Data.Value);
 		}
 		else {
-			Error("BackgroundScript: Unknown Data request Type [" + request.Data.Type + "]");
-			Error(request);
+			console.error("Unknown Data request Type [" + request.Data.Type + "]");
+			console.error(request);
 		}
 	};
 
 	/// <summary>
 	/// Handles IsFirstPlay action request
 	/// </summary>
-	var actionIsFirstPlay = function () {
-		if (!getObject("IsFirstPlay")) {
+	var ActionIsFirstPlay = function () {
+		if (!GetObject("IsFirstPlay")) {
 			chrome.tabs.create({ url: GetURL("Pages/Welcome.html") });
-			setObject("IsFirstPlay", { State: "AlreadyPlayed" });
+			SetObject("IsFirstPlay", { State: "AlreadyPlayed" });
 		};
 	};
 
@@ -133,7 +134,7 @@ function BackgroundScript() {
 	/// List of actions that can be called
 	/// </summary>
 	var ActionsAvailable = {
-		IsFirstPlay: actionIsFirstPlay
+		IsFirstPlay: ActionIsFirstPlay
 	};
 	
 	/// <summary>
@@ -142,18 +143,19 @@ function BackgroundScript() {
 	/// </summary>
 	/// <param name="key">Key object</param>
 	/// <param name="value">Value object</param>
-	var setObject = function (key, value) {
+	var SetObject = function (key, value) {
 		try {
 			localStorage.setItem(key, JSON.stringify(value));
-			console.log("BackgroundScript: Set Data [" + key + "] Value [" + value + "]");
+			console.log("Set Data [" + key + "] Value");
+			console.log(value);
 		}
 		catch (exception) {
 			if (exception.name === 'QUOTA_EXCEEDED_ERR' ||
 				exception.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-				Error("BackgroundScript: Quota exceeded! Clear localStorage to solve problem. WARNING: Clearing localStorage will delete all user data.");
+				console.error("Quota exceeded! Clear localStorage to solve problem. WARNING: Clearing localStorage will delete all user data.");
 			}
 			else {
-				Error("BackgroundScript: Unknown error while trying to set an item!");
+				console.error("Unknown error while trying to set an item!");
 			}
 		}
 	};
@@ -164,17 +166,18 @@ function BackgroundScript() {
 	/// </summary>
 	/// <param name="key">Key object</param>
 	/// <returns>Object from localStorage that corresponds to given key</returns>
-	var getObject = function (key) {
+	var GetObject = function (key) {
 		var value = localStorage.getItem(key);
 		var parsedValue = value && JSON.parse(value);
-		console.log("BackgroundScript: Got Data [" + key + "] Value [" + parsedValue + "]");
+		console.log("Get Data [" + key + "] Value");
+		console.log(parsedValue);
 		return parsedValue;
 	};
 };
 
 // TODO: Comment function
 //function GotNotificationRequest(request) {
-//	console.log("BackgroundScript: Got Notification request.");
+//	console.log("Got Notification request.");
 
 //	if (request.actionName == "Show") {
 //		notificationManager.Show(request.requestData);

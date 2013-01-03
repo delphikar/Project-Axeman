@@ -6,11 +6,11 @@
 
 	};
 
-	this.GoToPageInTimeout = function (page, timeout) {
+	this.GoToURLInTimeout = function (url, timeout) {
 		/// <summary>
 		/// Goes to page with some delay
 		/// </summary>
-		/// <param name="page">Full URL of page to go to</param>
+		/// <param name="url">Full URL of page to go to</param>
 		/// <param name="timeout">Delay before redirect in ms</param>
 
 		timeout = Math.ceil(timeout * Math.random());

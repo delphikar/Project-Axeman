@@ -18,12 +18,17 @@ function UpgradeIndicator() {
 	/// Initializes object 
 	/// </summary>
 	this.Register = function () {
+		if (!IsLogedIn) {
+			Log("ResourcesIndicator: User isn't loged in...");
+			return;
+		}
+
 		// TODO Refactor
 		// TODO Log
 
 		Log("UpgradeIndicator: Registering UpgradeIndicator plugin...");
 
-		if (MatchPages(Enums.TravianPages.VillageOut))	fieldUpgradeIndicator();
+		if (MatchPages(Enums.TravianPages.VillageOut)) fieldUpgradeIndicator();
 		if (MatchPages(Enums.TravianPages.VillageIn)) buildingUpgradeIndicator();
 
 		if (!IsDevelopmentMode) {

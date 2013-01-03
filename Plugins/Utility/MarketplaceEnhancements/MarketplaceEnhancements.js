@@ -23,13 +23,23 @@ function MarketplaceEnhancements() {
 		/// Initializes plugin object
 		/// </summary>
 
+		if (!IsLogedIn) {
+			Log("ResourcesIndicator: User isn't loged in...");
+			return;
+		}
+
+		// Register only on send resources marketplace tab
+		if (!(MatchPages(Enums.TravianPages.Build) && MatchQuery({ id: "30", t: "5" }))) return;
+
 		Log("Registering MarketplaceEnhancements plugin...", "MarketplaceEnhancements");
 
 		//work
 		var traderMaxTransport = parseInt($(".send_res > tbody > tr:eq(0) > .max > a").text() || 0, 10);
 		var tradersAvailable = parseInt($("#merchantsAvailable").text(), 10) || 0;
+
 		//work
 		FillVillagesList();
+
 		//work-in-half, but rebuild
 		//AddTransportShortcuts(traderMaxTransport);
 
@@ -79,32 +89,35 @@ function MarketplaceEnhancements() {
 		}
 	};
 
-	function FillVillagesList() {
+	var FillVillagesList = function () {
 		// TODO Comment
 		Log("Adding village list selector...", "MarketplaceEnhancements");
 
-		// Gets data
+		// Gets village names to array
 		var villages = [];
 		for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
 			var obj = ActiveProfile.Villages[index];
 			villages[index] = obj.Name;
 		}
 
+		// Build dropdown selector
 		var selectInput = $("<select>").attr({
 			'id': 'enterVillageName_list',
 			'class': 'text village'
 		});
 
-		$(selectInput).append("<option disabled selected>Select village</option>");
+		selectInput.append("<option disabled selected>Select village</option>");
 
+		// Add village names to list
 		$.each(villages, function (current, value) {
-			$(selectInput).append("<option>" + value + "</option>");
+			selectInput.append("<option>" + value + "</option>");
 		});
 
+		// Append selector
 		$(".compactInput").append($("<br>"));
 		$(".compactInput").append(selectInput);
 
-		//Change village, delete coords on select
+		// Change village needs to delete coords
 		$(selectInput).change(function () {
 			$("#enterVillageName").val($(this).val());
 			$("#xCoordInput, #yCoordInput").val("");
@@ -115,7 +128,7 @@ function MarketplaceEnhancements() {
 		$("#enterVillageName_list").css("width", "100%");
 
 		Log("Village list selector successfully added!", "MarketplaceEnhancements");
-	}
+	};
 
 
 	function AddTransportShortcuts(traderMaxTransport) {

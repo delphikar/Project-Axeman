@@ -57,6 +57,57 @@ function MatchPages() {
 	return false;
 };
 
+function MatchQuery(matchObject) {
+	/// <summary>
+	/// Matches current active page query with given query parameters
+	/// </summary>
+	/// <param name="matchObject"></param>
+	/// <returns type=""></returns>
+
+	if (arguments.length != 1) {
+		Warn("To match query you must pass object containing query parameters!");
+		return;
+	}
+
+	// Parse current page query
+	var queryObject = ParseQuery(ActivePageQuery);
+
+	// Check if there is more arguments requested than are in active page query
+	if (matchObject.length > queryObject.length) return false;
+
+	// Check if any argument doesn't match, in that case return false for not match
+	for (var i in matchObject) {
+		if (!queryObject[i] || !matchObject[i] || queryObject[i] != matchObject[i]) {
+			return false;
+		}
+	}
+
+	return true;
+};
+
+function ParseQuery(query) {
+	/// <summary>
+	/// Reads current location query
+	/// </summary>
+	/// <returns type="Object">Returns an object that contains parametes from query request</returns>
+
+	var parameters = {};
+
+	// Removes leading questionmark
+	query = query.replace("?", "");
+
+	// Split query by '&' symbol
+	var hashes = query.split('&');
+	
+	// Go through all parameters and add each to array
+	for (var index = 0; index < hashes.length; index++) {
+		var hash = hashes[index].split('=');
+		parameters[hash[0]] = hash[1];
+	}
+
+	return parameters;
+};
+
 function Error(message) {
 	/// <summary>
 	/// Writes console error message
