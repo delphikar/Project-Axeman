@@ -42,7 +42,13 @@ function PluginsManager() {
 				return;
 			}
 
-			registerPlugin(obj);
+			try {
+				registerPlugin(obj);
+			}
+			catch (ex) {
+				Warn("An exception was throwsn while registering " + obj.Name + " plugin!");
+				Error(ex);
+			}
 		});
 	};
 
@@ -52,7 +58,22 @@ function PluginsManager() {
 		// Send request and handle callback
 		activeStateRequest.Send(
 			function (response) {
-			var state = pluginMetadata.Default.State;
+				// Get default state
+				var state = pluginMetadata.Default.State;
+
+				// Check if user login is required for current plugin
+				if (pluginMetadata.Settings.IsLoginRequired && !IsLogedIn) {
+					Log("User login required for " + pluginMetadata.Name, "PluginsManager");
+					return;
+				}
+
+				// Check if plugins matches current page
+				if (!(MatchPages(pluginMetadata.Settings.RunOnPages) && MatchQuery(pluginMetadata.Settings.RunOnPageQuery))) {
+					Log("Page doesn't match for " + pluginMetadata.Name, "PluginsManager");
+					return;
+				}
+
+				// Check if plugin has state or default state is 'On'
 				if ((response == null || !response.State) && state == "On" || response.State == "On") {
 					Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is active...");
 					Log("PluginsManager: Registering '" + pluginMetadata.Name + "'");
@@ -61,6 +82,9 @@ function PluginsManager() {
 					pluginObject.Register();
 				}
 				else Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is NOT active!");
+
+				Log("Plugin " + pluginMetadata.Name + " loaded successfully!", "PluginsManager");
+				DLog("[-------------------- END " + pluginMetadata.Name + " --------------------]");
 			}
 		);
 	};

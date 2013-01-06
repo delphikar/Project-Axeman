@@ -14,6 +14,43 @@ var Models = {};
 
 /******************************************************************************
  *
+ * Plugin metadata model
+ *
+ *****************************************************************************/
+Models.PluginMetadata = {
+	Name: "",
+	Alias: "",
+	Category: "Other",
+	Version: "0.0.1",
+	Description: "TODO",
+	Author: "",
+	Site: "",
+
+	Settings: {
+		//HasSettings: false,
+		//SourceURL: "",
+		Changeable: true,
+		IsLoginRequired: false,
+		RunOnPages: [],
+		RunOnPageQuery: {}
+	},
+
+	Default: {
+		State: "On"
+	},
+
+	Flags: {
+		Internal: false,
+		Alpha: false,
+		Beta: false,
+		Featured: false
+	},
+
+	Class: ""
+};
+
+/******************************************************************************
+ *
  * Village model
  *
  *****************************************************************************/
@@ -138,32 +175,3 @@ Models.Report = function () {
 //	this.IsActive = true;
 //	this.Settings = {};
 //};
-
-Models.PluginMetadata = {
-	Name: "",
-	Alias: "",
-	Category: "",
-	Version: "",
-	Description: "",
-	Author: "",
-	Site: "",
-
-	Settings: {
-		//HasSettings: false,
-		//SourceURL: "",
-		Changeable: true
-	},
-	
-	Default: {
-		State: "On"
-	},
-
-	Flags: {
-			Internal: false,
-			Alpha: false,
-			Beta: false,
-			Featured: false
-	},
-
-	Class: ""
-};

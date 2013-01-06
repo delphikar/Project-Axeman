@@ -15,11 +15,6 @@ function VillageListEnhancement() {
 	/// Initializes object 
 	/// </summary>
 	this.Register = function () {
-		if (!IsLogedIn) {
-			Log("VillageListEnhancement: User isn't loged in...");
-			return;
-		}
-
 		Log("VillageListEnhancement: Registering VillageListEnhancement plugin...");
 
 		// Button styles
@@ -116,6 +111,10 @@ var VillageListEnhancementMetadata = {
 	Description: "TODO",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
+
+	Settings: {
+		IsLoginRequired: true
+	},
 
 	Flags: {
 		Alpha: true,

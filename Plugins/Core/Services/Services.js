@@ -52,10 +52,10 @@ function Services() {
 		// Nothing to crawl is user is loged off
 		if (!IsLogedIn) return;
 
-		if (!MatchPages(
+		if (!MatchPages([
 			Enums.TravianPages.Home,
 			Enums.TravianPages.Login,
-			Enums.TravianPages.Logout)) {
+			Enums.TravianPages.Logout])) {
 
 			Log("Crawling page...", "Services");
 
@@ -66,16 +66,16 @@ function Services() {
 			CrawlMessages();
 			CrawlReports();		
 		}
-		if (MatchPages(
-			Enums.TravianPages.Player)){
+		if (MatchPages([
+			Enums.TravianPages.Player])){
 
 			Log("Crawling Player page...", "Services");
 
 			CrawlPopulation();
 			CrawlVillagesDetails();
 		}
-		if (MatchPages(
-			Enums.TravianPages.VillageOut)){
+		if (MatchPages([
+			Enums.TravianPages.VillageOut])){
 
 			Log("Crawling Village Out page...", "Services");
 
@@ -155,7 +155,7 @@ function Services() {
 	// Crawls for user population
 	// </summary>
 	var CrawlPopulation = function () {
-		if (!MatchPages(Enums.TravianPages.Player)) return;
+		if (!MatchPages([Enums.TravianPages.Player])) return;
 		
 		var pop = parseInt($("td.inhabitants").text(), 10) || 0;
 		ActiveProfile.Population = pop;
@@ -252,7 +252,7 @@ function Services() {
 		var currentReportsCount = parseInt($(".messages .bubble-content").text(), 10) || 0;
 
 		// Check if on Messages page
-		if (MatchPages(Enums.TravianPages.Messages)) {
+		if (MatchPages([Enums.TravianPages.Messages])) {
 			// TODO Implement
 		}
 		else {
@@ -269,7 +269,7 @@ function Services() {
 		var currentReportsCount = parseInt($(".reports .bubble-content").text(), 10) || 0;
 
 		// Check if on Reports page
-		if (MatchPages(Enums.TravianPages.Reports)) {
+		if (MatchPages([Enums.TravianPages.Reports])) {
 			// TODO Implement
 		}
 		else {

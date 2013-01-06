@@ -24,13 +24,6 @@ function ResourceCalculator() {
 	/// Initializes object 
 	/// </summary>
 	this.Register = function () {
-		if (!IsLogedIn) {
-			Log("ResourcesIndicator: User isn't loged in...");
-			return;
-		}
-
-		if (!MatchPages(Enums.TravianPages.Build)) return;
-
 		Log("ResourceCalculator: Registering ResourceCalculator plugin...");
 
 
@@ -182,7 +175,7 @@ function ResourceCalculator() {
 			for (var rindex = 0; rindex < 5; rindex++) {
 				// Layout fix for crop cost
 				if (rindex > 3) {
-					$($("span:eq(" + rindex + ")", costs)).append($("<div>").append("empty").css("visibility", "hidden"));
+					$("span:eq(" + rindex + ")", costs[iindex]).append($("<div>").append("empty").css("visibility", "hidden"));
 					continue;
 				}
 
@@ -192,7 +185,7 @@ function ResourceCalculator() {
 				costElement.css("color", "#0C9E21");
 				costElement.css("text-align", "right");
 				costElement.html("(0)");
-				$($("span:eq(" + rindex + ")", costs)).append(costElement);
+				$("span:eq(" + rindex + ")", costs[iindex]).append(costElement);
 			}
 
 			// Attach function on textbox change
@@ -241,6 +234,11 @@ var ResourceCalculatorMetadata = {
 	Description: "Shows you how much of each resource is needed to build field, building or train army. ",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
+
+	Settings: {
+		RunOnPages: [Enums.TravianPages.Build],
+		IsLoginRequired: true
+	},
 
 	Flags: {
 		Beta: true

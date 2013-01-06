@@ -42,14 +42,17 @@ function GetPluginImage(metadata) {
 	return GetURL("Plugins/" + metadata.Category + "/" + metadata.Name + "/Image.png");
 };
 
-function MatchPages() {
+function MatchPages(pages) {
 	/// <summary>
 	/// Matches current active page with given pages
 	/// </summary>
+	/// <param name="pages">Array of pages that are required to match, if left blank matches to everything</param>
 	/// <returns>True if there was current active page passed as argument</returns>
 
-	for (var index = 0; index < arguments.length; index++) {
-		if (arguments[index] == Enums.TravianPages[ActivePage]) {
+	if (!pages || pages.length === 0) return true;
+
+	for (var index = 0; index < pages.length; index++) {
+		if (pages[index] == Enums.TravianPages[ActivePage]) {
 			return true;
 		}
 	}

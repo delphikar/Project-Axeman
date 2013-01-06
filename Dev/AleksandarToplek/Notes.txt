@@ -6,6 +6,7 @@
 
 - Take a look at MarketplaceImprovements code
 - Storage details replace tables with div and reverse to previous colors
+- Rename Changable to IsChangeable
 
 - HelpPlugin (Insert FAQ of extensions to help.php)
 - <span class="settle">1 Naseliti</span>
@@ -67,6 +68,8 @@ Changes 0.2.3
 	- Query handling functions added to Helpers
 	- Fix Loging on Background page now working
 	-----
+	- Moved Page and Query matching to PluginsManager
+	- Added IsLoginRequired, RunOnPages, RunOnPageQuery variables to PluginMetadata model
 
 
 

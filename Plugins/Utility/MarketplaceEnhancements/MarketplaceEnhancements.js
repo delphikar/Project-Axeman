@@ -23,14 +23,6 @@ function MarketplaceEnhancements() {
 		/// Initializes plugin object
 		/// </summary>
 
-		if (!IsLogedIn) {
-			Log("ResourcesIndicator: User isn't loged in...");
-			return;
-		}
-
-		// Register only on send resources marketplace tab
-		if (!(MatchPages(Enums.TravianPages.Build) && MatchQuery({ id: "30", t: "5" }))) return;
-
 		Log("Registering MarketplaceEnhancements plugin...", "MarketplaceEnhancements");
 
 		//work
@@ -377,6 +369,12 @@ var MarketplaceEnhancementsMetadata = {
 	Description: "ToDo",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
+
+	Settings: {
+		IsLoginRequired: true,
+		RunOnPages: [Enums.TravianPages.Build],
+		RunOnPageQuery: { id: "30", t: "5" }
+	},
 
 	Flags: {
 		Alpha: true,

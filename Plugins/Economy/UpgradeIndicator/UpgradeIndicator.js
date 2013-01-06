@@ -18,18 +18,13 @@ function UpgradeIndicator() {
 	/// Initializes object 
 	/// </summary>
 	this.Register = function () {
-		if (!IsLogedIn) {
-			Log("ResourcesIndicator: User isn't loged in...");
-			return;
-		}
-
 		// TODO Refactor
 		// TODO Log
 
 		Log("UpgradeIndicator: Registering UpgradeIndicator plugin...");
 
-		if (MatchPages(Enums.TravianPages.VillageOut)) fieldUpgradeIndicator();
-		if (MatchPages(Enums.TravianPages.VillageIn)) buildingUpgradeIndicator();
+		if (MatchPages([Enums.TravianPages.VillageOut])) fieldUpgradeIndicator();
+		if (MatchPages([Enums.TravianPages.VillageIn])) buildingUpgradeIndicator();
 
 		if (!IsDevelopmentMode) {
 			// Google analytics
@@ -249,6 +244,11 @@ var UpgradeIndicatorMetadata = {
 	Description: "Know when you can upgrade fields and building without clicking for each. This plugin will highlight upgradeable fields and buildings for you.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
+
+	Settings: {
+		RunOnPages: [Enums.TravianPages.VillageIn, Enums.TravianPages.VillageOut],
+		IsLoginRequired: true
+	},
 
 	Flags: {
 		Beta: true

@@ -19,11 +19,6 @@ function Feedback() {
 	/// Registers Feedback plugin
 	/// </summary>
 	this.Register = function () {
-		if (!IsLogedIn) {
-			Log("Feedback: User isn't loged in...");
-			return;
-		}
-
 		Log("Feedback: Registering Feedback plugin...");
 
 		// Insert feedback image
@@ -71,6 +66,10 @@ var FeedbackMetadata = {
 	Description: "Send us some feedback so we can quickly respond to any problems or ideas.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
+
+	Settings: {
+		IsLoginRequired: true
+	},
 
 	Flags: {
 		Beta: true

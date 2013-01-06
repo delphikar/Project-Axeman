@@ -20,15 +20,10 @@ function ResourceIndicator() {
 	/// Initializes object
 	/// </summary>
 	this.Register = function () {
-		if (!IsLogedIn) {
-			Log("ResourcesIndicator: User isn't loged in...");
-			return;
-		}
-
-		if (MatchPages(
+		if (MatchPages([
 			Enums.TravianPages.Home,
 			Enums.TravianPages.Login,
-			Enums.TravianPages.Logout)) return;
+			Enums.TravianPages.Logout])) return;
 
 		Log("ResourcesIndicator: Registering ResourceIndicator plugin...");
 
@@ -143,6 +138,10 @@ var ResourceIndicatorMetadata = {
 	Description: "Shows how long is needed for warehouse and granary to fill up to its maximum capacity and alerts accordingly.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
+
+	Settings: {
+		IsLoginRequired: true
+	},
 
 	Flags: {
 		Beta: true
