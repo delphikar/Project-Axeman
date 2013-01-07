@@ -167,10 +167,10 @@ function ResourceCalculator() {
 		// Refresh rate in ms
 		var refreshRate = 128;
 
-		var inputs = $("input[name*='t']");
+		var inputs = $(".details > input[name*='t']");
 		var costs = $(".details > .showCosts");
 
-		$.each(inputs, function (iindex) {
+		$.each(costs, function (iindex) {
 			// Append resource cost change element
 			for (var rindex = 0; rindex < 5; rindex++) {
 				// Layout fix for crop cost

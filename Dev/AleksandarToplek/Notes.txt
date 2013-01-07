@@ -70,6 +70,9 @@ Changes 0.2.3
 	-----
 	- Moved Page and Query matching to PluginsManager
 	- Added IsLoginRequired, RunOnPages, RunOnPageQuery variables to PluginMetadata model
+	- Fix ResourceCalculator duplicate issue
+	-----
+	- Fix ResourceCalaulator showing on troops send
 
 
 
