@@ -25,12 +25,20 @@ function MarketplaceEnhancements() {
 
 		Log("Registering MarketplaceEnhancements plugin...", "MarketplaceEnhancements");
 
-		//work
-		var traderMaxTransport = parseInt($(".send_res > tbody > tr:eq(0) > .max > a").text() || 0, 10);
+		// Gets max carry for one trader and number of traders available
+		var traderMaxTransport = parseInt($(".send_res .max:eq(0) > a").text() || 0, 10);
 		var tradersAvailable = parseInt($("#merchantsAvailable").text(), 10) || 0;
 
-		//work
-		FillVillagesList();
+		DLog("Trader Max Transport: " + traderMaxTransport);
+		DLog("Traders available: " + tradersAvailable);
+
+		// Add village selector if there are villages to send resources to
+		if (ActiveProfile.Villages.length > 1) {
+			FillVillagesList();
+		}
+
+		// Adds placeholder to village name textbox
+		$("#enterVillageName").attr("placeholder", "Enter village name");
 
 		//work-in-half, but rebuild
 		//AddTransportShortcuts(traderMaxTransport);
@@ -82,14 +90,21 @@ function MarketplaceEnhancements() {
 	};
 
 	var FillVillagesList = function () {
-		// TODO Comment
+		/// <summary>
+		/// Adds Select element under the village name textbox so that is 
+		/// simplifies sending resources to owned villages
+		/// </summary>
+
 		Log("Adding village list selector...", "MarketplaceEnhancements");
 
 		// Gets village names to array
 		var villages = [];
 		for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
 			var obj = ActiveProfile.Villages[index];
-			villages[index] = obj.Name;
+
+			// Check if village is not currently active village
+			if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID)
+				villages[index] = obj.Name;
 		}
 
 		// Build dropdown selector
@@ -373,7 +388,7 @@ var MarketplaceEnhancementsMetadata = {
 	Settings: {
 		IsLoginRequired: true,
 		RunOnPages: [Enums.TravianPages.Build],
-		RunOnPageQuery: { id: "30", t: "5" }
+		PageMustContain: [".gid17 .container.active a[href*='t=5']"] // NOTE This can be changed later and test for specific tab in code
 	},
 
 	Flags: {

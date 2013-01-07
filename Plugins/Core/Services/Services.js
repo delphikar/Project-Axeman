@@ -465,7 +465,7 @@ var ServicesMetadata = {
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
 	Settings: {
-		Changeable: false
+		IsChangeable: false
 	},
 
 	Flags: {

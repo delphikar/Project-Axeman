@@ -57,27 +57,19 @@ function UpgradeIndicator() {
 
 				// Go through all available resource tyoes
 				for (var rIndex = 0, cache = availableFields.length; rIndex < cache; rIndex++) {
-					var fIndex = 0;
-					var loopCache = availableFields[rIndex].length;
 					// Go through all available fields for specific resource type
-					for (; fIndex < loopCache; fIndex++) {
+					for (var fIndex = 0, cache = availableFields[rIndex].length; fIndex < cache; fIndex++) {
 						if (levelIndex == availableFields[rIndex][fIndex]) {
-							// If we found filed type, we can retrieve cost
-							// from Enums.Fields
+							// If we found filed type, we can retrieve cost from Enums.Fields
 							var fieldUpgradeCost = Enums.Fields[rIndex][fieldLevel];
 
 							var upgradeState = "upgradeable";
 							var maxFieldLvl = ActiveProfile.Villages[ActiveVillageIndex].IsMainCity ? 20 : 10;
 							if(fieldLevel < maxFieldLvl){
 								for (var rrIndex = 0; rrIndex < 4; rrIndex++) {
-									// Check if village have warehouse/granary large enough
-									// to upgrade field
+									// Check if village have warehouse/granary large enough to upgrade field
 									var canStoreResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[rrIndex];
-									DLog("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + fieldUpgradeCost[rrIndex] + " for lvl." + (fieldLevel + 1));
 									if (fieldUpgradeCost[rrIndex] > canStoreResource) {
-										DLog("Can Store: " + canStoreResource);
-										DLog("Cost: " + fieldUpgradeCost[rrIndex]);
-
 										upgradeState = "nonUpgradeable";
 										break;
 									}
@@ -94,6 +86,8 @@ function UpgradeIndicator() {
 											// but field clay cost is larger than what can be store. 
 										}
 									}
+
+									DLog("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + fieldUpgradeCost[rrIndex] + " for lvl." + (fieldLevel + 1));
 								}
 							}
 							else{
@@ -130,19 +124,15 @@ function UpgradeIndicator() {
 				var building = Enums.Buildings[GIDs[buildingGID]];
 				var buildingUpgradeCost = building[buildingLevel];
 
-				DLog("------"+buildingGID+": "+GIDs[buildingGID]);
-				
-				var upgradeState = "upgradeable";
-				if(buildingLevel < building.length){
-					for (var rrIndex = 0; rrIndex < 4; rrIndex++) {
-						// Check if village have warehouse/granary large enough
-						// to upgrade field
-						var canStoreResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[rrIndex];
-						DLog("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + buildingUpgradeCost[rrIndex] + " for lvl." + (buildingLevel + 1));
-						if (buildingUpgradeCost[rrIndex] > canStoreResource) {
-							DLog("Can Store:" + canStoreResource);
-							DLog("Cost: " + buildingUpgradeCost[rrIndex]);
+				DLog("------" + buildingGID + ": " + GIDs[buildingGID]);
 
+				var upgradeState = "upgradeable";
+				if (buildingLevel < building.length) {
+					for (var rrIndex = 0; rrIndex < 4; rrIndex++) {
+						// Check if village have warehouse/granary large enough to upgrade field
+						var canStoreResource = ActiveProfile.Villages[ActiveVillageIndex].Resources.Storage[rrIndex];
+
+						if (buildingUpgradeCost[rrIndex] > canStoreResource) {
 							upgradeState = "nonUpgradeable";
 							break;
 						}
@@ -159,9 +149,11 @@ function UpgradeIndicator() {
 								// but field clay cost is larger than what can be store. 
 							}
 						}
+
+						DLog("Storage: " + canStoreResource + " Cost[" + rrIndex + "]: " + buildingUpgradeCost[rrIndex] + " for lvl." + (buildingLevel + 1));
 					}
 				}
-				else{
+				else {
 					upgradeState = "maxUpgraded";
 				}
 			}
@@ -240,7 +232,7 @@ var UpgradeIndicatorMetadata = {
 	Name: "UpgradeIndicator",
 	Alias: "Upgrade Indicator",
 	Category: "Economy",
-	Version: "0.2.0.1",
+	Version: "0.2.0.6",
 	Description: "Know when you can upgrade fields and building without clicking for each. This plugin will highlight upgradeable fields and buildings for you.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

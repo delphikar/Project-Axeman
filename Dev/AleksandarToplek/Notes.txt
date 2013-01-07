@@ -4,9 +4,8 @@
 #
 ########################################################################
 
-- Take a look at MarketplaceImprovements code
+- Take a look at MarketplaceEnhancements code
 - Storage details replace tables with div and reverse to previous colors
-- Rename Changable to IsChangeable
 
 - HelpPlugin (Insert FAQ of extensions to help.php)
 - <span class="settle">1 Naseliti</span>
@@ -73,6 +72,13 @@ Changes 0.2.3
 	- Fix ResourceCalculator duplicate issue
 	-----
 	- Fix ResourceCalaulator showing on troops send
+	-----
+	- Renamed Changeable to IsChangeable in PluginsMetadata model
+	- Added PageMustContain to PluginMetadata.Settings model
+	- MarketplaceEnhancements
+		- Fix Plugin not runing on right page due to wrong query addressing
+		- Village list select not shown if there is no villages to send resources to
+		- Fix Village select now not showing current village
 
 
 

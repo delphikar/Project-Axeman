@@ -29,10 +29,11 @@ Models.PluginMetadata = {
 	Settings: {
 		//HasSettings: false,
 		//SourceURL: "",
-		Changeable: true,
+		IsChangeable: true,
 		IsLoginRequired: false,
 		RunOnPages: [],
-		RunOnPageQuery: {}
+		RunOnPageQuery: {},
+		PageMustContain: []
 	},
 
 	Default: {

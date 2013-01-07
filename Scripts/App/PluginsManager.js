@@ -61,6 +61,8 @@ function PluginsManager() {
 				// Get default state
 				var state = pluginMetadata.Default.State;
 
+				DLog("[-------------------- BEGIN " + pluginMetadata.Name + " --------------------]");
+
 				// Check if user login is required for current plugin
 				if (pluginMetadata.Settings.IsLoginRequired && !IsLogedIn) {
 					Log("User login required for " + pluginMetadata.Name, "PluginsManager");
@@ -71,6 +73,15 @@ function PluginsManager() {
 				if (!(MatchPages(pluginMetadata.Settings.RunOnPages) && MatchQuery(pluginMetadata.Settings.RunOnPageQuery))) {
 					Log("Page doesn't match for " + pluginMetadata.Name, "PluginsManager");
 					return;
+				}
+
+				// Check if page contains all required elements
+				for (var index = 0, cache = pluginMetadata.Settings.PageMustContain.length; index < cache; index++) {
+					if (!$(pluginMetadata.Settings.PageMustContain[index]).length) {
+						Log("Page doesn't contain needed elements for " + pluginMetadata.Name, "PluginsManager");
+						DLog("Page doesn't containe element \"" + pluginMetadata.Settings.PageMustContain[index] + "\"", "PluginsManager");
+						return;
+					}
 				}
 
 				// Check if plugin has state or default state is 'On'
@@ -84,7 +95,6 @@ function PluginsManager() {
 				else Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is NOT active!");
 
 				Log("Plugin " + pluginMetadata.Name + " loaded successfully!", "PluginsManager");
-				DLog("[-------------------- END " + pluginMetadata.Name + " --------------------]");
 			}
 		);
 	};
