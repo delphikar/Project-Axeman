@@ -4,9 +4,14 @@
 #
 ########################################################################
 
-- Take a look at MarketplaceEnhancements code
-- Storage details replace tables with div and reverse to previous colors
+0.2.3
+- MarketplaceEnhancements
+	- Take a look at code
+	- Replace inline css with stylesheet
 
+Other
+- Storage details replace tables with div and reverse to previous colors
+- Translation
 - HelpPlugin (Insert FAQ of extensions to help.php)
 - <span class="settle">1 Naseliti</span>
 
@@ -79,6 +84,12 @@ Changes 0.2.3
 		- Fix Plugin not runing on right page due to wrong query addressing
 		- Village list select not shown if there is no villages to send resources to
 		- Fix Village select now not showing current village
+	-----
+	- MarketplaceEnhancements
+		- Added select text on focus
+		- Fix Send error message now showing when needed on resource amount change
+		- Fix Junk table issues
+	-----
 
 
 

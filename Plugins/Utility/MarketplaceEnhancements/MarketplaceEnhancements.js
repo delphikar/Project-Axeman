@@ -18,6 +18,9 @@
  *****************************************************************************/
 
 function MarketplaceEnhancements() {
+	var tradersAvailable;
+	var traderCarryAmount;
+
 	this.Register = function () {
 		/// <summary>
 		/// Initializes plugin object
@@ -26,11 +29,11 @@ function MarketplaceEnhancements() {
 		Log("Registering MarketplaceEnhancements plugin...", "MarketplaceEnhancements");
 
 		// Gets max carry for one trader and number of traders available
-		var traderMaxTransport = parseInt($(".send_res .max:eq(0) > a").text() || 0, 10);
-		var tradersAvailable = parseInt($("#merchantsAvailable").text(), 10) || 0;
+		traderCarryAmount = parseInt($(".send_res .max:eq(0) > a").text() || 0, 10);
+		tradersAvailable = parseInt($("#merchantsAvailable").text(), 10) || 0;
 
-		DLog("Trader Max Transport: " + traderMaxTransport);
-		DLog("Traders available: " + tradersAvailable);
+		DLog("Trader Max Transport: " + traderCarryAmount, "MarketplaceEnhancements");
+		DLog("Traders available: " + tradersAvailable, "MarketplaceEnhancements");
 
 		// Add village selector if there are villages to send resources to
 		if (ActiveProfile.Villages.length > 1) {
@@ -40,29 +43,30 @@ function MarketplaceEnhancements() {
 		// Adds placeholder to village name textbox
 		$("#enterVillageName").attr("placeholder", "Enter village name");
 
-		//work-in-half, but rebuild
-		//AddTransportShortcuts(traderMaxTransport);
+		// Add spinners to resources textboxes
+		AddSpiners(tradersAvailable, traderCarryAmount);
 
-		//work-in-half, but rebuild
+		// Inserts junk resources table
 		InsertJunkResourceTable();
-		RegisterTimerFillInJunkResource([tradersAvailable, traderMaxTransport]);
-
-		//Perhaps works, maybe not, but useful
-		IncomingSum();
-
-		addSpiners(tradersAvailable, traderMaxTransport);
+		FillInJunkResourceTable();
 
 		//Test Area ;)
-		function testArea() {
+		(function testArea() {
+
+			//work-in-half, but rebuild
+			//AddTransportShortcuts(traderCarryAmount);
+
+			//Perhaps works, maybe not, but useful
+			IncomingSum();
+
+
+			// TODO Pun in seperate function. Looks good
 			var useHour = $("<span>").text("1h").attr({
-				"title": "Use hour production",
-				"id": "PA_1h"
+				"title": "Use hour production"
 			}).css({
 				"margin": "0"
 			}).button({
-				icons: {
-					primary: "ui-icon-plus"
-				}
+				icons: { primary: "ui-icon-plus" }
 			}).click(function () {
 				$.each($("#send_select input"), function (index, obj) {
 					var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
@@ -72,8 +76,7 @@ function MarketplaceEnhancements() {
 
 			$("#send_select tr:eq(4) td").append(useHour);
 			//need InsertJunkResourceTable and other ;)
-		}
-		testArea();
+		})();
 
 		if (!IsDevelopmentMode) {
 			// Google analytics
@@ -137,6 +140,136 @@ function MarketplaceEnhancements() {
 		Log("Village list selector successfully added!", "MarketplaceEnhancements");
 	};
 
+	var AddSpiners = function() {
+		/// <summary>
+		/// Adds spinners to resource input textboxes
+		/// </summary>
+		/// <param name="tradersAvailable">Number of traders available</param>
+		/// <param name="traderMaxTransport">Amount of resource each trader can carry</param>
+
+		var maxTransport = tradersAvailable * traderCarryAmount;
+
+		// Go through all resource input textboxes
+		$.each($("#r1, #r2, #r3, #r4"), function (index, obj) {
+			// Get stored amount of current resource
+			var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[index];
+
+			// Apply spinner to current resource input textbox
+			$(obj).spinner({
+				incremental: true,
+				step: 1,
+				min: 0,
+				max: Math.max(maxTransport, stored),
+				spin: function (event, ui) {
+					// If stored value is greater than trader carry, increase step to trader carry value (add one trader carry value)
+					if (ui.value > $(this).val() && ui.value - 1 + traderCarryAmount <= stored) {
+						$(this).spinner("value", ui.value - 1 + traderCarryAmount);
+						$(event.target).change();
+						return false;
+					}
+						// On spin down, if spinner value is greater than trader carry, increase step to trader carry value (remove one trader carry value)
+					else if (ui.value < $(this).val() && ui.value + 1 - traderCarryAmount >= 0) {
+						$(this).spinner("value", ui.value + 1 - traderCarryAmount);
+						$(event.target).change();
+						return false;
+					}
+					else {
+						$(this).spinner("value", ui.value);
+						$(event.target).change();
+					}
+				}
+			}).click(function () {
+				$(this).select();
+			});
+		});
+	};
+
+	var InsertJunkResourceTable = function () {
+		/// <summary>
+		/// Inserts JunkResource rows in the end of resource selection table
+		/// </summary>
+
+		Log("Inserting Junk resources table...", "MarketplaceEnhancements");
+
+		// This will prevent error messages
+		$(".send_res tbody tr:eq(5)").hide();
+
+		var mercantsRow = $("<tr>").css({ "line-height": "8px" });
+		mercantsRow.append($("<td>").attr("colspan", "2").append($("<div>").append("Mercants")));
+		mercantsRow.append($("<td>").addClass("tradersNeeded").css("text-align", "right").append($("<div>").append("0")));
+		mercantsRow.append($("<td>").addClass("tradersAvailable").append($("<div>").append("/ " + tradersAvailable)));
+
+		var currentRow = $("<tr>").css({ "line-height": "8px" });
+		currentRow.append($("<td>").attr("colspan", "2").append("Current"));
+		currentRow.append($("<td>").addClass("currentLoaded").css("text-align", "right").append($("<div>").append("0")));
+		currentRow.append($("<td>").addClass("maxRes").append($("<div>").append("/ 0")));
+
+		var wastedRow = $("<tr>").css({ "line-height": "8px" });
+		wastedRow.append($("<td>").attr("colspan", "2").append("Wasted"));
+		wastedRow.append($("<td>").addClass("junkAmount").css("text-align", "right").append($("<div>").append("0")));
+
+		$(".send_res tbody").append(mercantsRow);
+		$(".send_res tbody").append(currentRow);
+		$(".send_res tbody").append(wastedRow);
+
+		$("#r1, #r2, #r3, #r4").change(function () {
+			FillInJunkResourceTable();
+		});
+
+		//$(".send_res").append("<tfoot>");
+		//$(".send_res tbody tr:eq(5) > td").html(junkResourceTable);
+
+
+		//$(".send_res tfoot").append(junkResourceTable);
+		//$(".send_res tfoot").append("<tr><td colspan='7'><table id='send_info' style='background-color: white;'>\
+		//	<tr><td>Merchants</td><td style='text-align: right;' class='tradersNeeded'>0</td><td>/</td><td class='tradersAviable'>0</td></tr>\
+		//	<tr><td>Current</td><td style='text-align: right;' class='currentLoaded'>0</td><td>/</td><td class='maxRes'>0</td></tr>\
+		//	<tr><td>Wasted:</td><td style='text-align: right;' class='junkAmount'>0</td></tr>\
+		//</table></td></tr><input id='r0' type='hidden'>");
+
+		Log("Junk resources table inserted successfully...", "MarketplaceEnhancements");
+	};
+
+	var FillInJunkResourceTable = function () {
+		/// <summary>
+		/// Caltulates and fills values of pre-inserted table for junk resources
+		/// </summary>
+
+		var resMax = tradersAvailable * traderCarryAmount;
+
+		// Get input values
+		var r1 = parseInt($("#r1").val(), 10) || 0;
+		var r2 = parseInt($("#r2").val(), 10) || 0;
+		var r3 = parseInt($("#r3").val(), 10) || 0;
+		var r4 = parseInt($("#r4").val(), 10) || 0;
+
+		// Calulate sum of values
+		var resSum = r1 + r2 + r3 + r4;
+
+		// Calculates min number of traders needed for transport
+		var tradersNeeded = Math.ceil(resSum / traderCarryAmount);
+
+		// Calculates junk amount
+		var junkAmount = tradersNeeded * traderCarryAmount - resSum;
+
+		// Styles of row (indicating too much resource requested / more traders needed)
+		if (tradersNeeded > tradersAvailable) {
+			$(".currentLoaded").css({ color: "#DE0000", "font-weight": "bold" });
+			$(".junkAmount").css({ color: "gray" });
+		}
+		else {
+			$(".currentLoaded").css({ color: "", "font-weight": "" });
+			$(".junkAmount").css({ color: "" });
+		}
+
+		// Changes value of pre-inserted rows
+		$(".currentLoaded").text(resSum);
+		$(".maxRes").text("/ " + resMax);
+		$(".junkAmount").text("  " + junkAmount);
+		$(".tradersNeeded").text(tradersNeeded);
+
+		Log("traders [" + tradersAvailable + "] each [" + traderCarryAmount + "] sending [" + resSum + "] with junk [" + junkAmount + "]", "MarketplaceEnhancements");
+	};
 
 	function AddTransportShortcuts(traderMaxTransport) {
 		// TODO Comment
@@ -267,112 +400,17 @@ function MarketplaceEnhancements() {
 		Log("Incoming resources sum shown", "MarketplaceEnhancements");
 	}
 
+	//function RegisterTimerFillInJunkResource(args) {
+	//	// TODO Comment
+	//	$(".tradersAviable").text(+$("#merchantsAvailable").text());
+	//	$(".maxRes").text(args[0] * args[1]);
 
-	function addSpiners(tradersAvailable, traderMaxTransport) {
-		var maxTransport = tradersAvailable * traderMaxTransport;
-		function max(maxTransport, stored) {
-			if (maxTransport < stored) return maxTransport;
-			else return stored;
-		}
-		$.each($("#r1, #r2, #r3, #r4"), function (index, obj) {
-			var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[index];
-			$(obj).spinner({
-				incremental: true,
-				step: 1,
-				min: 0,
-				max: max(maxTransport, stored),
-				spin: function (event, ui) {
-					if (ui.value > $(this).val() && ui.value - 1 + traderMaxTransport <= stored) {
-						$(this).spinner("value", ui.value - 1 + traderMaxTransport);
-						$("#r0").change();
-						return false;
-					}
-					else if (ui.value < $(this).val() && ui.value + 1 - traderMaxTransport >= 0) {
-						$(this).spinner("value", ui.value + 1 - traderMaxTransport);
-						$("#r0").change();
-						return false;
-					}
-					else {
-						$(this).spinner("value", ui.value);
-						$("#r0").change();
-					}
-				}
-			});
-		});
-	}
+	//	$("#r0, #r1, #r2, #r3, #r4").change(function () {
+	//		FillInJunkResourceTimer(args);
+	//	});
 
-	function RegisterTimerFillInJunkResource(args) {
-		// TODO Comment
-		$(".tradersAviable").text(+$("#merchantsAvailable").text());
-		$(".maxRes").text(args[0] * args[1]);
-
-		$("#r0, #r1, #r2, #r3, #r4").change(function () {
-			FillInJunkResourceTimer(args);
-		});
-
-		Log("Attached for changes #r*", "MarketplaceEnhancements");
-	}
-
-	/**
-	 * Inserts JunkResource rows in the end of resource selection table
-	 *
-	 * @author Aleksandar Toplek
-	 */
-	function InsertJunkResourceTable() {
-		Log("Inserting Junk resources table...", "MarketplaceEnhancements");
-
-		$(".send_res").append("<tfoot>");
-		$(".send_res tbody tr:eq(5)").remove();
-		$(".send_res tfoot").append("<tr><td colspan='7'><table id='send_info' style='background-color: white;'>\
-			<tr><td>Merchants</td><td style='text-align: right;' class='tradersNeeded'>0</td><td>/</td><td class='tradersAviable'>0</td></tr>\
-			<tr><td>Current</td><td style='text-align: right;' class='currentLoaded'>0</td><td>/</td><td class='maxRes'>0</td></tr>\
-			<tr><td>Wasted:</td><td style='text-align: right;' class='junkAmount'>0</td></tr>\
-		</table></td></tr><input id='r0' type='hidden'>");
-
-		Log("Junk resources table inserted successfully...", "MarketplaceEnhancements");
-	}
-
-	/**
-	 * Called by FillInJunkResource timer
-	 * Actualy caltulates and fills values of pre-inserted table
-	 *
-	 * @author Aleksandar Toplek
-	 *
-	 * @param {Array} args  1 represents trader maximal transport amount
-	 *                      0 represents how much traders is available
-	 */
-	function FillInJunkResourceTimer(args) {
-		var resMax = args[0] * args[1];
-
-		// Get input values
-		var r1 = parseInt($("#r1").val(), 10) || 0;
-		var r2 = parseInt($("#r2").val(), 10) || 0;
-		var r3 = parseInt($("#r3").val(), 10) || 0;
-		var r4 = parseInt($("#r4").val(), 10) || 0;
-
-		// Calulate sum of values
-		var resSum = r1 + r2 + r3 + r4;
-
-		// Calculates min number of traders needed for transport
-		var tradersNeeded = Math.ceil(resSum / args[1]);
-
-		// Calculates junk amount
-		var junkAmount = tradersNeeded * args[1] - resSum;
-
-		// Styles of row (indicating too much resource requested / more traders needed)
-		if (tradersNeeded > args[0])
-			$(".currentLoaded").attr("style", "color:red;");
-		else $(".currentLoaded").attr("style", "");
-
-		// Changes value of pre-inserted rows
-		$(".currentLoaded").html(resSum);
-		$(".maxRes").html(resMax);
-		$(".junkAmount").html((tradersNeeded > args[0] ? "NA" : junkAmount));
-		$(".tradersNeeded").html(tradersNeeded);
-
-
-		Log("traders [" + args[0] + "] each [" + args[1] + "] sending [" + resSum + "] with junk [" + junkAmount + "]", "MarketplaceEnhancements");
-	}
+	//	Log("Attached for changes #r*", "MarketplaceEnhancements");
+	//}
 }
 
 // Metadata for this plugin (MarketplaceImprovement)
