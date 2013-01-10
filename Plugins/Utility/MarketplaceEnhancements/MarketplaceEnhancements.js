@@ -63,6 +63,33 @@ function MarketplaceEnhancements() {
 			IncomingSum();
 
 
+			var ValidateHourButton = function (hourButton) {
+				var villageResources = ActiveProfile.Villages[ActiveVillageIndex].Resources;
+				var productionSum = 0;
+
+				// Chack if enough each resources is stored
+				for (var index = 0; index < 4; index++) {
+					var stored = villageResources.Stored[index];
+					var production = villageResources.Production[index];
+					var alreadySet = parseInt($("#r" + (index + 1)).val(), 10) || 0;
+					if (stored < production + alreadySet) {
+						DLog("No enough " + Enums.FieldNames[index] + " stored [" + stored + "] to send " + (alreadySet ? "more than" : "hour production") + " [" + (production + alreadySet) + "]", "MarketplaceEnhancements");
+						hourButton.button("option", "disabled", true);
+						hourButton.attr("title", useHour.attr("title") + "\nNo enough " + Enums.FieldNames[index] + " - " + (production - stored) + " more needed");
+					}
+
+					productionSum += production + alreadySet;
+				}
+
+				// Check if enough traders is available
+				var canTransport = tradersAvailable * traderCarryAmount;
+				if (canTransport < productionSum) {
+					DLog("No enough traders to send [" + productionSum + "] resources", "MarketplaceEnhancements");
+					hourButton.button("option", "disabled", true);
+					hourButton.attr("title", useHour.attr("title") + "\nNo enough traders available - " + (Math.ceil(productionSum / traderCarryAmount) - tradersAvailable) + " more needed");
+				}
+			}
+
 			// TODO Add second button that adds hour production from all villages
 			// TODO Pun in seperate function. Looks good
 			var useHour = $("<span>").text("1h").attr({
@@ -74,37 +101,14 @@ function MarketplaceEnhancements() {
 			}).click(function () {
 				$.each($("#send_select input"), function (index, obj) {
 					var production = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
-					$(obj).val(production);
+					$(obj).val($(obj).val() + production);
 					$(obj).change();
 				});
+
+				ValidateHourButton($(this));
 			});
 
-			var ValidateHourButton = function (hourButton) {
-				var villageResources = ActiveProfile.Villages[ActiveVillageIndex].Resources;
-				var productionSum = 0;
-
-				// Chack if enough each resources is stored
-				for (var index = 0; index < 4; index++) {
-					var stored = villageResources.Stored[index];
-					var production = villageResources.Production[index];
-					if (stored < production) {
-						DLog("No enough " + Enums.FieldNames[index] + " stored [" + stored + "] to send hour production [" + production + "]", "MarketplaceEnhancements");
-						hourButton.button("option", "disabled", true);
-						hourButton.attr("title", useHour.attr("title") + "\nNo enough " + Enums.FieldNames[index] + " - " + (production - stored)  + " more needed");
-					}
-
-					productionSum += production;
-				}
-
-				// Check if enough traders is available
-				var canTransport = tradersAvailable * traderCarryAmount;
-				if (canTransport < productionSum) {
-					DLog("No enough traders to send [" + productionSum + "] resources", "MarketplaceEnhancements");
-					hourButton.button("option", "disabled", true);
-					hourButton.attr("title", useHour.attr("title") + "\nNo enough traders available - " + (Math.ceil(productionSum / traderCarryAmount) - tradersAvailable) + " more needed");
-				}
-			}
-			ValidateHourButton(useHour);
+			//ValidateHourButton(useHour);
 
 			$("#send_select tr:eq(4) td").append(useHour);
 			//need InsertJunkResourceTable and other ;)
@@ -185,30 +189,28 @@ function MarketplaceEnhancements() {
 		$.each($("#r1, #r2, #r3, #r4"), function (index, obj) {
 			// Get stored amount of current resource
 			var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[index];
-
+			
 			// Apply spinner to current resource input textbox
 			$(obj).spinner({
 				incremental: true,
 				step: 1,
 				min: 0,
-				max: Math.max(maxTransport, stored),
+				max: stored,
 				spin: function (event, ui) {
-					// If stored value is greater than trader carry, increase step to trader carry value (add one trader carry value)
-					if (ui.value > $(this).val() && ui.value - 1 + traderCarryAmount <= stored) {
-						$(this).spinner("value", ui.value - 1 + traderCarryAmount);
-						$(event.target).change();
-						return false;
+					var spinStep = 1;
+					var isInc = ui.value >= $(this).val();
+					var stepValue = isInc ? 1 * spinStep : -1 * spinStep;
+
+					// On spin up, if stored value is greater than trader carry, increase step to trader carry value (add one trader carry value)
+					// On spin down, if spinner value is greater than trader carry, increase step to trader carry value (remove one trader carry value)
+					if ((isInc && ui.value - 1 + traderCarryAmount <= stored) ||
+						(!isInc && ui.value + 1 - traderCarryAmount >= 0)) {
+						spinStep = traderCarryAmount;
 					}
-						// On spin down, if spinner value is greater than trader carry, increase step to trader carry value (remove one trader carry value)
-					else if (ui.value < $(this).val() && ui.value + 1 - traderCarryAmount >= 0) {
-						$(this).spinner("value", ui.value + 1 - traderCarryAmount);
-						$(event.target).change();
-						return false;
-					}
-					else {
-						$(this).spinner("value", ui.value);
-						$(event.target).change();
-					}
+
+					$(this).spinner("value", ui.value + spinStep * stepValue - stepValue);
+					$(event.target).change();
+					return false;
 				}
 			}).click(function () {
 				$(this).select();
@@ -244,6 +246,12 @@ function MarketplaceEnhancements() {
 		var wastedRow = $("<tr>");
 		wastedRow.append($("<td>").attr("colspan", "2").append("Waste"));
 		wastedRow.append($("<td>").addClass("junkAmount").append("0"));
+		wastedRow.append($("<td>")
+			.append($("<div>")
+				.append($("<img>").addClass("r1 PAMEJunkTableResourceLink Disabled").attr({ src: "img/x.gif", title: "Add waste to Lumber" }).click(UseJunkResource))
+				.append($("<img>").addClass("r2 PAMEJunkTableResourceLink Disabled").attr({ src: "img/x.gif", title: "Add waste to Clay" }).click(UseJunkResource))
+				.append($("<img>").addClass("r3 PAMEJunkTableResourceLink Disabled").attr({ src: "img/x.gif", title: "Add waste to Iron" }).click(UseJunkResource))
+				.append($("<img>").addClass("r4 PAMEJunkTableResourceLink Disabled").attr({ src: "img/x.gif", title: "Add waste to Crop" }).click(UseJunkResource))));
 
 		junkResourcesTable.append(mercantsRow);
 		junkResourcesTable.append(currentRow);
@@ -252,11 +260,38 @@ function MarketplaceEnhancements() {
 		// Adds new row with column that is apend on whole outter table and insertst new table to that column
 		$(".send_res tbody").append($("<tr>").append($("<td>").attr("colspan", "4").append(junkResourcesTable)));
 
+		// For keyboard input
+		$("#r1, #r2, #r3, #r4").live("input", function () {
+			FillInJunkResourceTable();
+		});
+
 		$("#r1, #r2, #r3, #r4").change(function () {
 			FillInJunkResourceTable();
 		});
 
 		Log("Junk resources table inserted successfully...", "MarketplaceEnhancements");
+	};
+
+	var UseJunkResource = function () {
+		var obj = $(this);
+		var objClass = obj.attr("class");
+
+		// Check if shortcut is enabled
+		if (obj.hasClass("Disabled")) {
+			DLog("Shortcut isn't enabled [" + objClass + "]");
+			return;
+		}
+
+		// Get spinner for given resource shortcut
+		var targetResourceIndex = objClass[objClass.search(" r") + 2];
+		var targetElement = $("#r" + targetResourceIndex);
+		var resourceReserved = targetElement.spinner("value");
+
+		var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[targetResourceIndex - 1];
+		var junkAmount = (parseInt($(".junkAmount").text(), 10) || 0);
+		
+		targetElement.spinner("value", resourceReserved + Math.min(junkAmount, stored - resourceReserved));
+		targetElement.change();
 	};
 
 	var FillInJunkResourceTable = function () {
@@ -291,9 +326,21 @@ function MarketplaceEnhancements() {
 			$(".currentLoaded").parent().addClass("PAMEJunkTableErrorRow");
 		else $(".currentLoaded").parent().removeClass("PAMEJunkTableErrorRow");
 
+		// Disables all resource shortcuts so they can be enabled if available
+		$(".PAMEJunkTableResourceLink").addClass("Disabled");
+
 		// Change style if junk amount isn't zero
-		if (junkAmount !== 0)
+		if (junkAmount !== 0) {
 			$(".junkAmount").parent().addClass("junkAmountNonzero");
+
+			for (var index = 0; index < 4; index++) {
+				var target = $("#r" + (index + 1));
+				var resourceReserved = parseInt(target.spinner("value"), 10) || 0;
+				var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[index];
+				if (stored - resourceReserved > 0)
+					$(".PAMEJunkTableResourceLink:eq(" + index + ")").removeClass("Disabled");
+			}
+		}
 		else $(".junkAmount").parent().removeClass("junkAmountNonzero");
 
 		// Changes value of pre-inserted rows

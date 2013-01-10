@@ -3,9 +3,11 @@
 }
 	.PAMEJunkTable > tbody > tr > td:nth-child(1) {
 		width: 45%;
+		vertical-align: top;
 	}
 	.PAMEJunkTable > tbody > tr > td:nth-child(2) {
 		width: 30%;
+		vertical-align: top;
 	}
 	.PAMEJunkTable > tbody > tr > td:nth-child(3) {
 		width: 25%;
@@ -25,4 +27,15 @@
 		.PAMEJunkTable .junkAmountNonzero > td,
 		.PAMEJunkTable .PAMEJunkTableErrorRow > td {
 			font-weight: bold;
+		}
+	.PAMEJunkTable .PAMEJunkTableResourceLink {
+		margin: 6px 3px;
+		margin-top: 0;
+		border: none;
+		cursor: pointer;
+	}
+		.PAMEJunkTable .PAMEJunkTableResourceLink.Disabled {
+			-webkit-filter: grayscale(1);
+			opacity: 0.5;
+			cursor: default;
 		}

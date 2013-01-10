@@ -128,7 +128,7 @@ var Enums = {
 		41: 'HorseDrinkingTrough'
 	},
 
-	FieldNames: [ "Wood", "Clay", "Iron", "Crop" ],
+	FieldNames: [ "Lumber", "Clay", "Iron", "Crop" ],
 
 	/**************************************************************************
 	 *

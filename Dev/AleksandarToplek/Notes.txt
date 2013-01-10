@@ -11,15 +11,17 @@ Website
 	- Google Chrome logo
 
 0.2.3
-- MarketplaceEnhancements
-	- Take a look at code
-	- Add second button that adds hour production from all villages
+	- MarketplaceEnhancements
+		- Take a look at code
+		- Add second button that adds hour production from all villages
+	- Insert all stylesheets using new function
+	- Check all on reports and messages
 
 Other
-- Storage details replace tables with div and reverse to previous colors
-- Translation
-- HelpPlugin (Insert FAQ of extensions to help.php)
-- <span class="settle">1 Naseliti</span>
+	- Storage details replace tables with div and reverse to previous colors
+	- Translation
+	- HelpPlugin (Insert FAQ of extensions to help.php)
+	- <span class="settle">1 Naseliti</span>
 
 ########################################################################
 #
@@ -102,7 +104,14 @@ Changes 0.2.3
 		- Fix Junk table layout
 	- Added FiledNames to Enums
 	-----
-
+	- MarketplaceEnhancements
+		- Addud support for multiple hour production clicks
+		- Fix Bug in spinner max value
+		- Refactored spin function
+		- Added junk fill resource shortcuts
+		- Added another event handle function that reacts on keypress
+	- Enums.FieldNames, Wood changed to Lumber 
+	-----
 
 
 ########################################################################
