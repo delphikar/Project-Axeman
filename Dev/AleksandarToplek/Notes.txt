@@ -4,10 +4,16 @@
 #
 ########################################################################
 
+http://www.traviantactics.com/index.php
+
+Website
+	- Add facebook page link / Facebook like widget
+	- Google Chrome logo
+
 0.2.3
 - MarketplaceEnhancements
 	- Take a look at code
-	- Replace inline css with stylesheet
+	- Add second button that adds hour production from all villages
 
 Other
 - Storage details replace tables with div and reverse to previous colors
@@ -89,6 +95,12 @@ Changes 0.2.3
 		- Added select text on focus
 		- Fix Send error message now showing when needed on resource amount change
 		- Fix Junk table issues
+	-----
+	- Added CreateStylesheet function to Helpers.js
+	- MarketplaceEnhancements
+		- Seperated styles from code
+		- Fix Junk table layout
+	- Added FiledNames to Enums
 	-----
 
 

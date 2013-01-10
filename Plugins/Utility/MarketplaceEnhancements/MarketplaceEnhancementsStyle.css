@@ -1,0 +1,28 @@
+﻿.PAMEJunkTable {
+	background-color: white;
+}
+	.PAMEJunkTable > tbody > tr > td:nth-child(1) {
+		width: 45%;
+	}
+	.PAMEJunkTable > tbody > tr > td:nth-child(2) {
+		width: 30%;
+	}
+	.PAMEJunkTable > tbody > tr > td:nth-child(3) {
+		width: 25%;
+	}
+	.PAMEJunkTable > tbody > tr {
+		line-height: 8px;
+	}
+		.PAMEJunkTable .tradersNeeded, 
+		.PAMEJunkTable .currentLoaded, 
+		.PAMEJunkTable .junkAmount {
+			text-align: right;
+		}
+	.PAMEJunkTable .junkAmountNonzero,
+	.PAMEJunkTable .PAMEJunkTableErrorRow {
+		color: #DE0000;
+	}
+		.PAMEJunkTable .junkAmountNonzero > td,
+		.PAMEJunkTable .PAMEJunkTableErrorRow > td {
+			font-weight: bold;
+		}

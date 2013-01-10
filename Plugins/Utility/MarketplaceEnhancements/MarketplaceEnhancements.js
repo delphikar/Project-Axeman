@@ -28,6 +28,9 @@ function MarketplaceEnhancements() {
 
 		Log("Registering MarketplaceEnhancements plugin...", "MarketplaceEnhancements");
 
+		// Inserting stylesheet
+		$("head").append(CreateStylesheet("Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancementsStyle.css"));
+
 		// Gets max carry for one trader and number of traders available
 		traderCarryAmount = parseInt($(".send_res .max:eq(0) > a").text() || 0, 10);
 		tradersAvailable = parseInt($("#merchantsAvailable").text(), 10) || 0;
@@ -60,19 +63,48 @@ function MarketplaceEnhancements() {
 			IncomingSum();
 
 
+			// TODO Add second button that adds hour production from all villages
 			// TODO Pun in seperate function. Looks good
 			var useHour = $("<span>").text("1h").attr({
-				"title": "Use hour production"
+				"title": "Use this village's hour production"
 			}).css({
 				"margin": "0"
 			}).button({
 				icons: { primary: "ui-icon-plus" }
 			}).click(function () {
 				$.each($("#send_select input"), function (index, obj) {
-					var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
-					$(obj).val(stored);
+					var production = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
+					$(obj).val(production);
+					$(obj).change();
 				});
-			});;
+			});
+
+			var ValidateHourButton = function (hourButton) {
+				var villageResources = ActiveProfile.Villages[ActiveVillageIndex].Resources;
+				var productionSum = 0;
+
+				// Chack if enough each resources is stored
+				for (var index = 0; index < 4; index++) {
+					var stored = villageResources.Stored[index];
+					var production = villageResources.Production[index];
+					if (stored < production) {
+						DLog("No enough " + Enums.FieldNames[index] + " stored [" + stored + "] to send hour production [" + production + "]", "MarketplaceEnhancements");
+						hourButton.button("option", "disabled", true);
+						hourButton.attr("title", useHour.attr("title") + "\nNo enough " + Enums.FieldNames[index] + " - " + (production - stored)  + " more needed");
+					}
+
+					productionSum += production;
+				}
+
+				// Check if enough traders is available
+				var canTransport = tradersAvailable * traderCarryAmount;
+				if (canTransport < productionSum) {
+					DLog("No enough traders to send [" + productionSum + "] resources", "MarketplaceEnhancements");
+					hourButton.button("option", "disabled", true);
+					hourButton.attr("title", useHour.attr("title") + "\nNo enough traders available - " + (Math.ceil(productionSum / traderCarryAmount) - tradersAvailable) + " more needed");
+				}
+			}
+			ValidateHourButton(useHour);
 
 			$("#send_select tr:eq(4) td").append(useHour);
 			//need InsertJunkResourceTable and other ;)
@@ -194,38 +226,35 @@ function MarketplaceEnhancements() {
 		// This will prevent error messages
 		$(".send_res tbody tr:eq(5)").hide();
 
-		var mercantsRow = $("<tr>").css({ "line-height": "8px" });
-		mercantsRow.append($("<td>").attr("colspan", "2").append($("<div>").append("Mercants")));
-		mercantsRow.append($("<td>").addClass("tradersNeeded").css("text-align", "right").append($("<div>").append("0")));
-		mercantsRow.append($("<td>").addClass("tradersAvailable").append($("<div>").append("/ " + tradersAvailable)));
+		var junkResourcesTable = $("<table>").addClass("PAMEJunkTable").attr({
+			cellpadding: 1,
+			cellspacing: 1
+		});
 
-		var currentRow = $("<tr>").css({ "line-height": "8px" });
+		var mercantsRow = $("<tr>");
+		mercantsRow.append($("<td>").attr("colspan", "2").append("Mercants"));
+		mercantsRow.append($("<td>").addClass("tradersNeeded").append("0"));
+		mercantsRow.append($("<td>").addClass("tradersAvailable").append("/ " + tradersAvailable));
+
+		var currentRow = $("<tr>");
 		currentRow.append($("<td>").attr("colspan", "2").append("Current"));
-		currentRow.append($("<td>").addClass("currentLoaded").css("text-align", "right").append($("<div>").append("0")));
-		currentRow.append($("<td>").addClass("maxRes").append($("<div>").append("/ 0")));
+		currentRow.append($("<td>").addClass("currentLoaded").append("0"));
+		currentRow.append($("<td>").addClass("maxRes").append("/ 0"));
 
-		var wastedRow = $("<tr>").css({ "line-height": "8px" });
-		wastedRow.append($("<td>").attr("colspan", "2").append("Wasted"));
-		wastedRow.append($("<td>").addClass("junkAmount").css("text-align", "right").append($("<div>").append("0")));
+		var wastedRow = $("<tr>");
+		wastedRow.append($("<td>").attr("colspan", "2").append("Waste"));
+		wastedRow.append($("<td>").addClass("junkAmount").append("0"));
 
-		$(".send_res tbody").append(mercantsRow);
-		$(".send_res tbody").append(currentRow);
-		$(".send_res tbody").append(wastedRow);
+		junkResourcesTable.append(mercantsRow);
+		junkResourcesTable.append(currentRow);
+		junkResourcesTable.append(wastedRow);
+
+		// Adds new row with column that is apend on whole outter table and insertst new table to that column
+		$(".send_res tbody").append($("<tr>").append($("<td>").attr("colspan", "4").append(junkResourcesTable)));
 
 		$("#r1, #r2, #r3, #r4").change(function () {
 			FillInJunkResourceTable();
 		});
-
-		//$(".send_res").append("<tfoot>");
-		//$(".send_res tbody tr:eq(5) > td").html(junkResourceTable);
-
-
-		//$(".send_res tfoot").append(junkResourceTable);
-		//$(".send_res tfoot").append("<tr><td colspan='7'><table id='send_info' style='background-color: white;'>\
-		//	<tr><td>Merchants</td><td style='text-align: right;' class='tradersNeeded'>0</td><td>/</td><td class='tradersAviable'>0</td></tr>\
-		//	<tr><td>Current</td><td style='text-align: right;' class='currentLoaded'>0</td><td>/</td><td class='maxRes'>0</td></tr>\
-		//	<tr><td>Wasted:</td><td style='text-align: right;' class='junkAmount'>0</td></tr>\
-		//</table></td></tr><input id='r0' type='hidden'>");
 
 		Log("Junk resources table inserted successfully...", "MarketplaceEnhancements");
 	};
@@ -252,15 +281,20 @@ function MarketplaceEnhancements() {
 		// Calculates junk amount
 		var junkAmount = tradersNeeded * traderCarryAmount - resSum;
 
-		// Styles of row (indicating too much resource requested / more traders needed)
-		if (tradersNeeded > tradersAvailable) {
-			$(".currentLoaded").css({ color: "#DE0000", "font-weight": "bold" });
-			$(".junkAmount").css({ color: "gray" });
-		}
-		else {
-			$(".currentLoaded").css({ color: "", "font-weight": "" });
-			$(".junkAmount").css({ color: "" });
-		}
+		// Chane styles when use requested too many traders
+		if (tradersNeeded > tradersAvailable) 
+			$(".tradersNeeded").parent().addClass("PAMEJunkTableErrorRow");
+		else $(".tradersNeeded").parent().removeClass("PAMEJunkTableErrorRow");
+
+		// Change style if user loaded more resources than travelers can carry
+		if (resSum > resMax)
+			$(".currentLoaded").parent().addClass("PAMEJunkTableErrorRow");
+		else $(".currentLoaded").parent().removeClass("PAMEJunkTableErrorRow");
+
+		// Change style if junk amount isn't zero
+		if (junkAmount !== 0)
+			$(".junkAmount").parent().addClass("junkAmountNonzero");
+		else $(".junkAmount").parent().removeClass("junkAmountNonzero");
 
 		// Changes value of pre-inserted rows
 		$(".currentLoaded").text(resSum);
@@ -268,7 +302,7 @@ function MarketplaceEnhancements() {
 		$(".junkAmount").text("  " + junkAmount);
 		$(".tradersNeeded").text(tradersNeeded);
 
-		Log("traders [" + tradersAvailable + "] each [" + traderCarryAmount + "] sending [" + resSum + "] with junk [" + junkAmount + "]", "MarketplaceEnhancements");
+		DLog("Traders [" + tradersAvailable + "] each (max. " + traderCarryAmount + ") sending [" + resSum + "] with total junk amount [" + junkAmount + "]", "MarketplaceEnhancements");
 	};
 
 	function AddTransportShortcuts(traderMaxTransport) {

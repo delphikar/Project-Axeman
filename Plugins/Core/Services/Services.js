@@ -141,7 +141,7 @@ function Services() {
 		var m = p.exec(scriptContent);
 		if (m != null) {
 			for (var index = 1; index < 5; index++) {
-				activeVillage.Resources.Production[index - 1] = m[index];
+				activeVillage.Resources.Production[index - 1] = parseInt(m[index], 10) || 0;
 			};
 
 			DLog("Production of Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Production + "]", "Services");

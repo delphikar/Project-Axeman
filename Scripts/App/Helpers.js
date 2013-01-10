@@ -268,3 +268,19 @@ function EnsureParams(object, required) {
 		console.warn(args[index]);
 	}
 };
+
+function CreateStylesheet(path) {
+	/// <summary>
+	/// Creates link object to given stylesheet.
+	/// In order to insert stylesheet into page through this plugin, stylesheet must be listen in minefest.json as external resource
+	/// </summary>
+	/// <param name="path">Relative path to stylesheet file in extension files</param>
+	/// <returns type="">jQuery object that can be inserted into page</returns>
+
+	var stylesheetLink = $("<link>");
+	stylesheetLink.attr("href", GetURL(path));
+	stylesheetLink.attr("type", "text/css");
+	stylesheetLink.attr("rel", "stylesheet");
+
+	return stylesheetLink;
+};

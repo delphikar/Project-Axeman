@@ -128,6 +128,8 @@ var Enums = {
 		41: 'HorseDrinkingTrough'
 	},
 
+	FieldNames: [ "Wood", "Clay", "Iron", "Crop" ],
+
 	/**************************************************************************
 	 *
 	 * Fields constants
