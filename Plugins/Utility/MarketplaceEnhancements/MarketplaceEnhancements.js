@@ -499,7 +499,7 @@ var MarketplaceEnhancementsMetadata = {
 	Name: "MarketplaceEnhancements",
 	Alias: "Marketplace Enhancements",
 	Category: "Utility",
-	Version: "0.0.1",
+	Version: "0.0.6.13",
 	Description: "ToDo",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

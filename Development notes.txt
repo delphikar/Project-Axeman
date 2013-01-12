@@ -10,6 +10,8 @@ LIBRARIES USED
 	jQueryUI current version:	1.9.1
 	jQuery.pageslide			2.0 + <head> fix
 
+	underscore					1.4.3
+
 
 APPLICATION DIAGRAM available at
 	https://cacoo.com/diagrams/KjPQ0pHQGjoujRxt

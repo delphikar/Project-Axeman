@@ -46,16 +46,13 @@ function DevelopmentToolbar() {
 		// Activate plugin message
 		Log("DevelopmentToolbar: Extension is in development mode - plugin set to active.");
 
-		// Attaches itself to request manager
-		chrome.extension.onMessage.addListener(recieveConsoleRequest);
-
 		// Creates new development toolbar source code
 		var toolbar = this.GetNewToolbar(
 			this.GetNewLabel("Project - Axeman").css("padding", "12px"),
 			this.GetNewButton("PluginManager", GetURL("/Pages/PluginsManager/PluginsManager.html")),
 			this.GetNewButton("Popup page", GetURL("/Pages/Popup.html")),
 			this.GetNewButton("StorageDetails", GetURL("/Pages/StorageDetails.html")),
-			this.GetNewImageButton("Console.png", function() {}).attr("id", "DTConsoleToggle").css("float", "right")
+			this.GetNewImageButton("Console.png", "Console", function() {}).attr("id", "DTConsoleToggle").css("float", "right")
 		);
 
 		// Create stylesheet link DOM object
@@ -75,15 +72,8 @@ function DevelopmentToolbar() {
 		$("body").append(toolbar);
 		$("body").append(consoleOutput);
 
-		// Apply click event to Console toggle button
-		$("#DTConsoleToggle").click(function () {
-			var console = $(".DTConsoleOutput");
-			if (console.css("visibility") == "visible")
-				console.css("visibility", "hidden");
-			else console.css("visibility", "visible");
-
-			$(this).attr("class", console.css("visibility") == "visible" ? "DTButtonImageToggled" : "DTButtonImage");
-		});
+		// Initialize console control 
+		InitializeConsole();
 
 		if (!IsDevelopmentMode) {
 			// Google analytics
@@ -97,6 +87,34 @@ function DevelopmentToolbar() {
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
 		}
+	};
+
+	var InitializeConsole = function () {
+		// Attaches itself to request manager
+		chrome.extension.onMessage.addListener(recieveConsoleRequest);
+
+		// Apply click event to Console toggle button
+		$("#DTConsoleToggle").click(function () {
+			var console = $(".DTConsoleOutput");
+
+			if (console.css("visibility") == "visible") {
+				console.css("visibility", "hidden");
+				$(this).removeClass("Toggled");
+			}
+			else {
+				console.css("visibility", "visible");
+				$(this).addClass("Toggled");
+			}
+
+			(new Request("Background", "Data", "PADTConsoleToggle", { Type: "set", Value: console.css("visibility") })).Send();
+		});
+
+		// Get current console toggle button state
+		(new Request("Background", "Data", "PADTConsoleToggle", { Type: "get" })).Send(function (state) {
+			if (state === "visible") {
+				$("#DTConsoleToggle").click();
+			}
+		});
 	};
 
 	// TODO Comment
@@ -181,14 +199,17 @@ function DevelopmentToolbar() {
 	};
 
 	// TODO Comment
-	this.GetNewImageButton = function(content, action) {
+	this.GetNewImageButton = function(content, title, action) {
 		DLog("DevelopmentToolbar: Creating new Button of content '" + content + "'");
 
 		var image = $("<img>");
 		image.attr("src", GetURL("Plugins/Development/DevelopmentToolbar/" + content));
 
 		var button = $("<div>");
-		button.attr("class", "DTButtonImage");
+		button.attr({
+			"class": "DTButtonImage",
+			"title": title
+		});
 		button.append(image);
 
 		return button;
@@ -200,7 +221,7 @@ var DevelopmentToolbarMetadata = {
 	Name: "DevelopmentToolbar",
 	Alias: "Development Toolbar",
 	Category: "Development",
-	Version: "0.3.0.0",
+	Version: "0.3.1.0",
 	Description: "You can quickly access extension development pages from bottom of the page. It will even give you some additional information about script.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

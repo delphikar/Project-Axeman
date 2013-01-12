@@ -19,8 +19,21 @@ console.log((new Date()).toString());
 console.log("Extension URL [" + chrome.extension.getURL("/") + "]");
 console.log("Starting App...");
 
-// Create new App object and initialize
+// Create new App object
 var app = new App();
-app.Initialize();
 
-console.log("App started!");
+console.log("Checking is current URL is on white list...");
+(new Request("Background", "URLCheck", null, window.location.href)).Send(function (foundMatch) {
+	if (foundMatch) {
+		console.log("Current URL is on white list");
+
+		// Initialize application on match
+		app.Initialize();
+
+		console.log("App started!");
+	}
+	else {
+		console.warn("Current URL isn't on white list!");
+		console.log("If Project Axeman extension should run on this page, go to extension settings and add this page to white list.");
+	}
+});

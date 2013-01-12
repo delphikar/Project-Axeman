@@ -51,6 +51,63 @@ Collaborators
 
 ## Changelog
 - **Version 0.2.3** _(**.**.201*.)_
+	- PluginsManager.html	
+		- Moved to seperate directory
+		- Seperated styles from html
+		- Replaced PluginItem string generating to jQuery objects
+		- Implemented Internal and featured flags (needs graphics)
+		- Added "INTERNAL" text left of plugin alias
+		- Functions moved to inner scope
+	- Modal view 
+		- Now under development toolbar
+		- Style now matches development toolbar
+		- Implemented pageslide as App modal view
+	- Created Utils directory
+		- Added pageslide jQuery plugin
+		- Added underscore.js
+	- Added NavigationManager application class
+	- Google Analytics
+		- Fix Google analytics now tracking in development mode
+		- Fix Google analytics now called upon plugin registration rathet than script loading
+		- Fix App.js Google Analytics
+	- ResourceCalculator
+		- Fix Now works for units again
+		- Fix Layout for crop consumption
+		- Optimized by removing timer in unit quantity change and replaced with event
+	- Helpers
+		- Added Query handling function
+		- Added CreateStylesheet function
+	- Added FiledNames to Enums
+		- Fix Enums.FieldNames, Wood changed to Lumber
+	- Fix Loging on Background page now working
+	- PluginsManager
+		- Moved Page and Query matching to PluginsManager
+		- Added IsLoginRequired, RunOnPages, RunOnPageQuery variables to PluginMetadata model
+		- Renamed Changeable to IsChangeable in PluginsMetadata model
+		- Added PageMustContain to PluginMetadata.Settings model
+	- ResourceCalculator
+		- Fix ResourceCalculator duplicate issue
+		- Fix ResourceCalaulator showing on troops send
+	- MarketplaceEnhancements
+		- Minor modifications to MarketplaceEnhancements plugin
+		- Junk table
+			- Added junk fill resource shortcuts
+			- Fix Junk table issues	
+			- Fix Junk table layout
+		- Resource boxes
+			- Refactored spin function
+			- Added select text on focus
+			- Added another event handle function that reacts on keypress
+			- Fix Send error message now showing when needed on resource amount change
+			- Fix Bug in spinner max value	
+		- Village list
+			- Village list select not shown if there is no villages to send resources to
+			- Fix Village select now not showing current village
+		- Seperated styles from code
+		- Added support for multiple hour production clicks
+		- Fix Plugin not runing on right page due to wrong query addressing
+	- Removed duplicates
+	- Updated jQuery to 1.9.0b1
 
 - **Version 0.2.2.3** _(28.12.2012.)_
 	- MarketplaceEnhancements

@@ -6,6 +6,8 @@
 
 http://www.traviantactics.com/index.php
 
+- Use less instead of css ? http://lesscss.org/
+
 Website
 	- Add facebook page link / Facebook like widget
 	- Google Chrome logo
@@ -16,8 +18,10 @@ Website
 		- Add second button that adds hour production from all villages
 	- Insert all stylesheets using new function
 	- Check all on reports and messages
+	- Move pages in seperate directories
 
 Other
+	- Make white list editable
 	- Storage details replace tables with div and reverse to previous colors
 	- Translation
 	- HelpPlugin (Insert FAQ of extensions to help.php)
@@ -51,66 +55,9 @@ QUEST MASTER
 </div></div>
 
 Changes 0.2.3
-	- PluginsManager.html	
-		- Moved to seperate directory
-		- Seperated styles from html
-		- Replaced PluginItem string generating to jQuery objects
-		- Implemented Internal and featured flags (needs graphics)
-		- Added "INTERNAL" text left of plugin alias
-		- Functions moved to inner scope
-	- Fix Google analytics now tracking in development mode
-	- Fix Google analytics now called upon plugin registration rathet than script loading
-	- Added NavigationManager application class
-	- ResourceCalculator
-		- Fix Now works for units again
-		- Fix Layout for crop consumption
-		- Optimized by removing timer in unit quantity change and replaced with event
 	-----
-	- Created Utils directory
-		- Added pageslide jQuery plugin
-			- Implemented pageslide as App modal view
-	- Removed duplicates
-	- Updated jQuery to 1.9.0b1
-	-----
-	- App.js GA fix
-	- Modal view 
-		- Now under development toolbar
-		- Style now matches development toolbar
-	- Minor modifications to MarketplaceEnhancements plugin
-	- Query handling functions added to Helpers
-	- Fix Loging on Background page now working
-	-----
-	- Moved Page and Query matching to PluginsManager
-	- Added IsLoginRequired, RunOnPages, RunOnPageQuery variables to PluginMetadata model
-	- Fix ResourceCalculator duplicate issue
-	-----
-	- Fix ResourceCalaulator showing on troops send
-	-----
-	- Renamed Changeable to IsChangeable in PluginsMetadata model
-	- Added PageMustContain to PluginMetadata.Settings model
-	- MarketplaceEnhancements
-		- Fix Plugin not runing on right page due to wrong query addressing
-		- Village list select not shown if there is no villages to send resources to
-		- Fix Village select now not showing current village
-	-----
-	- MarketplaceEnhancements
-		- Added select text on focus
-		- Fix Send error message now showing when needed on resource amount change
-		- Fix Junk table issues
-	-----
-	- Added CreateStylesheet function to Helpers.js
-	- MarketplaceEnhancements
-		- Seperated styles from code
-		- Fix Junk table layout
-	- Added FiledNames to Enums
-	-----
-	- MarketplaceEnhancements
-		- Addud support for multiple hour production clicks
-		- Fix Bug in spinner max value
-		- Refactored spin function
-		- Added junk fill resource shortcuts
-		- Added another event handle function that reacts on keypress
-	- Enums.FieldNames, Wood changed to Lumber 
+	- Extension now runs on customizable url list
+	- DevelopmentToolbar Console toggle button now saves state
 	-----
 
 
