@@ -71,11 +71,11 @@ function MarketplaceEnhancements() {
 				for (var index = 0; index < 4; index++) {
 					var stored = villageResources.Stored[index];
 					var production = villageResources.Production[index];
-					var alreadySet = parseInt($("#r" + (index + 1)).val(), 10) || 0;
-					if (stored < production + alreadySet) {
+					var alreadySet = $("#r" + (index + 1)).spinner("value");
+					if (stored < (production + alreadySet)) {
 						DLog("No enough " + Enums.FieldNames[index] + " stored [" + stored + "] to send " + (alreadySet ? "more than" : "hour production") + " [" + (production + alreadySet) + "]", "MarketplaceEnhancements");
 						hourButton.button("option", "disabled", true);
-						hourButton.attr("title", useHour.attr("title") + "\nNo enough " + Enums.FieldNames[index] + " - " + (production - stored) + " more needed");
+						hourButton.attr("title", useHour.attr("title") + "\nNo enough " + Enums.FieldNames[index] + " - " + (production + alreadySet - stored) + " more needed");
 					}
 
 					productionSum += production + alreadySet;
@@ -88,7 +88,7 @@ function MarketplaceEnhancements() {
 					hourButton.button("option", "disabled", true);
 					hourButton.attr("title", useHour.attr("title") + "\nNo enough traders available - " + (Math.ceil(productionSum / traderCarryAmount) - tradersAvailable) + " more needed");
 				}
-			}
+			};
 
 			// TODO Add second button that adds hour production from all villages
 			// TODO Pun in seperate function. Looks good
@@ -101,14 +101,14 @@ function MarketplaceEnhancements() {
 			}).click(function () {
 				$.each($("#send_select input"), function (index, obj) {
 					var production = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
-					$(obj).val($(obj).val() + production);
+					$(obj).spinner("value", $(obj).spinner("value") + production);
 					$(obj).change();
 				});
 
 				ValidateHourButton($(this));
 			});
 
-			//ValidateHourButton(useHour);
+			ValidateHourButton(useHour);
 
 			$("#send_select tr:eq(4) td").append(useHour);
 			//need InsertJunkResourceTable and other ;)
@@ -302,10 +302,10 @@ function MarketplaceEnhancements() {
 		var resMax = tradersAvailable * traderCarryAmount;
 
 		// Get input values
-		var r1 = parseInt($("#r1").val(), 10) || 0;
-		var r2 = parseInt($("#r2").val(), 10) || 0;
-		var r3 = parseInt($("#r3").val(), 10) || 0;
-		var r4 = parseInt($("#r4").val(), 10) || 0;
+		var r1 = $("#r1").spinner("value");
+		var r2 = $("#r2").spinner("value");
+		var r3 = $("#r3").spinner("value");
+		var r4 = $("#r4").spinner("value");
 
 		// Calulate sum of values
 		var resSum = r1 + r2 + r3 + r4;
@@ -335,7 +335,7 @@ function MarketplaceEnhancements() {
 
 			for (var index = 0; index < 4; index++) {
 				var target = $("#r" + (index + 1));
-				var resourceReserved = parseInt(target.spinner("value"), 10) || 0;
+				var resourceReserved = target.spinner("value");
 				var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[index];
 				if (stored - resourceReserved > 0)
 					$(".PAMEJunkTableResourceLink:eq(" + index + ")").removeClass("Disabled");
@@ -408,12 +408,12 @@ function MarketplaceEnhancements() {
 		}
 		//save language info for later ;)
 
-		$("#merchantsOnTheWayFormular h4").each(function (index, obj) {
-			$(this).nextUntil("h4").append("<p>'" + $(this).text().trim() + "'</p>");
-		});
+		//$("#merchantsOnTheWayFormular h4").each(function (index, obj) {
+		//	$(this).nextUntil("h4").append("<p>'" + $(this).text().trim() + "'</p>");
+		//});
 
 		//This way not work, but it might be helpy
-		/*
+		
 		$(".traders").each(function(index) {
 			var bodys = $(this).children("tbody");
 			if (bodys.length === 2) {
@@ -476,22 +476,10 @@ function MarketplaceEnhancements() {
 					sourceTable.children("tbody:first").children().children("td").children(".in").children().text());
 			}, 1000);
 		}
-		*/
+		
 
 		Log("Incoming resources sum shown", "MarketplaceEnhancements");
 	}
-
-	//function RegisterTimerFillInJunkResource(args) {
-	//	// TODO Comment
-	//	$(".tradersAviable").text(+$("#merchantsAvailable").text());
-	//	$(".maxRes").text(args[0] * args[1]);
-
-	//	$("#r0, #r1, #r2, #r3, #r4").change(function () {
-	//		FillInJunkResourceTimer(args);
-	//	});
-
-	//	Log("Attached for changes #r*", "MarketplaceEnhancements");
-	//}
 }
 
 // Metadata for this plugin (MarketplaceImprovement)

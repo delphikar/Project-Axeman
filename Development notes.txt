@@ -48,13 +48,15 @@ AVAILABLE PLUGINS
 	filename including path to list of extension scripts and in PluginManager.html
 	page (and here below).
 
-	Total: (8)
+	Total: (10)
 
 	Services				(Plugins/Core/Services/Services.js)
 	DevelopmentToolbar 		(Plugins/Development/DevelopmentToolbar/DevelopmentToolbar.js)
+	Decorations				(Plugins/Fun/Decorations/Decorations.js)
 	Feedback				(Plugins/Support/Feedback/Feedback.js)
 	ResourceCalculator		(Plugins/Economy/ResourceCalculator/ResourceClaculator.js)
 	ResourceIndicator		(Plugins/Economy/ResourceIndicator/ResourceIndicator.js)
 	UpgradeIndicator		(Plugins/Economy/UpgradeIndicator/UpgradeIndicator.js)
 	VillageListEnhancement	(Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js)
 	MarketplaceEnhancements	(Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancements.js)
+	TravianPLUS				(Plugins/Utility/TravianPLUS/TravianPLUS.js)

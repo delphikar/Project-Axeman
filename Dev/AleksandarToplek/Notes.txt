@@ -6,8 +6,6 @@
 
 http://www.traviantactics.com/index.php
 
-- Use less instead of css ? http://lesscss.org/
-
 Website
 	- Add facebook page link / Facebook like widget
 	- Google Chrome logo
@@ -16,9 +14,10 @@ Website
 	- MarketplaceEnhancements
 		- Take a look at code
 		- Add second button that adds hour production from all villages
-	- Insert all stylesheets using new function
 	- Check all on reports and messages
 	- Move pages in seperate directories
+	- Remove underscore if not used
+	- Load all plugins states in one call (use object instead of many objects)
 
 Other
 	- Make white list editable
@@ -58,6 +57,18 @@ Changes 0.2.3
 	-----
 	- Extension now runs on customizable url list
 	- DevelopmentToolbar Console toggle button now saves state
+	-----
+	- Fix ResourceCalculator not updating on units
+	- Added PageMayContain to PluginMetadata model which evaluates as 'or' operation
+	- Added Decorations plugin (Fun category)
+		- Added option to remove Help button from page
+	- Added TravianPLUS plugin (Utility category)
+		- Added 'Select all' option for reports and messages
+	- Implemented internationalization
+		- Added en (English)
+		- Added hr (Hrvatski/Croatian)
+	- PluginsManager
+		- Added timed registration (<20ms recommended)
 	-----
 
 

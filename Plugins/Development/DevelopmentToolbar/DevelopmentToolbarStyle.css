@@ -112,6 +112,8 @@
 		font-family: consolas;
 
 		overflow-x: auto;
+
+		text-align: left;
 	}
 .DTConsoleOutputLog {
 	color: white;

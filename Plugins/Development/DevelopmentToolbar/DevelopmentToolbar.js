@@ -56,10 +56,7 @@ function DevelopmentToolbar() {
 		);
 
 		// Create stylesheet link DOM object
-		var stylesheetLink = $("<link>");
-		stylesheetLink.attr("href", GetURL("Plugins/Development/DevelopmentToolbar/DevelopmentToolbarStyle.css"));
-		stylesheetLink.attr("type", "text/css");
-		stylesheetLink.attr("rel", "stylesheet");
+		var stylesheetLink = CreateStylesheet("Plugins/Development/DevelopmentToolbar/DevelopmentToolbarStyle.css");
 		
 		// Create console output DOM object
 		var consoleOutput = $("<div>");
@@ -106,12 +103,12 @@ function DevelopmentToolbar() {
 				$(this).addClass("Toggled");
 			}
 
-			(new Request("Background", "Data", "PADTConsoleToggle", { Type: "set", Value: console.css("visibility") })).Send();
+			(new Request("Background", "Data", "PADTConsoleToggle", { Type: "set", Value: { State: console.css("visibility") } })).Send();
 		});
 
 		// Get current console toggle button state
-		(new Request("Background", "Data", "PADTConsoleToggle", { Type: "get" })).Send(function (state) {
-			if (state === "visible") {
+		(new Request("Background", "Data", "PADTConsoleToggle", { Type: "get" })).Send(function (response) {
+			if (response && response.State === "visible") {
 				$("#DTConsoleToggle").click();
 			}
 		});

@@ -33,7 +33,8 @@ Models.PluginMetadata = {
 		IsLoginRequired: false,
 		RunOnPages: [],
 		RunOnPageQuery: {},
-		PageMustContain: []
+		PageMustContain: [],
+		PageMayContain: []
 	},
 
 	Default: {
