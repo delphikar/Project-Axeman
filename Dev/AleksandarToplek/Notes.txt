@@ -11,6 +11,7 @@ Website
 	- Google Chrome logo
 
 0.2.3
+	- ExtensionsActive button functionality
 	- MarketplaceEnhancements
 		- Take a look at code
 		- Add second button that adds hour production from all villages
@@ -70,7 +71,12 @@ Changes 0.2.3
 	- PluginsManager
 		- Added timed registration (<20ms recommended)
 	-----
-
+	- Moved all pages to seperate directories
+	- Popup redesign
+		- Now supports auto-login
+		- "Smart profile creation" 2-way profile creation
+	- Removed unnecessary styles
+	-----
 
 ########################################################################
 #

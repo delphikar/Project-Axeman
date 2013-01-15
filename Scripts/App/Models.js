@@ -125,6 +125,11 @@ Models.Village = function () {
  *
  *****************************************************************************/
 Models.Profile = function () {
+	// Project-Axeman variables	
+	this.IsAutoLogin = false;
+	this.Password = "";
+
+	//Game variables
 	this.ServerAddress = "unknown";
 
 	this.Name = "unknown";

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Game launcher</title>
+
+		<!-- jQuery scripts -->
+		<link type="text/css" href="../jQueryUIStyle.css" rel="stylesheet" />
+		<script type="text/javascript" src="../../Scripts/jQuery.js"></script>
+		<script type="text/javascript" src="../../Scripts/jQueryUI.js"></script>
+		<script type="text/javascript" src="../../Utils/pageslide/jquery.pageslide.js"></script>
+
+		<!-- Extsnions classes -->
+		<script type="text/javascript" src="../../Scripts/App/Enums.js"></script>
+		<script type="text/javascript" src="../../Scripts/App/Variables.js"></script>
+		<script type="text/javascript" src="../../Scripts/App/Helpers.js"></script>
+		<script type="text/javascript" src="../../Scripts/App/Models.js"></script>
+
+		<!-- GameLaucher script -->
+		<script type="text/javascript" src="PopupScript.js"></script>
+
+		<!-- Styles -->
+		<link type="text/css" href="../../Utils/pageslide/jquery.pageslide.css" rel="stylesheet"/>
+		<link type="text/css" href="../PAStyle.css" rel="stylesheet" />
+		<link type="text/css" href="PopupStyle.css" rel="stylesheet"/>
+	</head>
+	<body>
+
+		<!-- Home page -->
+		<div class="PARootSection">
+			<div class="PASection OptionsContainer">
+				<div class="ExtensionActiveContainer">
+					<div class="ExtensionActiveIndicator">|</div>
+					<span class="ExtensionActiveMessage">Extension active</span>
+				</div>
+			</div>
+			<div class="PASectionSeparator"></div>
+			<div id="ProfilesList" class="PASection">
+				<h3 class="PASection">Profiles</h3>
+				<div class="Info">
+					No profiles available
+					<div>
+						To add new profile, click on "Add" button and fill-in the form or just open new Travian game for which you would like to create profile for. By filling the form, you are able to enable "Auto login" feature which is not available otherwise.
+					</div>
+				</div>
+			</div>
+			<div class="PASectionSeparator"></div>
+			<div class="PASection">
+				<button id="Plugins" class="PAButtonLight">Plugins</button>
+				<button id="AddNewProfile" class="PAButtonLight ButtonRight">Add</button>
+			</div>
+		</div>
+		
+		<div class="ModalViewCover"></div>
+	</body>
+</html>

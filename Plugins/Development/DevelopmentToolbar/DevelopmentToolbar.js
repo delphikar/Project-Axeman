@@ -50,8 +50,8 @@ function DevelopmentToolbar() {
 		var toolbar = this.GetNewToolbar(
 			this.GetNewLabel("Project - Axeman").css("padding", "12px"),
 			this.GetNewButton("PluginManager", GetURL("/Pages/PluginsManager/PluginsManager.html")),
-			this.GetNewButton("Popup page", GetURL("/Pages/Popup.html")),
-			this.GetNewButton("StorageDetails", GetURL("/Pages/StorageDetails.html")),
+			this.GetNewButton("Popup page", GetURL("/Pages/Popup/Popup.html")),
+			this.GetNewButton("StorageDetails", GetURL("Plugins/Development/DevelopmentToolbar/Pages/StorageDetails/StorageDetails.html")),
 			this.GetNewImageButton("Console.png", "Console", function() {}).attr("id", "DTConsoleToggle").css("float", "right")
 		);
 

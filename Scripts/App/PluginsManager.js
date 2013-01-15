@@ -92,6 +92,8 @@ function PluginsManager() {
 	};
 
 	var ValidatePluginRegistration = function (pluginMetadata) {
+		var index, cache;
+
 		// Check if user login is required for current plugin
 		if (pluginMetadata.Settings.IsLoginRequired && !IsLogedIn) {
 			Log("User login required for " + pluginMetadata.Name, "PluginsManager");
@@ -105,7 +107,7 @@ function PluginsManager() {
 		}
 
 		// Check if page contains all required elements - 'and' operator
-		for (var index = 0, cache = pluginMetadata.Settings.PageMustContain.length; index < cache; index++) {
+		for (index = 0, cache = pluginMetadata.Settings.PageMustContain.length; index < cache; index++) {
 			if (!$(pluginMetadata.Settings.PageMustContain[index]).length) {
 				Log("Page doesn't contain needed elements for " + pluginMetadata.Name, "PluginsManager");
 				DLog("Page doesn't containe element \"" + pluginMetadata.Settings.PageMustContain[index] + "\"", "PluginsManager");
@@ -115,7 +117,7 @@ function PluginsManager() {
 
 		// Check if page contains any of required elements - 'or' operator
 		var foundMatch = pluginMetadata.Settings.PageMayContain.length === 0 || false;
-		for (var index = 0, cache = pluginMetadata.Settings.PageMayContain.length; index < cache; index++) {
+		for (index = 0, cache = pluginMetadata.Settings.PageMayContain.length; index < cache; index++) {
 			if ($(pluginMetadata.Settings.PageMayContain[index]).length) {
 				Log("Page contains at least one of required elements for " + pluginMetadata.Name, "PluginManager");
 				DLog("Page contains element \"" + pluginMetadata.Settings.PageMayContain[index] + "\"", "PluginsManager");

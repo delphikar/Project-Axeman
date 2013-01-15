@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Project Axeman - Popup - Add new user</title>
+</head>
+	<body>
+		<form class="AddNewProfileForm">
+			<table>
+				<thead>
+					<tr>
+						<td colspan="2">
+							<div style="font-size: 1.3em; margin-bottom: 10px;">Add new profile</div>
+						</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><label>Server</label></td><td><input id="AddUserServer" type="text" class="PATextBoxDark" placeholder="e.g. ts1.travian.com" /></td>
+					</tr>
+					<tr>
+						<td><label>Username</label></td><td><input id="AddUserUserName" type="text" class="PATextBoxDark" placeholder="e.g. ZoggyHat" /></td>
+					</tr>
+					<tr>
+						<td><input id="AddUserAutoLogin" type="checkbox" class="PATextBoxDark" checked="checked" style="float:right" /></td><td>Auto-login</td>
+					</tr>
+					<tr>
+						<td><label>Passsword</label></td>
+						<td><input id="AddUserPassword" type="password" class="PATextBoxDark" /></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<div class="Info">Password will be saved on local machine and only be used for Travian login page.</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+		<button id="AddNewProfileSubmit" class="PAButtonDark">Create</button>
+	</body>
+</html>

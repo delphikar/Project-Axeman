@@ -26,6 +26,8 @@ function TravianPLUS() {
 		// Statistics
 		// Account overview
 		// Notepad
+		// Crop finder
+		
 
 		// Reports/Messages 'Check all' option
 		ReportsShowCheckAll();
@@ -51,7 +53,7 @@ function TravianPLUS() {
 
 		Log("Adding 'Check all' option to reports and messages", "TravianPLUS");
 
-		if (!$("#markAll").length) {
+		if (!$("#markAll").length && !$(".checkAll").length) {
 			var sourceScript = "$(this).up('form').getElements('input[type=checkbox]').each(function(element){element.checked = this.checked;}, this);";
 			var sourceCode = "<div id='markAll' style='margin-left: 7px; float: left;'><input class='check' type='checkbox' id='sAll'><span style='margin-left: 8px;'><label for='sAll'>Select all</label></span></div>";
 

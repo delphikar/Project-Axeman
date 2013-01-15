@@ -76,7 +76,7 @@
 	};
 
 	// Function that controls opening of the pageslide
-	function _start(direction, speed) {
+	function _start(direction, speed, moveBody) {
 		var slideWidth = $pageslide.outerWidth(true),
             bodyAnimateIn = {},
             slideAnimateIn = {};
@@ -99,7 +99,9 @@
 		}
 
 		// Animate the slide, and attach this slide's settings to the element
-		$body.animate(bodyAnimateIn, speed);
+		if (moveBody) {
+			$body.animate(bodyAnimateIn, speed);
+		}
 		$pageslide.show()
                   .animate(slideAnimateIn, speed, function () {
                   	_sliding = false;
@@ -142,7 +144,8 @@
 		direction: 'right',    // Accepts 'left' or 'right'
 		modal: false,      // If set to true, you must explicitly close pageslide using $.pageslide.close();
 		iframe: true,       // By default, linked pages are loaded into an iframe. Set this to false if you don't want an iframe.
-		href: null        // Override the source of the content. Optional in most cases, but required when opening pageslide programmatically.
+		href: null,// Override the source of the content. Optional in most cases, but required when opening pageslide programmatically.
+		moveBody: true
 	};
 
 	/*
@@ -150,54 +153,57 @@
      */
 
 	// Open the pageslide
-	$.pageslide = function (options) {
+	$.pageslide = function(options) {
 		// Extend the settings with those the user has provided
 		var settings = $.extend({}, $.fn.pageslide.defaults, options);
 
 		// Are we trying to open in different direction?
 		if ($pageslide.is(':visible') && $pageslide.data('direction') != settings.direction) {
-			$.pageslide.close(function () {
+			$.pageslide.close(function() {
 				_load(settings.href, settings.iframe);
-				_start(settings.direction, settings.speed);
+				_start(settings.direction, settings.speed, settings.moveBody);
 			});
 		} else {
 			_load(settings.href, settings.iframe);
 			if ($pageslide.is(':hidden')) {
-				_start(settings.direction, settings.speed);
+				_start(settings.direction, settings.speed, settings.moveBody);
 			}
 		}
 
 		$pageslide.data(settings);
-	}
+	};
 
 	// Close the pageslide
-	$.pageslide.close = function (callback) {
+	$.pageslide.close = function(callback) {
 		var $pageslide = $('#pageslide'),
-            slideWidth = $pageslide.outerWidth(true),
-            speed = $pageslide.data('speed'),
-            bodyAnimateIn = {},
-            slideAnimateIn = {}
+		    slideWidth = $pageslide.outerWidth(true),
+		    speed = $pageslide.data('speed'),
+		    bodyAnimateIn = {},
+		    slideAnimateIn = {};
 
 		// If the slide isn't open, just ignore the call
 		if ($pageslide.is(':hidden') || _sliding) return;
 		_sliding = true;
 
 		switch ($pageslide.data('direction')) {
-			case 'left':
-				bodyAnimateIn['margin-left'] = '+=' + slideWidth;
-				slideAnimateIn['right'] = '-=' + slideWidth;
-				break;
-			default:
-				bodyAnimateIn['margin-left'] = '-=' + slideWidth;
-				slideAnimateIn['left'] = '-=' + slideWidth;
-				break;
+		case 'left':
+			bodyAnimateIn['margin-left'] = '+=' + slideWidth;
+			slideAnimateIn['right'] = '-=' + slideWidth;
+			break;
+		default:
+			bodyAnimateIn['margin-left'] = '-=' + slideWidth;
+			slideAnimateIn['left'] = '-=' + slideWidth;
+			break;
 		}
 
-		$pageslide.animate(slideAnimateIn, speed);
-		$body.animate(bodyAnimateIn, speed, function () {
+		$pageslide.animate(slideAnimateIn, speed, function() {
 			$pageslide.hide();
 			_sliding = false;
 			if (typeof callback != 'undefined') callback();
 		});
-	}
+		
+		if ($pageslide.data("moveBody")) {
+			$body.animate(bodyAnimateIn, speed);
+		}
+	};
 })(jQuery);

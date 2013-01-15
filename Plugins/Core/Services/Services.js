@@ -29,6 +29,8 @@ function Services() {
 		UpdateProfile();
 		// TODO Request refresh
 
+		AutoLoginUser();
+
 		if (!IsDevelopmentMode) {
 			// Google analytics
 			var _gaq = _gaq || [];
@@ -40,6 +42,17 @@ function Services() {
 				ga.src = 'https://ssl.google-analytics.com/ga.js';
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
+		}
+	};
+
+	var AutoLoginUser = function () {
+		Log("Checking if user can login automatically", "Services");
+		
+		if (!IsLogedIn && ActiveProfile.IsAutoLogin) {
+			$(".login input[name='name']").val(ActiveProfile.Name);
+			$(".login input[name='password']").val(ActiveProfile.Password);
+
+			$("form[name='login']").submit();
 		}
 	};
 
@@ -356,45 +369,59 @@ function Services() {
 	// </summary>
 	var ProcessProfiles = function () {
 		// Can't get active user if user isn't loged in
-		if (!IsLogedIn) return;
-
-		// Gets active profile UID
-		var profileLinkElement = $(".signLink").attr("href");
-		var profileUIDString = profileLinkElement.replace("spieler.php?uid=", "");
-		var activeProfileUID = parseInt(profileUIDString, 10);
-
-		DLog("Services: Active profile UID is [" + activeProfileUID + "]");
-
-		// Search for matching profile
-		for (var index = 0, cache = AvailableProfiles.length; index < cache; index++) {
-			var obj = AvailableProfiles[index];
-
-			// Match using User ID and Server Address
-			if (obj.ServerAddress == ActiveServerAddress &&
-				obj.UID == activeProfileUID) {
-				// Set Active Profile
-				Log("Services: Active profile is found!");
-				ActiveProfile = obj;
-
-				break;
+		if (!IsLogedIn) {
+			for (var index = 0, cache = AvailableProfiles.length; index < cache; index++) {
+				var obj = AvailableProfiles[index];
+				
+				if (obj.ServerAddress == ActiveServerAddress) {
+					Log("Services: Aproximated profile selected [" + obj.Name + "]");
+					ActiveProfile = obj;
+					break;
+				}
 			}
-		}
+		} else {
+			// Gets active profile UID
+			var profileLinkElement = $(".sideInfoPlayer .signLink").attr("href");
+			var profileUIDString = profileLinkElement.replace("spieler.php?uid=", "");
+			var activeProfileUID = parseInt(profileUIDString, 10);
 
-		// Creates new profile if matching profile doesn't exist
-		if (IsNullOrEmpty(ActiveProfile)) {
-			Warn("Services: No profiles available that match this user!");
-			Log("Services: Creating new profile...");
+			DLog("Services: Active profile UID is [" + activeProfileUID + "]");
 
-			var tribeElementClass = $(".sideInfoPlayer img").attr("class");
-			var tribeID = tribeElementClass.replace("nationBig nationBig", "");
+			// Search for matching profile
+			for (var index = 0, cache = AvailableProfiles.length; index < cache; index++) {
+				var obj = AvailableProfiles[index];
+				console.log($(".sideInfoPlayer .signLink span").text());
+				// Match using User ID and Server Address
+				if (obj.ServerAddress == ActiveServerAddress &&
+					(obj.UID == activeProfileUID || obj.Name == $(".sideInfoPlayer .signLink span").text())) {
+					// Set Active Profile
+					Log("Services: Active profile is found!");
+					ActiveProfile = obj;
 
-			ActiveProfile = new Models.Profile();
-			ActiveProfile.ServerAddress = ActiveServerAddress;
-			ActiveProfile.Name = $(".sideInfoPlayer span").text();
-			ActiveProfile.UID = activeProfileUID;
-			ActiveProfile.Tribe = Enums.Tribes[tribeID];
+					break;
+				}
+			}
 
-			DLog("Services: New profile created \"" + ActiveProfile.Name + "\" [" + ActiveProfile.UID + "] on server [" + ActiveProfile.ServerAddress + "]");
+			// Creates new profile if matching profile doesn't exist
+			if (IsNullOrEmpty(ActiveProfile) || 
+				ActiveProfile.UID == "unknown" ||
+				ActiveProfile.Name == "unknown" ||
+				ActiveProfile.Tribe == "unknown" ||
+				ActiveProfile.ServerAddress != ActiveServerAddress) {
+				Log("Services: Creating/Updating profile...");
+
+				var tribeElementClass = $(".sideInfoPlayer img").attr("class");
+				var tribeID = tribeElementClass.replace("nationBig nationBig", "");
+
+				ActiveProfile = IsNullOrEmpty(ActiveProfile) ? new Models.Profile() : ActiveProfile;
+				ActiveProfile.ServerAddress = ActiveServerAddress;
+				ActiveProfile.Name = $(".sideInfoPlayer span").text();
+				ActiveProfile.UID = activeProfileUID;
+				ActiveProfile.Tribe = Enums.Tribes[tribeID];
+				
+
+				DLog("Services: New profile created \"" + ActiveProfile.Name + "\" [" + ActiveProfile.UID + "] on server [" + ActiveProfile.ServerAddress + "]");
+			}
 		}
 	};
 

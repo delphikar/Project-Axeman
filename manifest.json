@@ -18,14 +18,14 @@
 	],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 	"background": {
-		"page": "Pages/Background.html",
+		"page": "Pages/Background/Background.html",
 		"persistent": false
 	},
 	"options_page": "Pages/PluginsManager/PluginsManager.html",
 	"browser_action": {
 		"default_icon": "Icons/icon48.png",
 		"default_title": "Project Axeman",
-		"default_popup": "Pages/Popup.html"
+		"default_popup": "Pages/Popup/Popup.html"
 	},
 	"content_scripts": [
 		{

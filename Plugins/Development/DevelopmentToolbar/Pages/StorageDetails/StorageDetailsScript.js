@@ -101,7 +101,6 @@ function dump(object, showTypes) {
 			for (i in o) {
 				var t = _dumpType(o[i]);
 				if (j < 1) {
-					console.warn(o.length);
 					var info = '';
 					if (type == "array")
 						info = ' (' + o.length + ')';
