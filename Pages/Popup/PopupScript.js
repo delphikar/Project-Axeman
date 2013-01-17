@@ -29,22 +29,29 @@ function PopupPage() {
 		InitializeActiveButton();
 		InitializeModal();
 		RefreshProfiles();
+		
+		_localize($("body"));
 	};
 
 	var InitializeActiveButton = function() {
 		$(".ExtensionActiveContainer").click(function() {
 			SetExtensionActiveState($(this).hasClass("Inactive"));
 		});
-		SetExtensionActiveState(true);
+		
+		// Load and set extension active set
+		var state = ExtensionActive();
+		SetExtensionActiveState(!state ? true : state.State);
 	};
 	
 	var SetExtensionActiveState = function (isActive) {
 		if (isActive) {
 			$(".ExtensionActiveContainer").removeClass("Inactive");
-			$(".ExtensionActiveMessage").text("Extension active");
+			$(".ExtensionActiveMessage").text(_gim("popup_ExtensionActive"));
+			ExtensionActive(true);
 		} else {
 			$(".ExtensionActiveContainer").addClass("Inactive");
-			$(".ExtensionActiveMessage").text("Extension inactive");
+			$(".ExtensionActiveMessage").text(_gim("popup_ExtensionInactive"));
+			ExtensionActive(false);
 		}
 	};
 
@@ -59,7 +66,9 @@ function PopupPage() {
 
 		// Activate modal view on "Add" button click
 		$("#AddNewProfile").click(function () {
-			$.pageslide({ direction: "left", href: "PopupAddUser.html", iframe: false, speed: modalAnimationSpeed, modal: true, moveBody: false });
+			$.pageslide({ direction: "left", href: "PopupAddUser.html", iframe: false, speed: modalAnimationSpeed, modal: true, moveBody: false, onLoaded: function() {
+				_localize($("#pageslide"));
+			} });
 			setTimeout(function () {
 				isModalActive = true;
 
@@ -69,6 +78,8 @@ function PopupPage() {
 				});
 			}, modalAnimationSpeed);
 			$(".ModalViewCover").fadeToggle();
+
+			_localize($("#pageslide"));
 		});
 	};
 
@@ -99,9 +110,8 @@ function PopupPage() {
 		var profile = new Models.Profile();
 		profile.Name = $("#AddUserUserName").val();
 		profile.ServerAddress = $("#AddUserServer").val();
-		profile.IsAutoLogin = $("#AddUserAutoLogin").val() == "on";
-		console.warn($("#AddUserPassword"));
 		profile.Password = $("#AddUserPassword").val();
+		profile.IsAutoLogin = $("#AddUserAutoLogin").val() == "on" && !IsNullOrEmpty(profile.Password);
 
 		console.log("User created");
 		console.log(profile);
@@ -151,43 +161,46 @@ function PopupPage() {
 					active: true
 				});
 			} else {
+				// Remove profile from list on click and 
+				// reloads page to get list without deleted profile
+				
 				var server = $(".ProfileDetails.Server", this).first().text();
 				var uid = $(".ProfileDetails.UID", this).first().text();
+				var username = $(".ProfileDetails.UserName").first().text();
 
-				RemoveProfile(server, uid);
+				RemoveProfile(server, uid, username);
 				location.reload();
 			}
-		});
-		
-		// Remove profile from list on click and 
-		// reloads page to get list without deleted profile
-		$(".DeleteButton").click(function () {
-
 		});
 
 		console.log("Profiles refreshed!");
 	};
 
-	var RemoveProfile = function (server, uid) {
+	var RemoveProfile = function (server, uid, username) {
 		// TODO Comment
 
 		console.log("Profile remove requested for [" + server + "](" + uid + ")", "PopupPage");
 
 		// Get a list of available profiles
 		var profiles = GetProfiles();
-		var newProfiles = new Array();
 
-		// Go through all available profiles and check if that profile is not 
-		// matching with given parameters (server and UID), in that case keep it
-		for (var index in profiles) {
-			if ((server.indexOf(profiles[index].ServerAddress) !== -1 && profiles[index].UID == uid) == false) {
-				newProfiles[newProfiles.length] = profiles[index];
+		// Go through all available profiles and check if that profile is 
+		// matching with given parameters (server and UID), in that case remove it
+		for (var index = 0, cache = profiles.length; index < cache; index++) {
+			var profile = profiles[index];
+			if (server.indexOf(profile.ServerAddress) !== -1 &&
+				(profile.UID == "unknown" && profile.Name == username) ||
+				profile.UID == uid) {
+				console.log("Profile (" + index + ") removed [" + profiles[index].server + "](" + profiles[index].UID + ")", "PopupPage");
 
-				console.log("Profile not removed [" + profiles[index].server + "](" + profiles[index].UID + ")", "PopupPage");
+				profiles.splice(index, 1);
+				
+				break;
 			}
 		}
 
-		UpdateProfiles(newProfiles);
+		// Update changed profiles list
+		UpdateProfiles(profiles);
 	};
 
 	var GetProfileView = function (profile) {
@@ -210,10 +223,10 @@ function PopupPage() {
 		// Create right container elements
 		var title = $("<div>")
 			.append($("<div>").addClass("ProfileDetails UserName").append(profile.Name))
-			.append($("<div>").addClass("ProfileDetails UID").append(profile.UID));
+			.append($("<div>").addClass("ProfileDetails UID").append(profile.UID).attr("title", _gim("popup_ProfileItem_TitleUID")));
 		var villages = $("<div>").addClass("ProfileDetails Village")
-			.append($("<div>").addClass("ProfileDetails").append(profile.Villages.length + " village(s)"))
-			.append($("<div>").addClass("ProfileDetails").append(profile.Population + " population"));
+			.append($("<div>").addClass("ProfileDetails").append(profile.Villages.length + " " + _gim("popup_ProfileItem_Villages")))
+			.append($("<div>").addClass("ProfileDetails").append(profile.Population + " " + _gim("popup_ProfileItem_Population")));
 		var serverDetails = $("<div>").addClass("ProfileDetails Server").append(profile.ServerAddress);
 		var rightContainer = $("<div>").addClass("RightContainer")
 			.append(title)
@@ -242,5 +255,16 @@ function PopupPage() {
 			return profiles;
 		}
 		else return new Array();
+	};
+
+	var ExtensionActive = function(state) {
+		if (state === undefined) {
+			var data = localStorage.getItem("IsExtensionActive");
+			if (data && data.length) {
+				return JSON.parse(data);
+			}
+		} else {
+			return localStorage.setItem("IsExtensionActive", JSON.stringify({ State: state }));
+		}
 	};
 };

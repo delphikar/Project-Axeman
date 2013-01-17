@@ -50,7 +50,9 @@ Collaborators
 
 
 ## Changelog
-- **Version 0.2.3** _(**.**.201*.)_
+- **Version 0.2.4** _(**.**.2013.)_
+
+- **Version 0.2.3 (not released)** _(16.01.2013.)_
 	- PluginsManager.html	
 		- Moved to seperate directory
 		- Seperated styles from html

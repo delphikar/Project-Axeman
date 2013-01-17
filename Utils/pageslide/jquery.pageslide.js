@@ -66,8 +66,10 @@
 				});
 
 				$pageslide.html(iframe);
+				$("#pageslide").data("onLoaded")();
 			} else {
-				$pageslide.load(url);
+				console.log($("#pageslide").data("onLoaded"));
+				$pageslide.load(url, ($("#pageslide").data("onLoaded") || function () { }));
 			}
 
 			$pageslide.data('localEl', false);
@@ -145,7 +147,8 @@
 		modal: false,      // If set to true, you must explicitly close pageslide using $.pageslide.close();
 		iframe: true,       // By default, linked pages are loaded into an iframe. Set this to false if you don't want an iframe.
 		href: null,// Override the source of the content. Optional in most cases, but required when opening pageslide programmatically.
-		moveBody: true
+		moveBody: true,
+		onLoaded: function() {}
 	};
 
 	/*

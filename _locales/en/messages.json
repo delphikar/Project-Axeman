@@ -1,3 +1,23 @@
 ﻿{
-	"extensionDescription": { "message": "Travian 4 extension that adds some 'missing' features to the game." }
+	"extensionDescription": { "message": "Travian 4 extension that adds some 'missing' features to the game." },
+
+	"popup_ExtensionActive": { "message": "Extension active" },
+	"popup_ExtensionInactive": { "message": "Extension inactive" },
+	"popup_Profiles": { "message": "Profiles" },
+	"popup_Options": { "message": "Options" },
+	"popup_Add": { "message": "Add" },
+	"popup_NoProfilesAvailable": { "message": "No profiles available" },
+	"popup_NoProfilesAvailableHelp": { "message": "To add new profile, click on 'Add' button and fill-in the form or just open new Travian game for which you would like to create a profile. By filling the form, you can check 'Auto login' feature which is not available otherwise." },
+	"popup_ProfileItem_Villages": { "message": "village(s)" },
+	"popup_ProfileItem_Population": { "message": "population" },
+	"popup_ProfileItem_TitleUID": { "message": "User's unique server identification number"},
+	"popup_AddProfile_AddNewProfile": { "message": "Add new profile" },
+	"popup_AddProfile_Server": { "message": "Server" },
+	"popup_AddProfile_Username": { "message": "Username" },
+	"popup_AddProfile_Password": { "message": "Password" },
+	"popup_AddProfile_AutoLogin": { "message": "Auto-login" },
+	"popup_AddProfile_PasswordDisclaimer": { "message": "Password will be saved on local machine and only be used for Travian login page." },
+	"popup_AddProfile_Create": { "message": "Create" },
+
+	"other": { "message": "" }
 }

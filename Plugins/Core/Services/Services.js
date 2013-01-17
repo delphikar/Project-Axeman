@@ -390,7 +390,7 @@ function Services() {
 			// Search for matching profile
 			for (var index = 0, cache = AvailableProfiles.length; index < cache; index++) {
 				var obj = AvailableProfiles[index];
-				console.log($(".sideInfoPlayer .signLink span").text());
+				
 				// Match using User ID and Server Address
 				if (obj.ServerAddress == ActiveServerAddress &&
 					(obj.UID == activeProfileUID || obj.Name == $(".sideInfoPlayer .signLink span").text())) {
@@ -486,7 +486,7 @@ var ServicesMetadata = {
 	Name: "Services",
 	Alias: "Services",
 	Category: "Core",
-	Version: "0.0.1.9",
+	Version: "0.0.1.13",
 	Description: "Takes care of all data retrieving and is requeired for all plugins",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

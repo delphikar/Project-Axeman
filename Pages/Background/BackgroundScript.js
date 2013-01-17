@@ -234,7 +234,7 @@ function BackgroundScript() {
 	/// </summary>
 	var ActionIsFirstPlay = function () {
 		if (!GetObject("IsFirstPlay")) {
-			chrome.tabs.create({ url: GetURL("Pages/Welcome.html") });
+			chrome.tabs.create({ url: GetURL("Pages/Welcome/Welcome.html") });
 			SetObject("IsFirstPlay", { State: "AlreadyPlayed" });
 		};
 	};

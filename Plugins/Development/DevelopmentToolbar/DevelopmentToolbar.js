@@ -115,7 +115,6 @@ function DevelopmentToolbar() {
 	};
 
 	// TODO Comment
-	// TODO Implement
 	// TODO Log
 	var recieveConsoleRequest = function (request, sender, sendRespons) {
 		if (request.Sign != "ConsoleOutput") return;

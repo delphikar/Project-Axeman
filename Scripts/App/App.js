@@ -16,10 +16,11 @@ function App() {
 	/// This is start class for content script
 	/// </summary>
 
-	var loadNumber = 1;
+	var loadNumber = 0;
 	var currentLoad = 0;
 	var pluginsManager = new PluginsManager();
 	var modalViewAnimationLength = 500;
+	var isExtensionActive = true;
 
 	this.Initialize = function () {
 		/// <summary>
@@ -68,6 +69,16 @@ function App() {
 
 		// Loading available user profiles
 		LoadProfiles();
+		loadNumber++;
+		
+		// Load extension active state
+		(new Request("Background", "Data", "IsExtensionActive", { Type: "get" }).Send(function(response) {
+			if (response) {
+				isExtensionActive = response.State;
+			}
+			CheckFinishedLoading();
+		}));
+		loadNumber++;
 	};
 
 	var LoadProfiles = function () {
@@ -119,8 +130,10 @@ function App() {
 
 		Log("App: Finalizing initialization...");
 
-		// Register plugins
-		pluginsManager.Initialize();
+		if (isExtensionActive) {
+			// Register plugins
+			pluginsManager.Initialize();
+		}
 	};
 
 	this.GetActivePage = function () {

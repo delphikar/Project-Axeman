@@ -283,4 +283,46 @@ function CreateStylesheet(path) {
 	stylesheetLink.attr("rel", "stylesheet");
 
 	return stylesheetLink;
-};
+}
+
+function _gim(name) {
+	/// <summary>
+	/// Gets locale message
+	/// </summary>
+	/// <param name="name">Name of message</param>
+	/// <returns type="">Message for current borwser locale</returns>
+
+	return chrome.i18n.getMessage(name) || name;
+}
+
+function _combinedgim() {
+	/// <summary>
+	/// Combines given arguments and returns locale message for combination
+	/// </summary>
+
+	var combined = "";
+	for (var index = 0, cache = arguments.length - 1; index < cache; index++) {
+		combined += arguments[index] + '_';
+	}
+	combined += arguments[index];
+
+	return _gim(combined);
+}
+
+function _localize(object, dataAttribute) {
+	/// <summary>
+	/// Localizes given object's children if possible
+	/// </summary>
+	/// <param name="object">Object to localize</param>
+	/// <param name="dataAttribute">Optional Look for custom data element atribute</param>
+
+	var jObj = $(object);
+	var attribute = dataAttribute || "locale";
+	var localizable = $("[data-" + attribute + "]", jObj);
+	for (var index = 0, cache = localizable.length; index < cache; index++) {
+		var current = $(localizable[index]);
+		current.text(_gim(current.data(attribute)));
+	}
+}
+
+

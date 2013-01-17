@@ -10,20 +10,19 @@ Website
 	- Add facebook page link / Facebook like widget
 	- Google Chrome logo
 
-0.2.3
-	- ExtensionsActive button functionality
+0.2.4
 	- MarketplaceEnhancements
 		- Take a look at code
 		- Add second button that adds hour production from all villages
-	- Check all on reports and messages
-	- Move pages in seperate directories
 	- Remove underscore if not used
-	- Load all plugins states in one call (use object instead of many objects)
+	- Translation
 
 Other
+	- Implement Plugin subcategory
+	- Implement Plugin initialization order
+	- Load all plugins states in one call (use object instead of many objects)
+	- Redesign Options page
 	- Make white list editable
-	- Storage details replace tables with div and reverse to previous colors
-	- Translation
 	- HelpPlugin (Insert FAQ of extensions to help.php)
 	- <span class="settle">1 Naseliti</span>
 
@@ -76,6 +75,10 @@ Changes 0.2.3
 		- Now supports auto-login
 		- "Smart profile creation" 2-way profile creation
 	- Removed unnecessary styles
+	-----
+	- Implemented functionality to Extension Activate/Deactivate button in Popup page
+	- Seperated styles from code in UpgradeIndicator plugin
+	- Popup translations complete for english
 	-----
 
 ########################################################################
