@@ -1,4 +1,6 @@
-﻿var popupPage;
+﻿// TODO Add support for editing password/profile
+
+var popupPage;
 
 $(document).ready(function () {
 	popupPage = new PopupPage();
@@ -57,7 +59,7 @@ function PopupPage() {
 
 	var InitializeModal = function() {
 		// Handle for modal view
-		$(document).live('click keyup', function (e) {
+		$(document).on('click keyup', function (e) {
 			// If this is a keyup event, let's see if it's an ESC key
 			if (e.type == "keyup" && e.keyCode != 27) return;
 
@@ -66,9 +68,19 @@ function PopupPage() {
 
 		// Activate modal view on "Add" button click
 		$("#AddNewProfile").click(function () {
-			$.pageslide({ direction: "left", href: "PopupAddUser.html", iframe: false, speed: modalAnimationSpeed, modal: true, moveBody: false, onLoaded: function() {
-				_localize($("#pageslide"));
-			} });
+			$.pageslide({
+				direction: "left",
+				href: "PopupAddUser.html",
+				iframe: false,
+				speed: modalAnimationSpeed,
+				modal: true,
+				moveBody: false,
+				onLoaded: function() {
+					console.log("Localizing...");
+					_localize($("#pageslide"));
+				}
+			});
+			
 			setTimeout(function () {
 				isModalActive = true;
 
@@ -77,6 +89,7 @@ function PopupPage() {
 					HideModalView(true);
 				});
 			}, modalAnimationSpeed);
+			
 			$(".ModalViewCover").fadeToggle();
 
 			_localize($("#pageslide"));
@@ -224,9 +237,14 @@ function PopupPage() {
 		var title = $("<div>")
 			.append($("<div>").addClass("ProfileDetails UserName").append(profile.Name))
 			.append($("<div>").addClass("ProfileDetails UID").append(profile.UID).attr("title", _gim("popup_ProfileItem_TitleUID")));
+		// Calculate total player population
+		var totalPopulation = 0;
+		for (var index = 0; index < profile.Villages.length; index++) {
+			totalPopulation += profile.Villages[index].Population;
+		}
 		var villages = $("<div>").addClass("ProfileDetails Village")
 			.append($("<div>").addClass("ProfileDetails").append(profile.Villages.length + " " + _gim("popup_ProfileItem_Villages")))
-			.append($("<div>").addClass("ProfileDetails").append(profile.Population + " " + _gim("popup_ProfileItem_Population")));
+			.append($("<div>").addClass("ProfileDetails").append(totalPopulation + " " + _gim("popup_ProfileItem_Population")));
 		var serverDetails = $("<div>").addClass("ProfileDetails Server").append(profile.ServerAddress);
 		var rightContainer = $("<div>").addClass("RightContainer")
 			.append(title)

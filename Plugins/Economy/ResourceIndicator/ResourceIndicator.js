@@ -65,7 +65,7 @@ function ResourceIndicator() {
 					$("p", element).css("color", "red");
 					$("p", element).addClass("negative");
 				}
-				$("p", element).attr("data-timeleft", timeLeft * 3600);
+				$("p", element).data("timeleft", timeLeft * 3600);
 				$(this).append(element);
 			}
 			DLog("ResourcesIndicator: Appended to resource [l" + (index + 1) + "]");
@@ -103,11 +103,11 @@ function ResourceIndicator() {
 	function RefreshFunction(cneg, czero, calmost, cclose, cother) {
 		$(".ResourceIndicatorFillTime").each(function () {
 			// Get current time from element
-			var secondsLeft = parseInt($(this).attr("data-timeleft"), 10);
+			var secondsLeft = $(this).data("timeleft");
 			if (secondsLeft >= 0) {
 				if (secondsLeft > 0) {
 					secondsLeft--;
-					$(this).attr("data-timeleft", secondsLeft);
+					$(this).data("timeleft", secondsLeft);
 				}
 				$(this).html(ConvertSecondsToTime(secondsLeft));
 			}

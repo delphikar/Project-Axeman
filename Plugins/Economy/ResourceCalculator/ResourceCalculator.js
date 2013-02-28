@@ -189,7 +189,7 @@ function ResourceCalculator() {
 			}
 
 			// Attach function on textbox change
-			$(inputs[iindex]).live("input", function () {
+			$(inputs[iindex]).on("input", function () {
 				RefreshUnitsFunction($(inputs[iindex]), $(costs[iindex]));
 			});
 

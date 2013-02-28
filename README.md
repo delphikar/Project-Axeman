@@ -50,7 +50,35 @@ Collaborators
 
 
 ## Changelog
-- **Version 0.2.4** _(**.**.2013.)_
+- **Version 0.2.4** _(28.02.2013.)_
+	- Extension now runs on customizable url list
+	- DevelopmentToolbar Console toggle button now saves state
+	- Fix ResourceCalculator not updating on units
+	- Added PageMayContain to PluginMetadata model which evaluates as 'or' operation
+	- Added Decorations plugin (Fun category)
+		- Added option to remove Help button from page
+	- Added TravianPLUS plugin (Utility category)
+		- Added 'Select all' option for reports and messages
+	- Implemented internationalization
+		- Added en (English)
+		- Added hr (Hrvatski/Croatian)
+	- PluginsManager
+		- Added timed registration (<20ms recommended)
+	- Moved all pages to seperate directories
+	- Popup redesign
+		- Now supports auto-login
+		- "Smart profile creation" 2-way profile creation
+	- Removed unnecessary styles
+	- Implemented functionality to Extension Activate/Deactivate button in Popup page
+	- Seperated styles from code in UpgradeIndicator plugin
+	- Popup translations complete for english
+	- Fix UpgradeIndicator Optimization for fields
+	- Fix UpgradeIndicator not showing corrently when there were no fields
+	- Removed parseInt from ResourceIndicator
+	- Fix MarketplaceEnhancements invalid select village options
+	- Fix MarketplaceEnhancements Allowing to add more than in storage via shortcuts
+	- DevelopmentToolbar new scrollbar style
+	- Updated jQuery to 1.9.0
 
 - **Version 0.2.3 (not released)** _(16.01.2013.)_
 	- PluginsManager.html	

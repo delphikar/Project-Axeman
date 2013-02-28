@@ -159,6 +159,7 @@
 	$.pageslide = function(options) {
 		// Extend the settings with those the user has provided
 		var settings = $.extend({}, $.fn.pageslide.defaults, options);
+		$pageslide.data(settings);
 
 		// Are we trying to open in different direction?
 		if ($pageslide.is(':visible') && $pageslide.data('direction') != settings.direction) {
@@ -172,8 +173,6 @@
 				_start(settings.direction, settings.speed, settings.moveBody);
 			}
 		}
-
-		$pageslide.data(settings);
 	};
 
 	// Close the pageslide

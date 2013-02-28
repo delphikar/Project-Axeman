@@ -21,7 +21,7 @@ function MarketplaceEnhancements() {
 	var tradersAvailable;
 	var traderCarryAmount;
 
-	this.Register = function () {
+	this.Register = function() {
 		/// <summary>
 		/// Initializes plugin object
 		/// </summary>
@@ -32,11 +32,13 @@ function MarketplaceEnhancements() {
 		$("head").append(CreateStylesheet("Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancementsStyle.css"));
 
 		// Gets max carry for one trader and number of traders available
+		// TODO Move this to Services
 		traderCarryAmount = parseInt($(".send_res .max:eq(0) > a").text() || 0, 10);
 		tradersAvailable = parseInt($("#merchantsAvailable").text(), 10) || 0;
 
 		DLog("Trader Max Transport: " + traderCarryAmount, "MarketplaceEnhancements");
 		DLog("Traders available: " + tradersAvailable, "MarketplaceEnhancements");
+
 
 		// Add village selector if there are villages to send resources to
 		if (ActiveProfile.Villages.length > 1) {
@@ -47,72 +49,24 @@ function MarketplaceEnhancements() {
 		$("#enterVillageName").attr("placeholder", "Enter village name");
 
 		// Add spinners to resources textboxes
-		AddSpiners(tradersAvailable, traderCarryAmount);
+		AddSpiners();
+
+		// Add village hour production button
+		// TODO Add second button that adds hour production from all villages
+		AddHourProductionButton();
 
 		// Inserts junk resources table
 		InsertJunkResourceTable();
 		FillInJunkResourceTable();
 
+		// Replace built-in shortcuts with custom
+		AddTransportShortcuts();
+
 		//Test Area ;)
-		(function testArea() {
-
-			//work-in-half, but rebuild
-			//AddTransportShortcuts(traderCarryAmount);
-
+		(function () {
 			//Perhaps works, maybe not, but useful
 			IncomingSum();
-
-
-			var ValidateHourButton = function (hourButton) {
-				var villageResources = ActiveProfile.Villages[ActiveVillageIndex].Resources;
-				var productionSum = 0;
-
-				// Chack if enough each resources is stored
-				for (var index = 0; index < 4; index++) {
-					var stored = villageResources.Stored[index];
-					var production = villageResources.Production[index];
-					var alreadySet = $("#r" + (index + 1)).spinner("value");
-					if (stored < (production + alreadySet)) {
-						DLog("No enough " + Enums.FieldNames[index] + " stored [" + stored + "] to send " + (alreadySet ? "more than" : "hour production") + " [" + (production + alreadySet) + "]", "MarketplaceEnhancements");
-						hourButton.button("option", "disabled", true);
-						hourButton.attr("title", useHour.attr("title") + "\nNo enough " + Enums.FieldNames[index] + " - " + (production + alreadySet - stored) + " more needed");
-					}
-
-					productionSum += production + alreadySet;
-				}
-
-				// Check if enough traders is available
-				var canTransport = tradersAvailable * traderCarryAmount;
-				if (canTransport < productionSum) {
-					DLog("No enough traders to send [" + productionSum + "] resources", "MarketplaceEnhancements");
-					hourButton.button("option", "disabled", true);
-					hourButton.attr("title", useHour.attr("title") + "\nNo enough traders available - " + (Math.ceil(productionSum / traderCarryAmount) - tradersAvailable) + " more needed");
-				}
-			};
-
-			// TODO Add second button that adds hour production from all villages
-			// TODO Pun in seperate function. Looks good
-			var useHour = $("<span>").text("1h").attr({
-				"title": "Use this village's hour production"
-			}).css({
-				"margin": "0"
-			}).button({
-				icons: { primary: "ui-icon-plus" }
-			}).click(function () {
-				$.each($("#send_select input"), function (index, obj) {
-					var production = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
-					$(obj).spinner("value", $(obj).spinner("value") + production);
-					$(obj).change();
-				});
-
-				ValidateHourButton($(this));
-			});
-
-			ValidateHourButton(useHour);
-
-			$("#send_select tr:eq(4) td").append(useHour);
-			//need InsertJunkResourceTable and other ;)
-		})();
+		})/*()*/;
 
 		if (!IsDevelopmentMode) {
 			// Google analytics
@@ -120,11 +74,69 @@ function MarketplaceEnhancements() {
 			_gaq.push(['_setAccount', 'UA-33221456-3']);
 			_gaq.push(['_trackEvent', 'Plugin', 'Utility/MarketplaceEnhancements']);
 
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			(function() {
+				var ga = document.createElement('script');
+				ga.type = 'text/javascript';
+				ga.async = true;
 				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+				var s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(ga, s);
 			})();
+		}
+	};
+
+	var AddHourProductionButton = function() {
+		var useHour = $("<span>").text("1h").attr({
+			id: "PAMEHourProductionButton",
+			title: "Use this village's hour production"
+		}).css({
+			margin: "0"
+		}).button({
+			icons: { primary: "ui-icon-plus" }
+		}).click(function () {
+			$.each($("#send_select input"), function (index, obj) {
+				var production = ActiveProfile.Villages[ActiveVillageIndex].Resources.Production[index];
+				$(obj).spinner("value", $(obj).spinner("value") + production);
+				$(obj).change();
+			});
+		});
+
+		ValidateHourButton();
+
+		$("#send_select tr:eq(4) td").append(useHour);
+
+		$("#r1, #r2, #r3, #r4").change(function () { ValidateHourButton(); });
+		$("#r1, #r2, #r3, #r4").on("input", function () { ValidateHourButton(); });
+	};
+	
+	var ValidateHourButton = function () {
+		var hourButton = $("#PAMEHourProductionButton");
+		hourButton.attr("title", "Add this village's hour production");
+		hourButton.button("option", "disabled", false);
+
+		var villageResources = ActiveProfile.Villages[ActiveVillageIndex].Resources;
+		var productionSum = 0;
+
+		// Chack if enough each resources is stored
+		for (var index = 0; index < 4; index++) {
+			var stored = villageResources.Stored[index];
+			var production = villageResources.Production[index];
+			var alreadySet = $("#r" + (index + 1)).spinner("value");
+			if (stored < (production + alreadySet)) {
+				DLog("No enough " + Enums.FieldNames[index] + " stored [" + stored + "] to send " + (alreadySet ? "more than" : "hour production") + " [" + (production + alreadySet) + "]", "MarketplaceEnhancements");
+				hourButton.button("option", "disabled", true);
+				hourButton.attr("title", hourButton.attr("title") + "\nNo enough " + Enums.FieldNames[index] + " - " + (production + alreadySet - stored) + " more needed");
+			}
+
+			productionSum += production + alreadySet;
+		}
+
+		// Check if enough traders is available
+		var canTransport = tradersAvailable * traderCarryAmount;
+		if (canTransport < productionSum) {
+			DLog("No enough traders to send [" + productionSum + "] resources", "MarketplaceEnhancements");
+			hourButton.button("option", "disabled", true);
+			hourButton.attr("title", hourButton.attr("title") + "\nNo enough traders available - " + (Math.ceil(productionSum / traderCarryAmount) - tradersAvailable) + " more needed");
 		}
 	};
 
@@ -143,7 +155,7 @@ function MarketplaceEnhancements() {
 
 			// Check if village is not currently active village
 			if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID)
-				villages[index] = obj.Name;
+				villages[villages.length] = obj.Name;
 		}
 
 		// Build dropdown selector
@@ -183,10 +195,8 @@ function MarketplaceEnhancements() {
 		/// <param name="tradersAvailable">Number of traders available</param>
 		/// <param name="traderMaxTransport">Amount of resource each trader can carry</param>
 
-		var maxTransport = tradersAvailable * traderCarryAmount;
-
 		// Go through all resource input textboxes
-		$.each($("#r1, #r2, #r3, #r4"), function (index, obj) {
+		$("#r1, #r2, #r3, #r4").each(function (index, obj) {
 			// Get stored amount of current resource
 			var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[index];
 			
@@ -197,6 +207,7 @@ function MarketplaceEnhancements() {
 				min: 0,
 				max: stored,
 				spin: function (event, ui) {
+					console.warn(event);
 					var spinStep = 1;
 					var isInc = ui.value >= $(this).val();
 					var stepValue = isInc ? 1 * spinStep : -1 * spinStep;
@@ -261,7 +272,7 @@ function MarketplaceEnhancements() {
 		$(".send_res tbody").append($("<tr>").append($("<td>").attr("colspan", "4").append(junkResourcesTable)));
 
 		// For keyboard input
-		$("#r1, #r2, #r3, #r4").live("input", function () {
+		$("#r1, #r2, #r3, #r4").on("input", function () {
 			FillInJunkResourceTable();
 		});
 
@@ -352,60 +363,105 @@ function MarketplaceEnhancements() {
 		DLog("Traders [" + tradersAvailable + "] each (max. " + traderCarryAmount + ") sending [" + resSum + "] with total junk amount [" + junkAmount + "]", "MarketplaceEnhancements");
 	};
 
-	function AddTransportShortcuts(traderMaxTransport) {
+	var AddTransportShortcuts = function() {
 		// TODO Comment
 		Log("Adding transport shortcuts...", "MarketplaceEnhancements");
 
-		// SAMPLE: "<a href='#' onmouseup='add_res(1);' onclick='return false;'>1000</a>"
+		// Hide Travian shortcuts
+		$("[id*='addRessourcesLink']").hide();
 
-		Log("buildMarketAddTransportShortcuts - Adding 1x shortcut");
 		// 1x shortcut
 		for (var index = 0; index < 4; index++) {
-			var addCall = "add_res(" + (index + 1) + ");";
-			var strX1 = "/ <a href='#' onmouseup='" + addCall + "' onclick='return false;'>" + traderMaxTransport + "</a><br>";
-			$(".send_res > tbody > tr:eq(" + index + ") > .max").html(strX1);
+			var container = $(".send_res > tbody > tr:eq(" + index + ") > .max");
+
+			var shortcutElement = $("<a>")
+				.attr("href", "#")
+				.addClass("PAMEShortcut")
+				.data("amount", traderCarryAmount)
+				.data("resource", index)
+				.click(function () {
+					if (!$(this).hasClass("disabled")) {
+						var inputElement = $(".val input", $(this).parent().parent());
+						var inputValue = inputElement.spinner("value");
+						inputElement.spinner("value", inputValue + traderCarryAmount);
+						inputElement.change();
+					}
+				}).text(traderCarryAmount);
+			
+			container.append(shortcutElement);
 		}
 
-		Log("buildMarketAddTransportShortcuts - 1x shortcud added!");
-		Log("buildMarketAddTransportShortcuts - Adding 2x shortcut");
-		// 2x shortcut
-
-		for (var index = 0; index < 4; index++) {
-			var addCall = "add_res(" + (index + 1) + ");";
-			var strX2 = "/ <a href='#' onmouseup='" + addCall + addCall + "' onclick='return false;'>" + traderMaxTransport * 2 + "</a><br>";
-			$(".send_res > tbody > tr:eq(" + index + ") > .max").append(strX2);
-		}
-		Log("buildMarketAddTransportShortcuts - 1x shortcud added!");
-
-
+		// Validate shortcuts on input change
+		$("#r1, #r2, #r3, #r4").change(ValidateTransportShortcuts);
+		
 		Log("Transport shortcuts added successfully!", "MarketplaceEnhancements");
-	}
+	};
+
+	var ValidateTransportShortcuts = function () {
+		var inputElement = $(this);
+		var currentAmount = inputElement.spinner("value");
+		var shortcuts = $(".PAMEShortcut", inputElement.parent().parent().parent());
+		
+		$.each(shortcuts, function() {
+			var element = $(this);
+			if (currentAmount >= inputElement.spinner("option", "max")) {
+				element.addClass("disabled");
+			} else element.removeClass("disabled");
+		});
+	};
 
 
-	function IncomingSum() {
+	var IncomingSum = function() {
 		// TODO Comment
 		Log("Generating table for incoming resources sum...", "MarketplaceEnhancements");
 
-		var sum = [0, 0, 0, 0];
-		var count = 0;
-		var tableIndex = 0;
+		// TODO Move this to Services
+		var CrawlMarketplaceTables = function() {
+			// Get groups(types) of trades incomming/outgoing
+			var groups = $("#merchantsOnTheWayFormular h4").length;
+			var arrivingTables = undefined;
 
-		var maxTime = 0; // Temp variable
+			if (groups === 2) {
+				// First group is arriving merchants
+				arrivingTables = $("#merchantsOnTheWayFormular h4:first:first-of-type").nextUntil("h4");
+			} else if (groups === 1) {
+				//if  traders available=total traders
+				//    incoming=true
+				//else
+				//    check language options
+				//    NOTE Check class "none" under tbody > .res, those are not incoming
+				//    NOTE Check sender UID, if same as active profile, those are outgoing
+			}
 
-		//this way do it!
-		var groups = $("#merchantsOnTheWayFormular h4").length;
+			// Check if there is any arriving tables
+			if (!arrivingTables) {
+				DLog("No arriving merchants.", "MarketplaceEnhancements");
+				return;
+			}
 
-		if (groups == 2) {
-			//incoming = first group
-		}
-		if (groups == 1) {
-			//if transport aviable=total
-			//incoming=true
-			//else
-			//check language options
-			//else
-			//there is no incoming, sorry ;(
-		}
+			var resourceSum = [0, 0, 0, 0];
+			var maxTime = Number.MAX_VALUE;
+			var arrivingIndex = 0;
+			// Get max time
+			$(".in", arrivingTables).each(function(index) {
+				var timeSplit = $(this).text().split(":");
+				var time = timeSplit[0] * 3600 + timeSplit[1] * 60 + timeSplit[2];
+
+				if (time > maxTime) {
+					maxTime = time;
+					arrivingIndex = index;
+				}
+			});
+
+			// Get resource sum by splitting all resource strings and adding them to array by 
+			// index mod 4 and offset by 1 because split returns unused value (first)
+			var resourceSplit = $(".res > td > span", arrivingTables).text().split(" ");
+			for (var index = 1, cache = resourceSplit.length; index < cache; index++) {
+				resourceSum[(index - 1) % 4] += Number($.trim(resourceSplit[index]));
+			}
+		};
+		CrawlMarketplaceTables();
+
 		//save language info for later ;)
 
 		//$("#merchantsOnTheWayFormular h4").each(function (index, obj) {
@@ -413,73 +469,73 @@ function MarketplaceEnhancements() {
 		//});
 
 		//This way not work, but it might be helpy
-		
-		$(".traders").each(function(index) {
-			var bodys = $(this).children("tbody");
-			if (bodys.length === 2) {
-				alert("mam cie");
-				// Gets max time and timer name
-				var timeSpan	 = $(bodys[0].children).children("td").children("div:first").children();
-				var time		 = timeSpan.text();
-				var timeSplit	 = time.split(":");
-				var timeInteger = timeSplit[0] * 3600 + timeSplit[1] * 60 + timeSplit[2] * 1;
 
-				if (timeInteger > maxTime) {
-					maxTime	 = timeInteger;
-					tableIndex	 = index;
-					count++;
-				}
+		//$(".traders").each(function(index) {
+		//	var bodys = $(this).children("tbody");
+		//	if (bodys.length === 2) {
+		//		alert("mam cie");
+		//		// Gets max time and timer name
+		//		var timeSpan = $(bodys[0].children).children("td").children("div:first").children();
+		//		var time = timeSpan.text();
+		//		var timeSplit = time.split(":");
+		//		var timeInteger = timeSplit[0] * 3600 + timeSplit[1] * 60 + timeSplit[2] * 1;
 
-				// Gets resources and sums it to total
-				var res		 = $(bodys[1].children).children("td").children().text();
-				var resSplit	 = res.split(" ");
+		//		if (timeInteger > maxTime) {
+		//			maxTime = timeInteger;
+		//			tableIndex = index;
+		//			count++;
+		//		}
 
-				for (var i = 0; i < 4; ++i) {
-					sum[i] += parseInt(resSplit[i + 1], 10);
-				}
-			}
-		});
+		//		// Gets resources and sums it to total
+		//		var res = $(bodys[1].children).children("td").children().text();
+		//		var resSplit = res.split(" ");
+
+		//		for (var i = 0; i < 4; ++i) {
+		//			sum[i] += parseInt(resSplit[i + 1], 10);
+		//		}
+		//	}
+		//});
 
 		// Checks if any incoming trade exists
-		if (count > 0) {
-			// Recreate table with custom text
-			var sourceTable = $(".traders:eq(" + tableIndex + ")");
+		//if (count > 0) {
+		//	// Recreate table with custom text
+		//	var sourceTable = $(".traders:eq(" + tableIndex + ")");
 
-			var customTable = $(sourceTable.outerHTML());
+		//	var customTable = $(sourceTable.outerHTML());
 
-			// Head customization
-			customTable.children("thead").children().children().each(function(index) {
-				if (index === 0) $(this).html(_gim("TravianTotalIncoming"));
-				else $(this).html(_gim("TravianIncomingFrom") + " " + count + " " + _gim("TravianVillagesLC"));
-			});
+		//	// Head customization
+		//	customTable.children("thead").children().children().each(function(index) {
+		//		if (index === 0) $(this).html(_gim("TravianTotalIncoming"));
+		//		else $(this).html(_gim("TravianIncomingFrom") + " " + count + " " + _gim("TravianVillagesLC"));
+		//	});
 
-			customTable.children("tbody:first").children().children("td").children(".in").children().attr("id", "paIncomingSumTimer");
+		//	customTable.children("tbody:first").children().children("td").children(".in").children().attr("id", "paIncomingSumTimer");
 
-			// Resource customization
-			customTable.children("tbody:last").children().children("td").children().html(
-				"<img class='r1' src='img/x.gif' alt='wood'> " + sum[0] + "&nbsp;&nbsp;" +
-				"<img class='r2' src='img/x.gif' alt='clay'> " + sum[1] + "&nbsp;&nbsp;" +
-				"<img class='r3' src='img/x.gif' alt='iron'> " + sum[2] + "&nbsp;&nbsp;" +
-				"<img class='r4' src='img/x.gif' alt='crop'> " + sum[3] + "&nbsp;&nbsp;"
-				);
+		//	// Resource customization
+		//	customTable.children("tbody:last").children().children("td").children().html(
+		//		"<img class='r1' src='img/x.gif' alt='wood'> " + sum[0] + "&nbsp;&nbsp;" +
+		//			"<img class='r2' src='img/x.gif' alt='clay'> " + sum[1] + "&nbsp;&nbsp;" +
+		//			"<img class='r3' src='img/x.gif' alt='iron'> " + sum[2] + "&nbsp;&nbsp;" +
+		//			"<img class='r4' src='img/x.gif' alt='crop'> " + sum[3] + "&nbsp;&nbsp;"
+		//	);
 
-			Log("buildMarketIncomingSum - Table generated! Appending table to beginning...");
+		//	Log("buildMarketIncomingSum - Table generated! Appending table to beginning...");
 
-			// Appends custom table to beginning
-			$(".traders:first").before(customTable.outerHTML());
+		//	// Appends custom table to beginning
+		//	$(".traders:first").before(customTable.outerHTML());
 
-			Log("buildMarketIncomingSum - Table appended successfully! Asigning timer...");
+		//	Log("buildMarketIncomingSum - Table appended successfully! Asigning timer...");
 
-			// Updates incoming left time every 128 ms to original table value
-			setInterval(function() {
-				$("#paIncomingSumTimer").text(
-					sourceTable.children("tbody:first").children().children("td").children(".in").children().text());
-			}, 1000);
-		}
-		
+		//	// Updates incoming left time every 128 ms to original table value
+		//	setInterval(function() {
+		//		$("#paIncomingSumTimer").text(
+		//			sourceTable.children("tbody:first").children().children("td").children(".in").children().text());
+		//	}, 1000);
+		//}
+
 
 		Log("Incoming resources sum shown", "MarketplaceEnhancements");
-	}
+	};
 }
 
 // Metadata for this plugin (MarketplaceImprovement)
@@ -487,7 +543,7 @@ var MarketplaceEnhancementsMetadata = {
 	Name: "MarketplaceEnhancements",
 	Alias: "Marketplace Enhancements",
 	Category: "Utility",
-	Version: "0.0.6.13",
+	Version: "0.0.6.14",
 	Description: "ToDo",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

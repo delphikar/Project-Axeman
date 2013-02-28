@@ -68,17 +68,17 @@ function App() {
 		Log("App: Loading...");
 
 		// Loading available user profiles
-		LoadProfiles();
 		loadNumber++;
+		LoadProfiles();
 		
 		// Load extension active state
+		loadNumber++;
 		(new Request("Background", "Data", "IsExtensionActive", { Type: "get" }).Send(function(response) {
 			if (response) {
 				isExtensionActive = response.State;
 			}
 			CheckFinishedLoading();
 		}));
-		loadNumber++;
 	};
 
 	var LoadProfiles = function () {
@@ -169,7 +169,7 @@ function App() {
 		// Attach function to click and keyup events
 		// so that we close modalview when user clicks
 		// outside of modalview (on document not on modalview)
-		$(document).live('click keyup', function (e) {
+		$(document).on('click keyup', function (e) {
 			// If this is a keyup event, let's see if it's an ESC key
 			if (e.type == "keyup" && e.keyCode != 27) return;
 			
@@ -189,7 +189,7 @@ function App() {
 
 		// Return if modelview is already active
 		if (app.isModalViewActive == true) {
-			DLog("Modal already oppened!", "App");
+			//DLog("Modal already oppened!", "App");
 			return false;
 		}
 

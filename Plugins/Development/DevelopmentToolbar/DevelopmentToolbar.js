@@ -71,6 +71,9 @@ function DevelopmentToolbar() {
 
 		// Initialize console control 
 		InitializeConsole();
+		
+		// Initialize auto-reload extension on file change
+		InitializeExtensionReload();
 
 		if (!IsDevelopmentMode) {
 			// Google analytics
@@ -84,6 +87,10 @@ function DevelopmentToolbar() {
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
 		}
+	};
+
+	var InitializeExtensionReload = function() {
+
 	};
 
 	var InitializeConsole = function () {

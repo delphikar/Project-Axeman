@@ -325,4 +325,15 @@ function _localize(object, dataAttribute) {
 	}
 }
 
+function _timed(func) {
+	/// <summary>
+	/// Timer for function
+	/// </summary>
+	/// <param name="func">Function on which to run timer</param>
+	/// <returns type="">Time needed for function to execute</returns>
 
+	var startTime = (new Date()).getTime();
+	(func || function() {})();
+	var endTime = (new Date()).getTime();
+	return endTime - startTime;
+}

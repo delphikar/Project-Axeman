@@ -125,6 +125,12 @@ function PluginsManager() {
 				break;
 			}
 		}
+		
+		// Development check - Check if plugin uses parseInt (indicates this hould be crawled in Service)
+		if (IsDevelopmentMode && pluginMetadata.Class.toString().search("parseInt") >= 0) {
+			Warn("Plugin uses \"parseInt\" method. This should be replaced with crawled data!");
+		}
+
 		if (!foundMatch) {
 			// If none of above returned, plugin isn't valid
 			Log("Page doesn't contain any of required elements for " + pluginMetadata.Name, "PluginManager");

@@ -7,48 +7,66 @@
  * Created on:
  * 		28.06.2012.
  *
- * Notes:
- *
  *****************************************************************************/
 
-// <summary>
-// Plugin that takes care of all built-in models (fill and update), refreshes page and changes views randomly.
-// </summary>
 function Services() {
-
 	// <summary>
-	// Registers plugin 
+	// Plugin that takes care of all built-in models (fill and update), refreshes page and changes views randomly.
 	// </summary>
+	
+	//
+	// Variables
+	//
+	var activeVillage;
+
+	
 	this.Register = function () {
-		Log("Services: Initializing...");
+		// <summary>
+		// Registers plugin 
+		// </summary>
 
-		// Call service methods
+		Log("Initializing...", "Services");
+
+		// Check if user is loged in
 		ProcessIsLogedIn();
+		
+		// Process profile
 		ProcessProfiles();
+		
+		// Crawl current page
 		CrawlPage();
-		UpdateProfile();
-		// TODO Request refresh
-
+		
+		// Save changes
+		SaveActiveVillage();
+		SaveProfileChanges();
+		
+		// Try to auto-login profile if possible
 		AutoLoginUser();
+
+		// Initiate refresh service
+		InitializeNavigationService();
 
 		if (!IsDevelopmentMode) {
 			// Google analytics
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-33221456-3']);
 			_gaq.push(['_trackEvent', 'Plugin', 'Core/Services']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
+			(function () { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = 'https://ssl.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
 		}
 	};
 
+	var InitializeNavigationService = function() {
+		// TODO Implement
+	};
+
 	var AutoLoginUser = function () {
+		/// <summary>
+		/// If profile has option enabled and password is available, fills login information  and submits form
+		/// </summary>
+
 		Log("Checking if user can login automatically", "Services");
 		
-		if (!IsLogedIn && ActiveProfile.IsAutoLogin) {
+		if (!IsLogedIn && ActiveProfile.IsAutoLogin && ActiveProfile.Password) {
 			$(".login input[name='name']").val(ActiveProfile.Name);
 			$(".login input[name='password']").val(ActiveProfile.Password);
 
@@ -63,7 +81,10 @@ function Services() {
 		// </summary>
 
 		// Nothing to crawl is user is loged off
-		if (!IsLogedIn) return;
+		if (!IsLogedIn) {
+			DLog("Crawling not supported when user isn't loged in!", "Services");
+			return;
+		}
 
 		if (!MatchPages([
 			Enums.TravianPages.Home,
@@ -73,31 +94,40 @@ function Services() {
 			Log("Crawling page...", "Services");
 
 			CrawlVillageList();
+			activeVillage = ActiveProfile.Villages[ActiveVillageIndex];
+
 			CrawlStorage();
 			CrawlProduction();
 			CrawlLoyalty();
 			CrawlMessages();
-			CrawlReports();		
+			CrawlReports();
+			
+			if (MatchPages([Enums.TravianPages.Player])) {
+
+				Log("Crawling Player page...", "Services");
+
+				CrawlVillagesDetails();
+			}
+			if (MatchPages([Enums.TravianPages.VillageOut])) {
+
+				Log("Crawling Village Out page...", "Services");
+
+				CrawlVillageType();
+				CrawlVillageFields();
+				CrawlVillageBuildTasks();
+				CrawlVillageMovements();
+				CrawlVillageTotalTroops();
+			}
+			if (MatchPages([Enums.TravianPages.VillageIn])) {
+
+				Log("Crawling Village In page...", "Services");
+
+				CrawlVillageBuildings();
+				CrawlVillageBuildTasks();
+			}
+			// TODO Military Units
+			// TODO Crawl movements from rally point
 		}
-		if (MatchPages([
-			Enums.TravianPages.Player])){
-
-			Log("Crawling Player page...", "Services");
-
-			CrawlPopulation();
-			CrawlVillagesDetails();
-		}
-		if (MatchPages([
-			Enums.TravianPages.VillageOut])){
-
-			Log("Crawling Village Out page...", "Services");
-
-			CrawlVillageType();
-		}
-		// TODO Fields
-		// TODO Tasks
-		// TODO Military Units
-		// TODO Movements
 	};
 
 	var CrawlStorage = function () {
@@ -107,32 +137,25 @@ function Services() {
 
 		Log("Crawling village storage...", "Services");
 
-		var activeVillage = GetActiveVillage();
-
 		$("#res > li > p > span").each(function (index, obj) {
 			var resText = $(obj).text();
-			var seperatorIndex = resText.indexOf("/");
-			var resInStorage = parseInt(resText.substr(0, seperatorIndex), 10);
-			var storageMax = parseInt(resText.substr(seperatorIndex + 1, resText.length - seperatorIndex + 1), 10);
+			var separated = resText.split("/");
 
 			// If storage, else it's crop production/consumtion
 			if (index < 4) {
 				// Set Storage max value
-				activeVillage.Resources.Storage[index] = storageMax;
+				activeVillage.Resources.Storage[index] = parseInt(separated[1], 10) || 0;
 
 				// Set current stored value
-				activeVillage.Resources.Stored[index] = resInStorage;
+				activeVillage.Resources.Stored[index] = parseInt(separated[0], 10) || 0;
 			}
 			else {
-				activeVillage.Resources.TotalCropProduction = storageMax;
-				activeVillage.Resources.Consumption = resInStorage;
+				activeVillage.Resources.FreeCrop = parseInt(resText, 10) || 0;
 			}
 		});
 
 		DLog("Stored in Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Stored + "] and crop [" + activeVillage.Resources.Consumption + " of " + activeVillage.Resources.TotalCropProduction + "]", "Services");
 		DLog("Storage of Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Storage + "]", "Services");
-
-		UpdateActiveVillage(activeVillage);
 	};
 
 	var CrawlProduction = function () {
@@ -141,8 +164,6 @@ function Services() {
 		// </summary>
 
 		Log("Crawling village production...", "Services");
-
-		var activeVillage = GetActiveVillage();
 
 		// Go through all script values and parse production values to village resource production array
 		var scriptContent = $("script:contains('resources.production')").html();
@@ -160,59 +181,42 @@ function Services() {
 			DLog("Production of Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Production + "]", "Services");
 		}
 		else Warn("Can't parse production script!", "Services");
-
-		UpdateActiveVillage(activeVillage);
-	};
-	
-	// <summary>
-	// Crawls for user population
-	// </summary>
-	var CrawlPopulation = function () {
-		if (!MatchPages([Enums.TravianPages.Player])) return;
-		
-		var pop = parseInt($("td.inhabitants").text(), 10) || 0;
-		ActiveProfile.Population = pop;
-			
-		DLog("Services: Population of active village is [" + ActiveProfile.Population + "]");
 	};
 
-	// <summary>
-	// Crawls for active village loyalty
-	// </summary>
 	var CrawlLoyalty = function () {
-		Log("Services: Crawling village loyalty...");
+		// <summary>
+		// Crawls for active village loyalty
+		// </summary>
+		
+		Log("Crawling village loyalty...", "Services");
 
 		// Get loyalty span text
 		var loyaltyText = $("#villageName .loyalty").text();
 
-		// Get index of loyalty word end
-		var index = loyaltyText.indexOf(":");
-
-		// Remove loyalty word and percentage sign then parse to int
-		var loyalty = parseInt(loyaltyText.substr(index + 1, loyaltyText.length - index + 1).replace("%", ""), 10) || 0;
+		// Remove 'Loyalty' word parse right part to number
+		var loyalty = parseInt(loyaltyText.split(":")[1], 10) || 0;
 
 		// Set crawled data to active village
-		var activeVillage = GetActiveVillage();
 		activeVillage.Loyalty = loyalty;
-		UpdateActiveVillage(activeVillage);
 
-		DLog("Services: Set Village [" + activeVillage.VID + "] loyalty to [" + activeVillage.Loyalty + "]");
+		DLog("Set Village [" + activeVillage.VID + "] loyalty to [" + activeVillage.Loyalty + "]", "Services");
 	};
 
-	// <summary>
-	// Crawls Village list data
-	// </summary>
 	var CrawlVillageList = function () {
-		Log("Services: Crawling Villages list...");
+		// <summary>
+		// Crawls Village list data
+		// </summary>
+		
+		Log("Crawling Villages list...", "Services");
 
 		// Go through all available entryes in village list
-		$("#villageList .entry").each(function (index, obj) {
+		$("#villageList .entry").each(function () {
 			// Gets basic village values
 			var villageName = $(" > a", this).text();
 			var villageID = parseInt($(" > a", this).attr("href").replace("?newdid=", ""), 10) || 0;
-			var isVillageActive = $(this).is(".active");
-
-			DLog("Services: Found village \"" + villageName + "\" [" + villageID + "]");
+			var isVillageActive = $(this).hasClass("active");
+			
+			DLog("Found village \"" + villageName + "\" [" + villageID + "]", "Services");
 
 			// Try to update village data
 			var wasUpdated = false;
@@ -230,10 +234,10 @@ function Services() {
 					// Check if this is active village
 					if (obj.IsActive) {
 						ActiveVillageIndex = index;
-						DLog("Services: Set ActiveVilageIndex to [" + ActiveVillageIndex + "]");
+						DLog("Set ActiveVilageIndex to [" + ActiveVillageIndex + "]", "Services");
 					}
 
-					DLog("Services: Village [" + villageID + "] updated...");
+					DLog("Village [" + villageID + "] updated...", "Services");
 					break;
 				}
 			}
@@ -248,30 +252,89 @@ function Services() {
 				// Check if this is active village
 				if (newVillage.IsActive) {
 					ActiveVillageIndex = ActiveProfile.Villages.length;
-					DLog("Service: Set ActiveVilageIndex to [" + ActiveVillageIndex + "]");
+					DLog("Set ActiveVilageIndex to [" + ActiveVillageIndex + "]", "Services");
 				}
 
 				ActiveProfile.Villages[ActiveProfile.Villages.length] = newVillage;
 
-				DLog("Services: New Village [" + villageID + "] registered!");
+				Log("New Village [" + villageID + "] registered!", "Services");
 			}
 		});
 	};
 
-	// <summary>
-	// Crawls for new user reports
-	// </summary>
 	var CrawlMessages = function () {
-		var currentReportsCount = parseInt($(".messages .bubble-content").text(), 10) || 0;
+		// <summary>
+		// Crawls for new user reports
+		// </summary>
+
+		Log("Crawling messages...", "Services");
+		
+		var currentReportsCount = parseInt($(".messages > div.bubble > .bubble-content").text(), 10) || 0;
+		ActiveProfile.Messages.UnreadCount = currentReportsCount;
 
 		// Check if on Messages page
 		if (MatchPages([Enums.TravianPages.Messages])) {
-			// TODO Implement
-		}
-		else {
-			ActiveProfile.Messages.UnreadCount = currentReportsCount;
-		}
+			// Check if on 'Inbox' tab
+			if ($(".messages .container.active a[href*='t=0']").length ||
+				$(".messages .container.active a[href*='t=2']").length) {
+				DLog("On messages page. Crawling message details.", "Services");
 
+				if ($(".paper").length) {
+					// We are in write/read mode
+					var messageID = $(".paper #answer input:eq(0)").attr("value");
+					var messageContent = $("#message").html();
+
+					// Check if message is already crawled
+					if (ActiveProfile.Messages.Inbox[messageID]) {
+						ActiveProfile.Messages.Inbox[messageID].Content = messageContent;
+					} else if (ActiveProfile.Messages.Sent[messageID]) {
+						ActiveProfile.Messages.Sent[messageID].Content = messageContent;
+					} else {
+						Warn("No message with same ID [" + messageID + "]", "Services");
+						return;
+					}
+					
+					DLog("Message [" + messageID + "] content set.", "Services");
+				} else {
+					// Go throigh all message lines and crawl data
+					$(".inbox > tbody > tr").each(function() {
+						var messageElement = $(this);
+
+						// Get message details
+						var message = new Models.Message();
+
+						// Get message subject and ID
+						var messageLink = $(".subject a", messageElement);
+						message.MID = parseInt(messageLink.attr("href").replace("nachrichten.php?id=", "")).toString();
+						message.IsRead = $(".subject img", messageElement).hasClass("messageStatusRead");
+						message.Subject = $.trim(messageLink.text());
+
+						// Get message sender
+						var sender = $(".send a", messageElement);
+						message.From = sender.text();
+						message.FromUID = sender.attr("href").replace("spieler.php?uid=", "");
+
+						// Get message date
+						var date = $(".dat", messageElement).text();
+						var dateSplit = date.split("/");
+						if (dateSplit.length < 3) {
+							// Message arrived today
+							var dateNow = new Date();
+							var timeSplit = date.split(" ")[1].split(":");
+							message.Date = (new Date(dateNow.getYear() + 1900, dateNow.getMonth(), dateNow.getDate(), timeSplit[0], timeSplit[1])).getTime();
+						} else {
+							// Message arrives some day before today
+							var timeSplit = dateSplit[2].split(" ")[1].split(":");
+							message.Date = (new Date("20" + dateSplit[0], dateSplit[1], parseInt(dateSplit[2], 10) || 0, timeSplit[0], timeSplit[1])).getTime();
+						}
+
+						if ($(".messages .container.active a[href*='t=0']").length)
+							ActiveProfile.Messages.Inbox[message.MID] = message;
+						else ActiveProfile.Messages.Sent[message.MID] = message;
+					});
+				}
+			}
+		}
 		DLog("Services: CrawlReports found [" + currentReportsCount + "] new messages");
 	};
 
@@ -293,23 +356,6 @@ function Services() {
 	};
 	
 	// <summary>
-	// Crawls user population
-	// </summary>
-	var CrawlPopulation = function () {
-		// Check if we are looking at current user profile
-		var detailsUID = ActivePageQuery.replace("?uid=", "");
-		if (ActiveProfile.UID != detailsUID) {
-			DLog("Not in current user profile details", "Services");
-			return;
-		}
-
-		var pop =  parseInt($("#details tbody tr").eq(4).children().last().text(), 10) || 0;
-		ActiveProfile.Population = pop;
-
-		DLog("Services: Population of active profile is [" + ActiveProfile.Population + "]");
-	};
-	
-	// <summary>
 	// Crawls for villages details
 	// </summary>
 	var CrawlVillagesDetails = function () {
@@ -319,8 +365,8 @@ function Services() {
 		
 			// Crawl IsMainCity
 			var checkMainCity = ($(".name", village).has(".mainVillage").length ? true : false);
-			ActiveProfile.Villages[index].IsMainCity = checkMainCity
-			DLog("Services: "+obj.Name+" "+(checkMainCity ? "is" : "isn't")+" main city");
+			ActiveProfile.Villages[index].IsMainCity = checkMainCity;
+			DLog("Services: " + obj.Name + " " + (checkMainCity ? "is" : "isn't") + " main city");
 			
 			// Crawl village population
 			var villagePop =  parseInt($(".inhabitants", village).text(), 10) || 0;
@@ -347,107 +393,170 @@ function Services() {
 	var CrawlVillageType = function () {
 		var currentVillageType = $("#village_map").attr("class") || "f3";
 	
-		var activeVillage = GetActiveVillage();
 		activeVillage.VillageOut.Type = currentVillageType;
-		UpdateActiveVillage(activeVillage);
 
-		DLog("Services: CrawlVillageType is [" + currentVillageType + "]");
+		DLog("CrawlVillageType is [" + currentVillageType + "]", "Services");
 	};
 
-	// <summary>
-	// Sets variable to true if user is loged in
-	// </summary>
+	var CrawlVillageFields = function () {
+		/// <summary>
+		/// Crawls field levels
+		/// </summary>
+
+		Log("Crawling VillageOut fields", "Services");
+
+		var activeVillage = GetActiveVillage();
+		$("#village_map .level").each(function (fieldIndex, fieldObj) {
+			var field = $(fieldObj);
+			var level = parseInt(field.text(), 10) || 0;
+			activeVillage.VillageOut.Levels[fieldIndex] = level;
+			
+			DLog("VillageOut Field(" + fieldIndex + ") at lvl." + level, "Services");
+		});
+	};
+
+	var CrawlVillageBuildings = function() {
+		// TODO Implement
+	};
+
+	var CrawlVillageTasks = function(type) {
+		// TODO Implement
+	};
+
+	var CrawlVillageBuildTasks = function () {
+		// TODO Implement
+	};
+	
+	var CrawlVillageMovements = function () {
+		// TODO Implement
+	};
+	
+	var CrawlVillageTotalTroops = function () {
+		// TODO Implement
+	};
+
 	var ProcessIsLogedIn = function () {
+		// <summary>
+		// Sets variable to true if user is loged in
+		// </summary>
+
 		IsLogedIn = !IsNullOrEmpty($(".signLink"));
 
-		if (IsLogedIn) Log("Services: User is loged in...");
-		else Warn("Services: User isn't loged in!");
+		if (IsLogedIn) Log("User is loged in...", "Services");
+		else Warn("User isn't loged in!", "Services");
 	};
 
-	// <summary>
-	// Sets profile object to AvailableProfiles
-	// </summary>
 	var ProcessProfiles = function () {
+		// <summary>
+		// Sets profile object to AvailableProfiles
+		// </summary>
+
+		Log("Processing profile...", "Services");
+
 		// Can't get active user if user isn't loged in
 		if (!IsLogedIn) {
+			var profileIndexToActivate = -1;
+
+			// Check if more than one profile belongs to current server address
 			for (var index = 0, cache = AvailableProfiles.length; index < cache; index++) {
-				var obj = AvailableProfiles[index];
-				
-				if (obj.ServerAddress == ActiveServerAddress) {
-					Log("Services: Aproximated profile selected [" + obj.Name + "]");
-					ActiveProfile = obj;
-					break;
+				if (AvailableProfiles[index].ServerAddress == ActiveServerAddress) {
+					DLog("Found profile at [" + index + "]", "Services");
+					if (profileIndexToActivate !== -1) {
+						Warn("More than one profile is available for current server! Can't select profile automatically.", "Services");
+						return;
+					}
+					profileIndexToActivate = index;
 				}
 			}
+			
+			// Check if any profiles were found
+			if (profileIndexToActivate === -1) {
+				Warn("No profile found for current server! Please login or create profile manualy.", "Services");
+				return;
+			}
+
+			// Set active profile to matching profile
+			ActiveProfile = AvailableProfiles[index];
 		} else {
 			// Gets active profile UID
 			var profileLinkElement = $(".sideInfoPlayer .signLink").attr("href");
-			var profileUIDString = profileLinkElement.replace("spieler.php?uid=", "");
-			var activeProfileUID = parseInt(profileUIDString, 10);
+			var activeProfileUID = parseInt(profileLinkElement.replace("spieler.php?uid=", ""), 10) || 0;
+			var activeProfileName = $(".sideInfoPlayer .signLink span").text();
+			var activeProfileTribeID = $(".sideInfoPlayer img").attr("class").replace("nationBig nationBig", "");
 
-			DLog("Services: Active profile UID is [" + activeProfileUID + "]");
+			DLog("Active profile UID is [" + activeProfileUID + "]", "Services");
 
 			// Search for matching profile
 			for (var index = 0, cache = AvailableProfiles.length; index < cache; index++) {
 				var obj = AvailableProfiles[index];
 				
-				// Match using User ID and Server Address
+				// Match using Server Address and UID or name
 				if (obj.ServerAddress == ActiveServerAddress &&
-					(obj.UID == activeProfileUID || obj.Name == $(".sideInfoPlayer .signLink span").text())) {
+					(obj.UID == activeProfileUID || obj.Name == activeProfileName)) {
 					// Set Active Profile
-					Log("Services: Active profile is found!");
+					Log("Active profile is found!", "Services");
 					ActiveProfile = obj;
 
 					break;
 				}
 			}
 
-			// Creates new profile if matching profile doesn't exist
-			if (IsNullOrEmpty(ActiveProfile) || 
-				ActiveProfile.UID == "unknown" ||
-				ActiveProfile.Name == "unknown" ||
-				ActiveProfile.Tribe == "unknown" ||
-				ActiveProfile.ServerAddress != ActiveServerAddress) {
-				Log("Services: Creating/Updating profile...");
+			DLog("Updating current active profile...", "Services");
 
-				var tribeElementClass = $(".sideInfoPlayer img").attr("class");
-				var tribeID = tribeElementClass.replace("nationBig nationBig", "");
+			// Update profile data
+			ActiveProfile = IsNullOrEmpty(ActiveProfile) ? new Models.Profile() : ActiveProfile;
+			ActiveProfile.ServerAddress = ActiveServerAddress;
+			ActiveProfile.Name = activeProfileName;
+			ActiveProfile.UID = activeProfileUID;
+			ActiveProfile.Tribe = Enums.Tribes[activeProfileTribeID];
 
-				ActiveProfile = IsNullOrEmpty(ActiveProfile) ? new Models.Profile() : ActiveProfile;
-				ActiveProfile.ServerAddress = ActiveServerAddress;
-				ActiveProfile.Name = $(".sideInfoPlayer span").text();
-				ActiveProfile.UID = activeProfileUID;
-				ActiveProfile.Tribe = Enums.Tribes[tribeID];
-				
-
-				DLog("Services: New profile created \"" + ActiveProfile.Name + "\" [" + ActiveProfile.UID + "] on server [" + ActiveProfile.ServerAddress + "]");
-			}
+			DLog("Profile updated!", "Services");
 		}
 	};
 
-	// <summary>
-	// Updates AvailableProfiles list with new profile data
-	// </summary>
-	// <param name="newProfile">Profile data for update</param>
-	var UpdateProfile = function (newProfile) {
-		if (!IsLogedIn) return;
+	var GetActiveVillage = function () {
+		// <summary>
+		// Gets currently active village
+		// </summary>
+		// <returns>Models.Village object representing currently active village</returns>
+		
+		return ActiveProfile.Villages[ActiveVillageIndex];
+	};
 
-		Log("Services: Saving profile...");
+	var SaveActiveVillage = function () {
+		// <summary>
+		// Updates active village
+		// </summary>
+		
+		ActiveProfile.Villages[ActiveVillageIndex] = activeVillage;
+	};
+	
+	var SaveProfileChanges = function () {
+		// <summary>
+		// Updates AvailableProfiles list with new profile data
+		// </summary>
+
+		Log("Saving profile...", "Services");
+
+		if (!IsLogedIn) {
+			DLog("Can't save profile when user isn't loged in!", "Services");
+			return;
+		}
+
+		var wasUpdated = false;
 
 		// Search for profile to update
-		var wasUpdated = false;
 		for (var index = 0, cache = AvailableProfiles.length; index < cache; index++) {
 			var obj = AvailableProfiles[index];
 
 			// Check if current profile matched active profile
-			if (obj.ServerAddress == ActiveProfile.ServerAddress &&
-				obj.UID == ActiveProfile.UID) {
+			if (obj.ServerAddress == ActiveProfile.ServerAddress && obj.UID == ActiveProfile.UID) {
 				// Replace old data with new data
 				AvailableProfiles[index] = ActiveProfile;
 
 				wasUpdated = true;
 
-				DLog("Services: Profile saved [" + obj.UID + "]");
+				Log("Profile saved [" + obj.UID + "]", "Services");
 
 				break;
 			}
@@ -457,27 +566,12 @@ function Services() {
 		// Adds new profile to the end of list
 		if (!wasUpdated) {
 			AvailableProfiles[AvailableProfiles.length] = ActiveProfile;
+
+			Log("New Profile[" + ActiveProfile.UID + "] saved!", "Services");
 		}
 
 		// Sends request to save profiles list so that other plugins can use it
-		var updateProfilesRequest = new Request("Background", "Data", "Profiles", { Type: "set", Value: AvailableProfiles });
-		updateProfilesRequest.Send();
-	};
-
-	// <summary>
-	// Gets currently active village
-	// </summary>
-	// <returns>Models.Village object representing currently active village</returns>
-	var GetActiveVillage = function () {
-		return ActiveProfile.Villages[ActiveVillageIndex];
-	};
-
-	// <summary>
-	// Updates active village
-	// </summary>
-	// <param name="updatedVillage">Update village</param>
-	var UpdateActiveVillage = function (updatedVillage) {
-		ActiveProfile.Villages[ActiveVillageIndex] = updatedVillage;
+		(new Request("Background", "Data", "Profiles", { Type: "set", Value: AvailableProfiles })).Send();
 	};
 }
 
@@ -486,7 +580,7 @@ var ServicesMetadata = {
 	Name: "Services",
 	Alias: "Services",
 	Category: "Core",
-	Version: "0.0.1.13",
+	Version: "0.0.2.0",
 	Description: "Takes care of all data retrieving and is requeired for all plugins",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

@@ -79,8 +79,7 @@ Models.Village = function () {
 
 		Production: [0, 0, 0, 0],
 
-		TotalCropProduction: 0,
-		Consumption: 0
+		FreeCrop: 0
 	};
 
 	// Note: On dorf1.php page
@@ -148,7 +147,10 @@ Models.Profile = function () {
 Models.MessagesCollection = function () {
 	this.UnreadCount = 0;
 
-	this.Unread = new Array();
+	this.Inbox = {};
+	this.Sent = {};
+	this.Draft = new Array();
+	this.Archive = {};
 };
 
 Models.Message = function () {
@@ -156,8 +158,9 @@ Models.Message = function () {
 	this.MID = "unknown";
 	this.Subject = "unknown";
 	this.From = "unknown";
-	//this.FromUID = 0;
+	this.FromUID = 0;
 	this.Date = "unknown";
+	this.Content = "";
 };
 
 Models.ReportsCollection = function () {

@@ -55,6 +55,12 @@ var Enums = {
 		Help: "/help.php"
 	},
 	
+	TaskTypes: {
+		Build: "",
+		Movements: "",
+		TotalTroops: ""
+	},
+	
 	/**************************************************************************
 	 *
 	 * Village out filed IDs

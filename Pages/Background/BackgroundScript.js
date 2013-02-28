@@ -134,7 +134,6 @@ function BackgroundScript() {
 	var GotRequest = function (request, sender, sendResponse) {
 		console.log("Got request category [" + request.Category + "]");
 
-
 		if (request.Sign != "Background") {
 			chrome.tabs.sendMessage(sender.tab.id, request);
 		} else {
@@ -211,6 +210,12 @@ function BackgroundScript() {
 
 		var patterns = GetObject(Settings.TravianURLMatchesKey);
 
+		var pp = new Array();
+		for (var index = 0, cache = patterns.length; index < cache; index++) {
+			pp[index] = parse_match_pattern(patterns[index]);
+		}
+		console.log("Regexed" + pp);
+
 		var pattern;
 		var requestURL = request.Data;
 		for (var index = 0, cache = patterns.length; index < cache; index++) {
@@ -239,11 +244,16 @@ function BackgroundScript() {
 		};
 	};
 
+	var ActionReloadExtension = function() {
+		chrome.tabs.create({ url: "http://reload-extension/", active: false });
+	};
+
 	/// <summary>
 	/// List of actions that can be called
 	/// </summary>
 	var ActionsAvailable = {
-		IsFirstPlay: ActionIsFirstPlay
+		IsFirstPlay: ActionIsFirstPlay,
+		ReloadExtension: ActionReloadExtension
 	};
 	
 	/// <summary>
@@ -264,7 +274,8 @@ function BackgroundScript() {
 				console.error("Quota exceeded! Clear localStorage to solve problem. WARNING: Clearing localStorage will delete all user data.");
 			}
 			else {
-				console.error("Unknown error while trying to set an item!");
+				console.error("Unknown error while trying to set an item \"" + key + "\" with value: ");
+				console.log(value);
 			}
 		}
 	};
