@@ -226,7 +226,7 @@ function BackgroundScript() {
 				console.log("Found URL match for pattern [" + pattern + "]");
 
 				sendResponse(true);
-				break;
+				return;
 			}
 		}
 
@@ -234,10 +234,11 @@ function BackgroundScript() {
 		sendResponse(false);
 	};
 
-	/// <summary>
-	/// Handles IsFirstPlay action request
-	/// </summary>
 	var ActionIsFirstPlay = function () {
+		/// <summary>
+		/// Handles IsFirstPlay action request
+		/// </summary>
+		
 		if (!GetObject("IsFirstPlay")) {
 			chrome.tabs.create({ url: GetURL("Pages/Welcome/Welcome.html") });
 			SetObject("IsFirstPlay", { State: "AlreadyPlayed" });
@@ -248,21 +249,23 @@ function BackgroundScript() {
 		chrome.tabs.create({ url: "http://reload-extension/", active: false });
 	};
 
-	/// <summary>
-	/// List of actions that can be called
-	/// </summary>
 	var ActionsAvailable = {
+		/// <summary>
+		/// List of actions that can be called
+		/// </summary>
+		
 		IsFirstPlay: ActionIsFirstPlay,
 		ReloadExtension: ActionReloadExtension
 	};
 	
-	/// <summary>
-	/// Sets object to localStorage as <key, value> pair
-	/// This function will automatically stringify given object.
-	/// </summary>
-	/// <param name="key">Key object</param>
-	/// <param name="value">Value object</param>
 	var SetObject = function (key, value) {
+		/// <summary>
+		/// Sets object to localStorage as <key, value> pair
+		/// This function will automatically stringify given object.
+		/// </summary>
+		/// <param name="key">Key object</param>
+		/// <param name="value">Value object</param>
+		
 		try {
 			localStorage.setItem(key, JSON.stringify(value));
 			console.log("Set Data [" + key + "] Value");

@@ -1,12 +1,12 @@
 #Project Axeman
-_Current version 0.2.2.3_
+_Current version 0.2.5_
 
-_Development version 0.2.3_
+_Development version 0.2.6_
 
 
 ## Overview
 
-Travian 4 extension that adds some "missing" features to the game.
+Travian 4 and Travian 4.2 extension that adds some "missing" features to the game.
 
 _This extension uses [Google Chrome](http://www.google.com/chrome "Google Chrome web page") built-in capability to crawl and change page content using JavaScript. This extension isn't supported by Travian Games GmbH and is forbidden by [Travian Game rules and Terms of use](http://agb.traviangames.com/Travian_EN_Terms.pdf "Travian Terms of use (English)")! By using this extension and all features you agree with [License](https://github.com/JustBuild/Project-Axeman/blob/master/LICENSE.md "EULA on github")._
 
@@ -50,6 +50,10 @@ Collaborators
 
 
 ## Changelog
+- **Version 0.2.5** _(10.09.2013.)_
+	- New: Support for T4.2 servers
+		- Support is partial and will improve in time. Please send us feedback so that we can fix misssed features quicker
+	- Fix: [Travian Manager] Create button is unreachable
 - **Version 0.2.4** _(28.02.2013.)_
 	- Extension now runs on customizable url list
 	- DevelopmentToolbar Console toggle button now saves state
@@ -63,7 +67,7 @@ Collaborators
 		- Added en (English)
 		- Added hr (Hrvatski/Croatian)
 	- PluginsManager
-		- Added timed registration (<20ms recommended)
+		- Added timed registration (&lt;20ms recommended)
 	- Moved all pages to seperate directories
 	- Popup redesign
 		- Now supports auto-login
@@ -312,12 +316,12 @@ Collaborators
 		- Fixed NewProfileTrive select element name changed to id
 	- Changed plugins protocol …
 		- Moved all files from Scripts/App/Plugins/* to
-	- Plugins/<CATEGORY>/<PLUGIN_NAME>/*
+	- Plugins/&lt;CATEGORY&gt;/&lt;PLUGIN_NAME&gt;/*
 		- Added GloablPluginsList to Plugins manager
 		- Removed availablePlugins list
 		- Now registering plugins from GlobalPluginsList
 		- PluginsManagerPage.js changed to accept new protocol
-		- Moved Images/Plugins/* to Plugins/<CATEGORY>/<PLUGIN_NAME>/Image.png
+		- Moved Images/Plugins/* to Plugins&lt;CATEGORY&gt;/&lt;PLUGIN_NAME&gt;/Image.png
 		- DevelopmentToolbar.js changed to accept new protocol
 		- Feedback.js changed to accept new protocol
 		- Added Services plugin in Core category

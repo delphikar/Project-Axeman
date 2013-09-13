@@ -24,9 +24,10 @@ function PopupPage() {
 
 
 	this.Initialize = function () {
-		$("#Plugins").click(function () {
-			chrome.tabs.create({ url: GetURL("Pages/PluginsManager/PluginsManager.html"), active: true });
-		});
+		$("#Plugins").attr("href", GetURL("Pages/PluginsManager/PluginsManager.html"));
+		//$("#Plugins").click(function () {
+		//	chrome.tabs.create({ url: GetURL("Pages/PluginsManager/PluginsManager.html"), active: true });
+		//});
 
 		InitializeActiveButton();
 		InitializeModal();

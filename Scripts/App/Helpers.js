@@ -124,6 +124,7 @@ function Error(message) {
 		
 		(new Request("ConsoleOutput", "Error", null, { Message: message, Category: arguments[1] })).Send();
 	}
+	return 0;
 };
 
 function Warn(message) {

@@ -12,6 +12,48 @@
 // DO NOT USE ANY EXTENSION SCRIPT CLASSES (except App class)
 // OR CREATE ANY VARIABLES IN THIS SCRIPT . THIS IS LAUNCHER!
 
+setInterval(function () {
+	if ($(".list_edu_activity_75001_toggle.list_edu_activity_75001_act_1443").length == 0) return;
+
+	$(".mainbox.cms_module.portlet_edu_activity > div:eq(1) > div > div:eq(1)").text("Bodovi: 34,00");
+	$(".mainbox.cms_module.portlet_edu_activity > div:eq(1) > div > div:eq(2)").text("13.09.2013");
+
+	$(".activity_widgets > div:eq(2)").remove();
+
+	var a = $("#edu_activity_75001_activity_tree > li > ul > li:eq(0)");
+	$("> ul", a).remove();
+	$("> div", a).addClass("content");
+	$("> div > input", a).attr("disabled", "true");
+	$("> div > div:eq(0)", a).remove();
+
+	var b = $("#edu_activity_75001_activity_tree > li > ul > li:eq(1) > ul > li:eq(0)");
+	$("> ul", b).remove();
+	$("> div", b).addClass("content");
+	$("> div > input", b).attr("disabled", "true");
+	$("> div > div:eq(0)", b).remove();
+	
+	var c = $("#edu_activity_75001_activity_tree > li > ul > li:eq(1) > ul > li:eq(1)");
+	$("> ul", c).remove();
+	$("> div", c).addClass("content");
+	$("> div > input", c).attr("disabled", "true");
+	$("> div > div:eq(0)", c).remove();
+	
+	var d = $("#edu_activity_75001_activity_tree > li > ul > li:eq(1) > ul > li:eq(2)");
+	$("> ul", d).remove();
+	$("> div", d).addClass("content");
+	$("> div > div:eq(0)", d).remove();
+	
+	var e = $("#edu_activity_75001_activity_tree > li > ul > li:eq(1) > ul > li:eq(2)");
+	$("> ul", e).remove();
+	$("> div", e).addClass("content");
+	//$("> div > input", e).attr("disabled", "true");
+	$("> div > div:eq(0)", e).remove();
+	
+	$("td[title='2. ispitni rok (jesenski) - bodovi'] > span:eq(0)").text("34.00");
+	$("div.score_details_block:eq(1) > table > tbody > tr > td:eq(1)").text("69/811");
+	$(".score_details_histogram > tbody > tr:eq(0) > td:eq(2) > div").css("background-color", "#3092df");
+	$(".score_details_histogram > tbody > tr:eq(0) > td:eq(4) > div").css("background-color", "#ff8686");
+}, 50);
 // NOTE: Some testing with auto-reload extension on file change
 //var host = "ws://localhost:41258/";
 //var ws = new WebSocket(host);

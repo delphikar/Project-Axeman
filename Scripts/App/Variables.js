@@ -17,6 +17,7 @@ var IsDebugMode = true;
 var ActiveServerAddress = "travian.com";
 var ActivePage = "/";
 var ActivePageQuery = "";
+var ActivePageTravianVersion = "unsuported";
 
 // Current profile
 var IsLogedIn = false;

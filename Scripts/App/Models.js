@@ -130,6 +130,7 @@ Models.Profile = function () {
 
 	//Game variables
 	this.ServerAddress = "unknown";
+	this.ServerVersion = "unsuported";
 
 	this.Name = "unknown";
 	this.UID = "unknown";

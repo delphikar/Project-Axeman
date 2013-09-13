@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<title>Game launcher</title>
+		<title>Travian Manager</title>
 
 		<!-- jQuery scripts -->
 		<link type="text/css" href="../jQueryUIStyle.css" rel="stylesheet" />
@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="../../Scripts/App/Variables.js"></script>
 		<script type="text/javascript" src="../../Scripts/App/Helpers.js"></script>
 		<script type="text/javascript" src="../../Scripts/App/Models.js"></script>
+		<script type="text/javascript" src="../../Scripts/App/RequestManager.js"></script>
 
 		<!-- GameLaucher script -->
 		<script type="text/javascript" src="PopupScript.js"></script>
@@ -42,7 +43,7 @@
 			</div>
 			<div class="PASectionSeparator"></div>
 			<div class="PASection">
-				<button id="Plugins" class="PAButtonLight" data-locale="popup_Options" />
+				<a id="Plugins" class="PAButtonLight" data-locale="popup_Options" href="#" target="_blank" />
 				<button id="AddNewProfile" class="PAButtonLight ButtonRight" data-locale="popup_Add" />
 			</div>
 		</div>
