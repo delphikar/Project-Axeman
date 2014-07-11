@@ -36,7 +36,7 @@ function ResourceSender() {
 			DLog("Appending send resource value...");
 			var values = resourceValues.split(",");
 			$("#send_select input[id*='r']").each(function(index) {
-				$(this).val(values[index]);
+				$(this).val(values[index].replace("-", ""));
 			});
 
 			Log("Send request processed.");
@@ -46,7 +46,7 @@ function ResourceSender() {
 		if (ActiveProfile.Villages.length > 1) {
 			$(".showCosts").each(function () {
 				// Check if there is any negative costs in current container
-				if ($(".ResourceCalculatorBuildCost.negative", $(this)).length) {
+				if ($(".ResourceCalculatorBuildCost.negative", $(this)).length && !$(".ResourceCalculatorBuildCost.upgradeStorage", $(this)).length) {
 					// Retrieve costs
 					var costs = $(".ResourceCalculatorBuildCost", $(this));
 					var r1 = parseInt($(costs[0]).text().replace("(", ""), 10) || 0;
@@ -99,7 +99,10 @@ function ResourceSender() {
 				"data-r3": amountR3,
 				"data-r4": amountR4
 			})
-			.css("margin-left", "12px")
+			.css({
+				"margin-left": "12px",
+				"display": "none"
+			})
 			.html(text));
 	};
 
@@ -155,6 +158,7 @@ function ResourceSender() {
 			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, r1, r2, r3, r4);
 			
 			sendButton.attr("href", selectedVillageSendLink);
+			sendButton.show();
 		});
 
 		// Append selector
@@ -169,7 +173,7 @@ var DevelopmentMetadata = {
 	Name: "ResourceSender",
 	Alias: "Resource Sender",
 	Category: "Economy",
-	Version: "0.0.1.0",
+	Version: "0.1.0.0",
 	Description: "Sends missing resource amount from any village shortcut",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
@@ -180,7 +184,7 @@ var DevelopmentMetadata = {
 	},
 
 	Flags: {
-		Alpha: true
+		Beta: true
 	},
 
 	Class: ResourceSender

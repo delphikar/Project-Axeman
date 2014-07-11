@@ -81,6 +81,7 @@ function ResourceCalculator() {
 						"color": color,
 						"text-align": "right"
 					});
+					if (storage < res) costElement.addClass("upgradeStorage");
 					if (diff < 0) costElement.addClass("negative");
 					costElement.html("(" + diff + ")");
 					$(this).append(costElement);
