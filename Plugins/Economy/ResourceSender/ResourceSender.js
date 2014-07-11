@@ -141,12 +141,14 @@ function ResourceSender() {
 
 		// Add village names to list
 		$.each(villages, function (current, value) {
+			console.log(current);
+			console.log(value);
 			selectInput.append("<option data-villageId='" + value.VID + "'>" + value.Name + "</option>");
 		});
 
 		// Update link if selection changes
 		$(selectInput).change(function () {
-			var selectedVillageId = $("select options:selected").data("villageid");
+			var selectedVillageId = $("option:selected", $(this)).data("villageid");
 			var selectInputSendButtonId = $(this).data("sendbuttonid");
 			var sendButton = $("#" + selectInputSendButtonId);
 
@@ -173,7 +175,7 @@ var DevelopmentMetadata = {
 	Name: "ResourceSender",
 	Alias: "Resource Sender",
 	Category: "Economy",
-	Version: "0.1.0.0",
+	Version: "0.1.0.1",
 	Description: "Sends missing resource amount from any village shortcut",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
