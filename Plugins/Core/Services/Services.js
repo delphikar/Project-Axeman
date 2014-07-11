@@ -541,7 +541,7 @@ function Services() {
 
 		// Tryes to get active profile UID, name and tribe and match them to available profile
 		try {
-			DLog("Retrieving active profile info...");
+			DLog("Retrieving active profile info...", "Services");
 			activeProfileUID = GetActiveProfileUID();
 			activeProfileName = GetActiveProfileName();
 			activeProfileTribeID = GetActiveProfileTribe();

@@ -43,9 +43,6 @@ function App() {
 		// Initiates loading
 		this.Load();
 
-		// Send request to check if this is first play
-		(new Request("Background", "Action", "IsFirstPlay")).Send();
-
 		if (!IsDevelopmentMode) {
 			// Google analytics
 			var _gaq = _gaq || [];

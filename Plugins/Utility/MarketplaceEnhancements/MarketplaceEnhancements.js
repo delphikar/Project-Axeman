@@ -398,6 +398,8 @@ function MarketplaceEnhancements() {
 	};
 
 	var ValidateTransportShortcuts = function () {
+		// TODO Comment
+		
 		var inputElement = $(this);
 		var currentAmount = inputElement.spinner("value");
 		var shortcuts = $(".PAMEShortcut", inputElement.parent().parent().parent());

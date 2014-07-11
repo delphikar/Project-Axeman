@@ -118,11 +118,13 @@ function Error(message) {
 	/// </summary>
 	/// <param name="message">Message to write</param>
 
+	if (message === undefined) return;
+
 	if (IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
 		console.error(category + message);
 		
-		(new Request("ConsoleOutput", "Error", null, { Message: message, Category: arguments[1] })).Send();
+		//(new Request("ConsoleOutput", "Error", null, { Message: message, Category: arguments[1] })).Send();
 	}
 	return 0;
 };
