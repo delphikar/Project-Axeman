@@ -145,6 +145,7 @@ function Services() {
 		}
 		
 		if ($(".sideInfoPlayer .signLink").length) ActivePageTravianVersion = "4";
+		else if ($("#sidebarBoxQuestachievements").length) ActivePageTravianVersion = "4.4";
 		else if ($(".sidebarBoxInnerBox .heroImage").length) ActivePageTravianVersion = "4.2";
 
 		DLog("Travian version: " + ActivePageTravianVersion, "Services");
@@ -153,7 +154,7 @@ function Services() {
 	var CrawlStorage = function () {
 		/// <summary>
 		/// Crawls for active village storages and crop production/consumption
-		/// Supported versions: 4, 4.2
+		/// Supported versions: 4, 4.2, 4.4
 		/// </summary>
 
 		Log("Crawling village storage...", "Services");
@@ -175,7 +176,7 @@ function Services() {
 				}
 			});
 		}
-		else if (ActivePageTravianVersion === "4.2") {
+		else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4") {
 			var warehouseSize = parseInt($("#stockBarWarehouse").text().replace(",", "").replace(" ", "").replace(".", ""), 10) || 0;
 			var granarySize = parseInt($("#stockBarGranary").text().replace(",", "").replace(" ", "").replace(".", ""), 10) || 0;
 			
@@ -193,7 +194,7 @@ function Services() {
 	var CrawlProduction = function () {
 		/// <summary>
 		/// Crawls for active village production from production table (not from script) 
-		/// Supported versions: 4, 4.2
+		/// Supported versions: 4, 4.2, 4.4 
 		/// </summary>
 
 		Log("Crawling village production...", "Services");
@@ -219,7 +220,7 @@ function Services() {
 	var CrawlLoyalty = function () {
 		/// <summary>
 		/// Crawls for active village loyalty
-		/// Supported versions: 4, 4.2
+		/// Supported versions: 4, 4.2, 4.4
 		/// </summary>
 		
 		Log("Crawling village loyalty...", "Services");
@@ -230,7 +231,7 @@ function Services() {
 			
 			// Remove 'Loyalty' word parse right part to number
 			activeVillage.Loyalty = parseInt(loyaltyText.split(":")[1], 10) || 0;
-		} else if (ActivePageTravianVersion === "4.2")
+		} else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4")
 			activeVillage.Loyalty = parseInt($("#sidebarBoxActiveVillage div.loyalty.medium > span").text().replace(/[^\d]/g, ""), 10) || 0;
 		else throw ("Unsuported travian version");
 
@@ -297,7 +298,7 @@ function Services() {
 	var GetVillagesListData = function () {
 		/// <summary>
 		/// Generates list of basic data for villages in the sidebar list
-		/// Suported versions: 4, 4.2
+		/// Suported versions: 4, 4.2, 4.4
 		/// </summary>
 		/// <returns type="Array[{ name: string, id: integer, isActive: boolean }]">Returns array of retrieved data from villages list</returns>
 
@@ -312,7 +313,7 @@ function Services() {
 					isActive: $(this).hasClass("active")
 				});
 			});
-		} else if (ActivePageTravianVersion === "4.2") {
+		} else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4") {
 			$("#sidebarBoxVillagelist div.content > ul > li").each(function () {
 				data.push({
 					name: $("> a > div", this).text().trim(),
@@ -634,14 +635,14 @@ function Services() {
 	var GetActiveProfileUID = function() {
 		/// <summary>
 		/// Matches element that contains profile UID and retrieves value
-		/// Supported versions: 4, 4.2
+		/// Supported versions: 4, 4.2, 4.4
 		/// </summary>
 		/// <returns type="integer">Returns UID of active profile</returns>
 
 		if (ActivePageTravianVersion === "4") {
 			var profileLinkElement = $(".sideInfoPlayer .signLink").attr("src");
 			return parseInt(profileLinkElement.replace("spieler.php?uid=", ""), 10) || 0;
-		} else if (ActivePageTravianVersion == "4.2") {
+		} else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4") {
 			var imageSource = $(".sidebarBoxInnerBox .heroImage").attr("src");
 			var start = imageSource.indexOf("uid");
 			var end = imageSource.indexOf("&");
@@ -652,13 +653,13 @@ function Services() {
 	var GetActiveProfileName = function () {
 		/// <summary>
 		/// Matches element that contains profile name and retrieves value
-		/// Suported versions: 4, 4.2
+		/// Suported versions: 4, 4.2, 4.4
 		/// </summary>
 		/// <returns type="string">Returns active profile name</returns>
 
 		if (ActivePageTravianVersion === "4") {
 			return $(".sideInfoPlayer .signLink span").text().trim();
-		} else if (ActivePageTravianVersion === "4.2") {
+		} else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4") {
 			return $(".sidebarBoxInnerBox .playerName").text().trim();
 		} else throw("Unsuported travian version");
 	};
@@ -666,13 +667,13 @@ function Services() {
 	var GetActiveProfileTribe = function () {
 		/// <summary>
 		/// Matches element that contains currently active profile tribe and retrieves raw value
-		/// Suported versions: 4, 4.2
+		/// Suported versions: 4, 4.2, 4.4
 		/// </summary>
 		/// <returns type="string">Returns raw tribe value (eg. '2' for teutons, etc.)</returns>
 
 		if (ActivePageTravianVersion === "4") {
 			return $(".sideInfoPlayer img").attr("class").replace("nationBig nationBig", "");
-		} else if (ActivePageTravianVersion === "4.2") {
+		} else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4") {
 			return $(".sidebarBoxInnerBox .playerName > img").attr("class").replace("nation nation", "");
 		} else throw("Unsuported travian version");
 	};
@@ -746,7 +747,7 @@ var ServicesMetadata = {
 	Name: "Services",
 	Alias: "Services",
 	Category: "Core",
-	Version: "0.0.3.0",
+	Version: "0.0.3.1",
 	Description: "Takes care of all data retrieving and is requeired for all plugins",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
