@@ -76,11 +76,12 @@ function ResourceCalculator() {
 
 					// Crete element
 					var costElement = $("<div>");
-					costElement.attr("class", "ResourceCalculatorBuildCost");
+					costElement.addClass("ResourceCalculatorBuildCost");
 					costElement.css({
 						"color": color,
 						"text-align": "right"
 					});
+					if (diff < 0) costElement.addClass("negative");
 					costElement.html("(" + diff + ")");
 					$(this).append(costElement);
 

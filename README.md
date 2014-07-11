@@ -55,6 +55,7 @@ Donators
 - Geczy
 
 ## Changelog
+- **Version 0.2.6** _(xx.07.2014.)_
 - **Version 0.2.5.1** _(11.07.2014.)_
 	- New: Support for T4.4
 	- Fix: Popup dialog was too small

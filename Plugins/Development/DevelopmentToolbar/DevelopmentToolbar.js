@@ -28,6 +28,7 @@ function DevelopmentToolbar() {
 	// Variables
 	//
 	var requestManager = new RequestManager();
+	var isActive = false;
 
 	/**************************************************************************
 	 *
@@ -74,6 +75,8 @@ function DevelopmentToolbar() {
 		
 		// Initialize auto-reload extension on file change
 		InitializeExtensionReload();
+
+		this.isActive = true;
 
 		if (!IsDevelopmentMode) {
 			// Google analytics
@@ -124,6 +127,7 @@ function DevelopmentToolbar() {
 	// TODO Comment
 	// TODO Log
 	var recieveConsoleRequest = function (request, sender, sendRespons) {
+		if (!this.isActive) return;
 		if (request.Sign != "ConsoleOutput") return;
 
 		// Create and append new console element

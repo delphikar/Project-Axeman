@@ -57,6 +57,7 @@ AVAILABLE PLUGINS
 	ResourceCalculator		(Plugins/Economy/ResourceCalculator/ResourceClaculator.js)
 	ResourceIndicator		(Plugins/Economy/ResourceIndicator/ResourceIndicator.js)
 	UpgradeIndicator		(Plugins/Economy/UpgradeIndicator/UpgradeIndicator.js)
+	ResourceSender			(Plugins/Economy/ResourceSender/ResourceSender.js)
 	VillageListEnhancement	(Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js)
 	MarketplaceEnhancements	(Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancements.js)
 	TravianPLUS				(Plugins/Utility/TravianPLUS/TravianPLUS.js)
