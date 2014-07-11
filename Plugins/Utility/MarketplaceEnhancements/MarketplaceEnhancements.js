@@ -545,8 +545,8 @@ var MarketplaceEnhancementsMetadata = {
 	Name: "MarketplaceEnhancements",
 	Alias: "Marketplace Enhancements",
 	Category: "Utility",
-	Version: "0.0.6.14",
-	Description: "ToDo",
+	Version: "0.1.0.0",
+	Description: "Adds number of improvements to the marketplace, quick village selection, resource shortcuts, junk resource links and many more.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
@@ -557,8 +557,7 @@ var MarketplaceEnhancementsMetadata = {
 	},
 
 	Flags: {
-		Alpha: true,
-		Internal: true
+		Beta: true
 	},
 
 	Class: MarketplaceEnhancements
