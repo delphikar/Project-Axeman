@@ -6,7 +6,7 @@ _Development version 0.2.6_
 
 ## Overview
 
-Travian 4 and Travian 4.2 extension that adds some "missing" features to the game.
+Travian 4, 4.2 and 4.4 extension that adds some "missing" features to the game.
 
 _This extension uses [Google Chrome](http://www.google.com/chrome "Google Chrome web page") built-in capability to crawl and change page content using JavaScript. This extension isn't supported by Travian Games GmbH and is forbidden by [Travian Game rules and Terms of use](http://agb.traviangames.com/Travian_EN_Terms.pdf "Travian Terms of use (English)")! By using this extension and all features you agree with [License](https://github.com/JustBuild/Project-Axeman/blob/master/LICENSE.md "EULA on github")._
 
@@ -16,6 +16,7 @@ _This extension uses [Google Chrome](http://www.google.com/chrome "Google Chrome
 **Version 0.2 is finally here!**
 
 - Support for up to 54 countries which means support for more than 200 servers
+- Support for all Travian 4 versions
 - Beautiful design that goes hand-in-hand with travian website
 - Advanced Plugin system where you can enable or disable plugins as you need
 
@@ -48,8 +49,16 @@ Collaborators
 - Everton Moreth _([emoreth](https://github.com/emoreth "Everton Moreth on github"))_
 - Ignacio Munizaga _([thagat](https://github.com/emoreth "Everton Moreth on github"))_
 
+Donators
+
+- Ivan Boytsov
+- Geczy
 
 ## Changelog
+- **Version 0.2.5.1** _(11.07.2014.)_
+	- New: Support for T4.4
+	- Fix: Popup dialog was too small
+	- Removed: Welcome screen
 - **Version 0.2.5** _(10.09.2013.)_
 	- New: Support for T4.2 servers
 		- Support is partial and will improve in time. Please send us feedback so that we can fix misssed features quicker
