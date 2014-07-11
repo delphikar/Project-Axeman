@@ -22,6 +22,7 @@ function ResourceSender() {
 	this.Register = function () {
 		Log("Registering ResourceSender plugin...", "ResourceSender");
 
+		// If in marketplace at Send resource tab
 		if ($(".gid17 .container.active a[href*='t=5']").length) {
 			Log("In marketplace on Send resources tab. Checking for send request...");
 
@@ -41,21 +42,26 @@ function ResourceSender() {
 			Log("Send request processed.");
 		}
 
+		// Process all show costs containers
 		if (ActiveProfile.Villages.length > 1) {
-			$(".showCosts").each(function() {
+			$(".showCosts").each(function () {
+				// Check if there is any negative costs in current container
 				if ($(".ResourceCalculatorBuildCost.negative", $(this)).length) {
+					// Retrieve costs
 					var costs = $(".ResourceCalculatorBuildCost", $(this));
 					var r1 = parseInt($(costs[0]).text().replace("(", ""), 10) || 0;
 					var r2 = parseInt($(costs[1]).text().replace("(", ""), 10) || 0;
 					var r3 = parseInt($(costs[2]).text().replace("(", ""), 10) || 0;
 					var r4 = parseInt($(costs[3]).text().replace("(", ""), 10) || 0;
 
+					$(this).append("<br/><div>You can send missing resources from another village:</div>");
 					FillVillagesList($(this));
-					AddSendButton($(this), "Send",
+					AddSendButton($(this), "Send from this village",
 						r1 < 0 ? r1 : 0,
 						r2 < 0 ? r2 : 0,
 						r3 < 0 ? r3 : 0,
 						r4 < 0 ? r4 : 0);
+					$(this).append("<br/><br/>");
 				}
 			});
 		}
@@ -93,6 +99,7 @@ function ResourceSender() {
 				"data-r3": amountR3,
 				"data-r4": amountR4
 			})
+			.css("margin-left", "12px")
 			.html(text));
 	};
 
@@ -127,7 +134,7 @@ function ResourceSender() {
 			});
 
 		// TODO Localize
-		selectInput.append("<option disabled selected>Select village</option>");
+		selectInput.append("<option disabled selected>Select a village</option>");
 
 		// Add village names to list
 		$.each(villages, function (current, value) {
@@ -151,7 +158,6 @@ function ResourceSender() {
 		});
 
 		// Append selector
-		container.append($("<br>"));
 		container.append(selectInput);
 
 		Log("Village list selector successfully added!", "ResourceSender");

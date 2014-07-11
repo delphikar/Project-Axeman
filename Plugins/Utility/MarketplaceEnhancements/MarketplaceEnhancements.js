@@ -164,7 +164,7 @@ function MarketplaceEnhancements() {
 			'class': 'text village'
 		});
 
-		selectInput.append("<option disabled selected>Select village</option>");
+		selectInput.append("<option disabled selected>Select a village</option>");
 
 		// Add village names to list
 		$.each(villages, function (current, value) {
