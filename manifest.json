@@ -44,7 +44,6 @@
 				"Scripts/App/NavigationManager.js",
 				"Scripts/App/PluginsManager.js",
 				"Plugins/Core/Services/Services.js",
-				"Plugins/Development/DevelopmentToolbar/DevelopmentToolbar.js",
 				"Plugins/Fun/Decorations/Decorations.js",
 				"Plugins/Support/Feedback/Feedback.js",
 				"Plugins/Economy/ResourceIndicator/ResourceIndicator.js",
@@ -74,8 +73,6 @@
 		"Plugins/Utility/VillageListEnhancement/SortAscending.png",
 		"Plugins/Utility/VillageListEnhancement/SortDescending.png",
 		"Plugins/Utility/VillageListEnhancement/SortHierarchical.png",
-		"Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancementsStyle.css",
-		"Plugins/Development/DevelopmentToolbar/DevelopmentToolbarStyle.css",
-		"Plugins/Development/DevelopmentToolbar/Console.png"
+		"Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancementsStyle.css"
 	]
 }

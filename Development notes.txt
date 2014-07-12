@@ -51,7 +51,6 @@ AVAILABLE PLUGINS
 	Total: (10)
 
 	Services				(Plugins/Core/Services/Services.js)
-	DevelopmentToolbar 		(Plugins/Development/DevelopmentToolbar/DevelopmentToolbar.js)
 	Decorations				(Plugins/Fun/Decorations/Decorations.js)
 	Feedback				(Plugins/Support/Feedback/Feedback.js)
 	ResourceCalculator		(Plugins/Economy/ResourceCalculator/ResourceClaculator.js)
