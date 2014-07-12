@@ -51,6 +51,24 @@ function ResourceIndicator() {
 			$("p", element).data("timeleft", timeLeft * 3600);
 			$(child).append(element);
 		}
+
+		// Style for T4.4
+		if (ActivePageTravianVersion === "4.4") {
+			$(".ResourceIndicatorFillTime").css({
+				"background": "-webkit-linear-gradient(top, rgba(237, 237, 237, 0) 0%,rgba(224, 231, 241, 0.85) 20%)",
+				"height": "25px",
+				"position": "absolute",
+				"right": "2px",
+				"top": "10px",
+				"width": "76px",
+				"border-bottom-left-radius": "10px",
+				"border-bottom-right-radius": "10px",
+				"box-shadow": "0px 1px 2px #888",
+				"text-align": "center",
+				"line-height": "26px"
+			});
+		}
+
 		DLog("ResourcesIndicator: Appended to resource [l" + (index + 1) + "]");						
 	}
 
@@ -81,16 +99,6 @@ function ResourceIndicator() {
 		}
 		else if (ActivePageTravianVersion === "4.4") { 
 			resourceHolders = $("#stockBar .stockBarButton");
-
-			//Indicator beautifer
-			$("#stockBar").css({
-				"background": "-webkit-linear-gradient(top, rgba(237, 237, 237, 0.7) 0%,rgba(237, 237, 237, 0.95) 50%)",
-				"border-bottom-left-radius": "8px",
-				"border-bottom-right-radius": "8px",
-				"box-shadow": "0px 1px 2px #333",
-				"height": "55px",
-				"margin-bottom": "1px"
-			});
 		}
 		else throw ("Unsuported travian version");
 
@@ -162,7 +170,7 @@ var ResourceIndicatorMetadata = {
 	Name: "ResourceIndicator",
 	Alias: "Resource Indicator",
 	Category: "Economy",
-	Version: "0.2.3.0",
+	Version: "0.2.4.0",
 	Description: "Shows how long is needed for warehouse and granary to fill up to its maximum capacity and alerts accordingly.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
