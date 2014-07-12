@@ -293,6 +293,19 @@ function Services() {
 				Log("New Village [" + village.id + "] registered!", "Services");
 			}
 		}
+
+		// Shows message to crawn profile page
+		var mainVillageFound = false;
+		for (var index = 0; index < ActiveProfile.Villages.length; index++) {
+			if (ActiveProfile.Villages[index].IsMainCity) {
+				mainVillageFound = true;
+				break;
+			}
+		}
+		if (!mainVillageFound) {
+			// TODO Localize
+			$("#sidebarBoxVillagelist .innerBox.content").append("<br/><div>Capital village not detected. Visit your profile page.</div>");
+		}
 	};
 	
 	var GetVillagesListData = function () {
