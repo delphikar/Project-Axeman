@@ -118,13 +118,11 @@ function Error(message) {
 	/// </summary>
 	/// <param name="message">Message to write</param>
 
-	if (message === undefined) return;
+	if (!message) return 0;
 
 	if (IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
 		console.error(category + message);
-		
-		//(new Request("ConsoleOutput", "Error", null, { Message: message, Category: arguments[1] })).Send();
 	}
 	return 0;
 };
@@ -138,9 +136,7 @@ function Warn(message) {
 
 	if (IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
-		console.warn(category + message);
-		
-		(new Request("ConsoleOutput", "Warning", null, { Message: message, Category: arguments[1] })).Send();
+		console.warn("%c" + category + message, "color: #B88E07");
 	}
 };
 
@@ -154,8 +150,6 @@ function Log(message) {
 	if (IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
 		console.log(category + message);
-		
-		(new Request("ConsoleOutput", "Log", null, { Message: message, Category: arguments[1] })).Send();
 	}
 };
 
@@ -168,9 +162,7 @@ function DLog(message) {
 
 	if (IsDebugMode == true && IsDevelopmentMode == true) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
-		console.log(category + message);
-		
-		(new Request("ConsoleOutput", "Debug", null, { Message: message, Category: arguments[1] })).Send();
+		console.log("%c" + category + message, "color: #AAAAAA");
 	}
 };
 
