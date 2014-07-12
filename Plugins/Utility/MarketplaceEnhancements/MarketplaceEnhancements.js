@@ -34,7 +34,12 @@ function MarketplaceEnhancements() {
 		// Gets max carry for one trader and number of traders available
 		// TODO Move this to Services
 		traderCarryAmount = parseInt($(".send_res .max:eq(0) > a").text() || 0, 10);
-		tradersAvailable = parseInt($("#merchantsAvailable").text(), 10) || 0;
+		if (ActivePageTravianVersion === "4" || ActivePageTravianVersion == "4.2") {
+			tradersAvailable = parseInt($("#merchantsAvailable").text(), 10) || 0;
+		}
+		else if (ActivePageTravianVersion === "4.4") {
+			tradersAvailable = parseInt(escape($(".merchantsAvailable").html()).split(/[A-Z]|%/)[4], 10) || 0;
+		}
 
 		DLog("Trader Max Transport: " + traderCarryAmount, "MarketplaceEnhancements");
 		DLog("Traders available: " + tradersAvailable, "MarketplaceEnhancements");

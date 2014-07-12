@@ -27,23 +27,38 @@ function ResourceSender() {
 			Log("In marketplace on Send resources tab. Checking for send request...");
 
 			var query = ParseQuery(ActivePageQuery);
+			var resourceDestination = query.resourceDestinationId;
 			var resourceValues = query.resourceSend;
-			if (!resourceValues) {
-				Log("Nothing to send", "ResourceSender");
+			if (!resourceDestination || !resourceValues) {
+				Log("No valid resource send request.", "ResourceSender");
 				return;
 			}
 
+			// Retrieve destination name
+			DLog("Retrieving destination village name...", "ResourceSender");
+			var destinationName = "unknown";
+			for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
+				if (ActiveProfile.Villages[index].VID == resourceDestination) {
+					destinationName = ActiveProfile.Villages[index].Name;
+				}
+			}
+			DLog("Destination village name: " + destinationName, "ResourceSender");
+
+			// Append resource values to textboxes
 			DLog("Appending send resource value...");
 			var values = resourceValues.split(",");
 			$("#send_select input[id*='r']").each(function(index) {
 				$(this).val(values[index].replace("-", ""));
 			});
 
+			// Append destination name to village name textbox
+			$("#enterVillageName").val(destinationName);
+
 			Log("Send request processed.");
 		}
 
 		// Process all show costs containers
-		if (ActiveProfile.Villages.length > 1) {
+		if (ActiveProfile.Villages.length >= 1) {
 			$(".showCosts").each(function () {
 				// Check if there is any negative costs in current container
 				if ($(".ResourceCalculatorBuildCost.negative", $(this)).length && !$(".ResourceCalculatorBuildCost.upgradeStorage", $(this)).length) {
@@ -80,8 +95,8 @@ function ResourceSender() {
 		}
 	};
 
-	var GetMarketplaceLink = function(villageId, amountR1, amountR2, amountR3, amountR4) {
-		return "http://" + ActiveServerAddress + Enums.TravianPages.Build + "?gid=17&t=5&newdid=" + villageId + "&resourceSend=" + amountR1 + "," + amountR2 + "," + amountR3 + "," + amountR4;
+	var GetMarketplaceLink = function(villageId, receiverVillageId, amountR1, amountR2, amountR3, amountR4) {
+		return "http://" + ActiveServerAddress + Enums.TravianPages.Build + "?gid=17&t=5&newdid=" + villageId + "&resourceDestinationId=" + receiverVillageId + "&resourceSend=" + amountR1 + "," + amountR2 + "," + amountR3 + "," + amountR4;
 	};
 
 	var AddSendButton = function(container, text, amountR1, amountR2, amountR3, amountR4) {
@@ -120,7 +135,7 @@ function ResourceSender() {
 			var obj = ActiveProfile.Villages[index];
 
 			// Check if village is not currently active village
-			if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID)
+			//if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID)
 				villages[villages.length] = obj;
 		}
 
@@ -157,7 +172,7 @@ function ResourceSender() {
 			var r3 = sendButton.data("r3");
 			var r4 = sendButton.data("r4");
 
-			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, r1, r2, r3, r4);
+			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, ActiveProfile.Villages[ActiveVillageIndex].VID, r1, r2, r3, r4);
 			
 			sendButton.attr("href", selectedVillageSendLink);
 			sendButton.show();
