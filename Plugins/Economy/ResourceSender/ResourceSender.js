@@ -58,7 +58,7 @@ function ResourceSender() {
 		}
 
 		// Process all show costs containers
-		if (ActiveProfile.Villages.length >= 1) {
+		if (ActiveProfile.Villages.length > 1) {
 			$(".showCosts").each(function () {
 				// Check if there is any negative costs in current container
 				if ($(".ResourceCalculatorBuildCost.negative", $(this)).length && !$(".ResourceCalculatorBuildCost.upgradeStorage", $(this)).length) {
@@ -135,7 +135,7 @@ function ResourceSender() {
 			var obj = ActiveProfile.Villages[index];
 
 			// Check if village is not currently active village
-			//if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID)
+			if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID)
 				villages[villages.length] = obj;
 		}
 
