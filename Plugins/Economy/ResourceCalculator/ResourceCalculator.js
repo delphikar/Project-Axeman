@@ -105,7 +105,7 @@ function ResourceCalculator() {
 					timeElement.addClass("ResourceCalculatorBuildFillTime");
 					timeElement.attr("data-timeleft", ratio * 3600);
 					timeElement.css("text-align", "right");
-					timeElement.append("time");
+					timeElement.append("00:00:00");
 					$(this).append(timeElement);
 
 					DLog("Appended time deference element for resource [r" + (rindex + 1) + "] difference [" + timeDifference + "]", "ResourceCalculator");
@@ -143,7 +143,7 @@ function ResourceCalculator() {
 					$(this).attr("data-timeLeft", secondsLeft);
 					$(this).html(ConvertSecondsToTime(secondsLeft));
 				}
-				else $(this).css("visibility", "hidden");
+				else $(this).css("opacity", "0.3");
 			}
 			else {
 				$(this).html("never");
@@ -177,7 +177,7 @@ function ResourceCalculator() {
 			for (var rindex = 0; rindex < 5; rindex++) {
 				// Layout fix for crop cost
 				if (rindex > 3) {
-					$("span:eq(" + rindex + ")", costs[iindex]).append($("<div>").append("empty").css("visibility", "hidden"));
+					$("span:eq(" + rindex + ")", costs[iindex]).append($("<div>").append("empty").hide());
 					continue;
 				}
 
@@ -232,7 +232,7 @@ var ResourceCalculatorMetadata = {
 	Name: "ResourceCalculator",
 	Alias: "Resource Calculator",
 	Category: "Economy",
-	Version: "0.2.2.0",
+	Version: "0.2.3.0",
 	Description: "Shows you how much of each resource is needed to build field, building or train army. ",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
