@@ -184,10 +184,12 @@ function Services() {
 				activeVillage.Resources.Stored[index] = parseInt($("#l" + (index + 1)).text().replace(",", "").replace(" ", "").replace(".", ""), 10) || 0;
 				activeVillage.Resources.Storage[index] = index == 3 ? granarySize : warehouseSize;
 			}
+
+			// Crawl Free Crop
 			activeVillage.Resources.FreeCrop = parseInt($("#stockBarFreeCrop").text().replace(",", "").replace(" ", "").replace(".", ""), 10) || 0;
 		} else throw ("Unsuported travian version");
 
-		DLog("Stored in Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Stored + "] and crop [" + activeVillage.Resources.Consumption + " of " + activeVillage.Resources.TotalCropProduction + "]", "Services");
+		DLog("Stored in Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Stored + "] and free crop [" + activeVillage.Resources.FreeCrop + "]", "Services");
 		DLog("Storage of Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Storage + "]", "Services");
 	};
 
@@ -565,9 +567,13 @@ function Services() {
 			var matchedProfilesIndexes = GetMatchingProfilesIndexes(activeProfileUID, activeProfileName, ActiveServerAddress);
 
 			// Check if multiple or none profiles were found
-			if (matchedProfilesIndexes != 1) {
-				Warn("Invalid number of profiles found that match current player [" + matchedProfilesIndexes.length + "]. Can't select profile automatically - selecting FIRST.", "Services");
+			if (matchedProfilesIndexes.length >= 1) {
 				ActiveProfile = AvailableProfiles[matchedProfilesIndexes[0]];
+
+				// Warning that profile was not matched unique
+				if (matchedProfilesIndexes.length != 1) {
+					Warn("Invalid number of profiles found that match current player [" + matchedProfilesIndexes.length + "]. Can't select profile automatically - selecting FIRST.", "Services");
+				}
 			}
 		}
 		catch (ex) {
@@ -603,6 +609,11 @@ function Services() {
 		/// <param name="server">Server address of profiles to match</param>
 		/// <returns type="Array[integer]">Returns an list of integers, indexes of matched profiles</returns>
 
+		console.warn(AvailableProfiles[0]);
+		console.warn(uid);
+		console.warn(name);
+		console.warn(server);
+
 		// Search for matching profiles
 		var matchedProfilesIndexes = [];
 		for (var index = 0, cache = AvailableProfiles.length; index < cache; index++) {
@@ -610,9 +621,9 @@ function Services() {
 
 			// Match using Server Address and, UID or name
 			if (currentProfile.ServerAddress == server &&
-				(currentProfile.UID == uid ||
-					currentProfile.Name == name))
+				(currentProfile.UID == uid || currentProfile.Name == name)) {
 				matchedProfilesIndexes.push(index);
+			}
 		}
 		return matchedProfilesIndexes;
 	};
