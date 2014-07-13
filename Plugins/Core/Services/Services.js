@@ -304,7 +304,7 @@ function Services() {
 		}
 		if (!mainVillageFound) {
 			// TODO Localize
-			$("#sidebarBoxVillagelist .innerBox.content").append("<br/><div>Capital village not detected. Visit your profile page.</div>");
+			$("#sidebarBoxVillagelist .innerBox.content").append("<br/><div>Capital village not detected. Visit your <a href='/spieler.php' style='color: #00BC00; text-decoration: underline;'>profile page</a>.</div>");
 		}
 	};
 	
