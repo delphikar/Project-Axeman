@@ -280,6 +280,17 @@ function CreateStylesheet(path) {
 	return stylesheetLink;
 }
 
+function NumberWithCommas(x) {
+	/// <summary>
+	/// Transforms number into grouped digit number. 
+	/// Group of three digits
+	/// </summary>
+	/// <param name="x">Number to transform</param>
+	/// <returns type="">string number with comas after group of four digits</returns>
+
+	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 function _gim(name) {
 	/// <summary>
 	/// Gets locale message

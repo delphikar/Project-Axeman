@@ -83,7 +83,7 @@ function ResourceCalculator() {
 					});
 					if (storage < res) costElement.addClass("upgradeStorage");
 					if (diff < 0) costElement.addClass("negative");
-					costElement.html("(" + diff + ")");
+					costElement.html("(" + NumberWithCommas(diff) + ")");
 					$(this).append(costElement);
 
 					DLog("ResourceCalculator - Appended cost element for resource [r" + (rindex + 1) + "] difference [" + diff + "]");
@@ -221,7 +221,7 @@ function ResourceCalculator() {
 			var color = diff < 0 ? "#B20C08" : "#0C9E21";
 
 			// Update elements
-			$(".ResourceCalculatorR" + rindex, cost).html("(" + diff + ")");
+			$(".ResourceCalculatorR" + rindex, cost).html("(" + NumberWithCommas(diff) + ")");
 			$(".ResourceCalculatorR" + rindex, cost).css("color", color);
 		}
 	};
@@ -232,7 +232,7 @@ var ResourceCalculatorMetadata = {
 	Name: "ResourceCalculator",
 	Alias: "Resource Calculator",
 	Category: "Economy",
-	Version: "0.2.3.0",
+	Version: "0.2.4.0",
 	Description: "Shows you how much of each resource is needed to build field, building or train army. ",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
