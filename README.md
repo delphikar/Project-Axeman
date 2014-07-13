@@ -55,7 +55,17 @@ Donators
 - Geczy
 
 ## Changelog
-- **Version 0.2.6** _(xx.07.2014.)_
+- **Version 0.2.7 & 0.2.6** _(14.07.2014.)_
+	- New: Resource Sender plugin
+	- New: Marketplace Enhancements plugin
+	- Improved: User is now informed how to crawl capital city and village population
+	- Improved: Number grouping in Resource Calculator plugin
+	- Improved: Resource Calculator now shows time left when 00:00:00 
+	- Improved: Resource Indicator now matches new T4.4 design	
+	- Fix: User profiles were not saved properly
+	- Fix: Capital now detected correctly
+	- Fix: Submit button when creating new profile was hidden
+	- Removed: Development Toolbar (internal) plugin
 - **Version 0.2.5.1** _(11.07.2014.)_
 	- New: Support for T4.4
 	- Fix: Popup dialog was too small
