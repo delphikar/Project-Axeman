@@ -160,7 +160,7 @@ function DLog(message) {
 	/// </summary>
 	/// <param name="message">Message to write</param>
 
-	if (IsDebugMode == true && IsDevelopmentMode == true) {
+	if (IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
 		console.log("%c" + category + message, "color: #AAAAAA");
 	}
