@@ -30,10 +30,10 @@ function PluginsManager() {
 		if (!IsDevelopmentMode) {
 			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 			ga.src = 'https://ssl.google-analytics.com/ga.js';
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-33221456-3']);
 
 			for (var i in GlobalPluginsList) {
-				var _gaq = _gaq || [];
-				_gaq.push(['_setAccount', 'UA-33221456-3']);
 				_gaq.push(['_trackEvent', 'Plugin', (GlobalPluginsList[i].Category + '/' + GlobalPluginsList[i].Name)]);
 			}
 
