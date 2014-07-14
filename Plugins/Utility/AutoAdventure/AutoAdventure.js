@@ -2,10 +2,10 @@
  * AutoAdventure.js
  *
  * Author:
- * 		Geczy
+ *      Geczy
  *
  * Created on:
- * 		13.07.2014.
+ *      13.07.2014.
  *
  *****************************************************************************/
 
@@ -17,7 +17,7 @@ function AutoAdventure() {
     this.Register = function() {
         Log("Registering AutoAdventure plugin...", "AutoAdventure");
 
-        initialize();
+        this.initialize();
 
         if (!IsDevelopmentMode) {
             // Google analytics
@@ -40,34 +40,44 @@ function AutoAdventure() {
     /// Adds checkbox on the end of reports list to check all reports
     /// </summary>
 
-    initialize = function() {
-        if (!this.enabled()) {
-            if (MatchPages('start_adventure.php')) {
+    this.initialize = function() {
+
+        if (!this.hasAdventure()) {
+
+            // We're on the last page of doing the adventure
+            if (MatchPages([Enums.TravianPages.HeroStartAdventure])) {
                 $('button[name="ok"]').click();
             }
+
+            // No adventures = don't continue
             return;
         }
 
-        if (!MatchPages('adventure.php')) {
+        // We have an adventure, let's go to the list of adventures
+        if (!MatchPages([Enums.TravianPages.HeroStartAdventure, Enums.TravianPages.HeroAdventures])) {
             location.href = 'hero_adventure.php';
             return;
-        } else {
-            this.process();
-            $('button[name="start"]').click();
         }
-    }
 
-    enabled = function() {
-        return this.doAdventures && $('.heroStatusMessage').text().trim().indexOf('in home') !== -1 && parseInt($('.adventureWhite .speechBubbleContent').text());
-    }
+        // Pick the first adventure from the list
+        if (MatchPages([Enums.TravianPages.HeroAdventures])) {
+            var url = $('a.gotoAdventure:first').attr('href');
+            if (url != undefined) {
+                location.href = url;
+                return;
+            }
+        }
 
-    process = function() {
-        var url = $('a.gotoAdventure:first').attr('href');
-        if (url == undefined) {
+        // Start the first adevnture
+        if (MatchPages([Enums.TravianPages.HeroStartAdventure])) {
+            $('button[name="start"]').click();
             return;
         }
 
-        location.href = url;
+    }
+
+    this.hasAdventure = function() {
+        return $('.heroStatusMessage').text().trim().indexOf('in home') !== -1 && parseInt($('.adventureWhite .speechBubbleContent').text());
     }
 
 }
@@ -78,7 +88,7 @@ var AutoAdventureMetadata = {
     Alias: "Auto Adventure",
     Category: "Utility",
     Version: "0.0.0.1",
-    Description: "TODO",
+    Description: "Completes an adventure when available.",
     Author: "Geczy",
     Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
