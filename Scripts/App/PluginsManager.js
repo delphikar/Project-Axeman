@@ -9,13 +9,21 @@
  *
  *****************************************************************************/
 
-// Global list of available plugins this list is used for registering 
+// Global list of available plugins this list is used for registering
 // all plugins so that developer doesn't have to write script path to
 // a lot of places (Only in manifest.json and Development notes.txt)
 //
 // ADD METADATA TO THIS LIST, DO NOT ADD PLUGIN CLASS
 //
 var GlobalPluginsList = new Array();
+
+// Google analytics
+if (!IsDevelopmentMode) {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = 'https://ssl.google-analytics.com/ga.js';
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-33221456-3']);
+}
 
 function PluginsManager() {
 	var pluginsLoaded = 0;
@@ -27,6 +35,12 @@ function PluginsManager() {
 		Log("PluginsManager: Initializing...");
 
 		this.RegisterPlugins(GlobalPluginsList);
+
+		if (!IsDevelopmentMode) {
+			(function () {
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		}
 	};
 
 
@@ -73,6 +87,11 @@ function PluginsManager() {
 				if ((response == null || !response.State) && state == "On" || response.State == "On") {
 					Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is active...");
 					Log("PluginsManager: Registering '" + pluginMetadata.Name + "'");
+
+					// Google analytics
+					if (!IsDevelopmentMode) {
+						_gaq.push(['_trackEvent', 'Plugin', (pluginMetadata.Category + '/' + pluginMetadata.Name)]);
+					}
 
 					var pluginObject = new pluginMetadata.Class();
 					pluginObject.Register();
@@ -125,7 +144,7 @@ function PluginsManager() {
 				break;
 			}
 		}
-		
+
 		// Development check - Check if plugin uses parseInt (indicates this hould be crawled in Service)
 		if (IsDevelopmentMode && pluginMetadata.Class.toString().search("parseInt") >= 0) {
 			Warn("Plugin uses \"parseInt\" method. This should be replaced with crawled data!");

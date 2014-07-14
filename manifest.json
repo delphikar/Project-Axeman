@@ -65,7 +65,8 @@
 			"matches": [ "http://*/*" ]
 		}
 	],
-	"web_accessible_resources": [		
+	"web_accessible_resources": [
+		"manifest.json",
 		"Utils/pageslide/jquery.pageslide.css",
 		"Plugins/Support/Feedback/Image.png",
 		"Plugins/Support/Feedback/FeedbackForm.html",
