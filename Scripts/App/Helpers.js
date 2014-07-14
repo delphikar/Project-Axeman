@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Helpers.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek,
  *
@@ -101,7 +101,7 @@ function ParseQuery(query) {
 
 	// Split query by '&' symbol
 	var hashes = query.split('&');
-	
+
 	// Go through all parameters and add each to array
 	for (var index = 0; index < hashes.length; index++) {
 		var hash = hashes[index].split('=');
@@ -160,7 +160,7 @@ function DLog(message) {
 	/// </summary>
 	/// <param name="message">Message to write</param>
 
-	if (IsDebugMode == true && IsDevelopmentMode == true) {
+	if (IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
 		console.log("%c" + category + message, "color: #AAAAAA");
 	}
@@ -282,7 +282,7 @@ function CreateStylesheet(path) {
 
 function NumberWithCommas(x) {
 	/// <summary>
-	/// Transforms number into grouped digit number. 
+	/// Transforms number into grouped digit number.
 	/// Group of three digits
 	/// </summary>
 	/// <param name="x">Number to transform</param>

@@ -1,7 +1,7 @@
 {
 	"name": "Project Axeman",
 	"description": "__MSG_extensionDescription__",
-	"version": "0.2.6",
+	"version": "0.2.7",
 	"manifest_version": 2,
 	"default_locale": "en",
 	"homepage_url": "http://github.com/JustBuild/Project-Axeman",
@@ -67,6 +67,7 @@
 		}
 	],
 	"web_accessible_resources": [
+		"manifest.json",
 		"Utils/pageslide/jquery.pageslide.css",
 		"Plugins/Support/Feedback/Image.png",
 		"Plugins/Support/Feedback/FeedbackForm.html",

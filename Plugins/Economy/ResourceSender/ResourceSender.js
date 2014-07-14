@@ -24,37 +24,7 @@ function ResourceSender() {
 
 		// If in marketplace at Send resource tab
 		if ($(".gid17 .container.active a[href*='t=5']").length) {
-			Log("In marketplace on Send resources tab. Checking for send request...");
-
-			var query = ParseQuery(ActivePageQuery);
-			var resourceDestination = query.resourceDestinationId;
-			var resourceValues = query.resourceSend;
-			if (!resourceDestination || !resourceValues) {
-				Log("No valid resource send request.", "ResourceSender");
-				return;
-			}
-
-			// Retrieve destination name
-			DLog("Retrieving destination village name...", "ResourceSender");
-			var destinationName = "unknown";
-			for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
-				if (ActiveProfile.Villages[index].VID == resourceDestination) {
-					destinationName = ActiveProfile.Villages[index].Name;
-				}
-			}
-			DLog("Destination village name: " + destinationName, "ResourceSender");
-
-			// Append resource values to textboxes
-			DLog("Appending send resource value...");
-			var values = resourceValues.split(",");
-			$("#send_select input[id*='r']").each(function(index) {
-				$(this).val(values[index].replace("-", ""));
-			});
-
-			// Append destination name to village name textbox
-			$("#enterVillageName").val(destinationName);
-
-			Log("Send request processed.");
+			HandleMarketplaceRequest();
 		}
 
 		// Process all show costs containers
@@ -64,10 +34,10 @@ function ResourceSender() {
 				if ($(".ResourceCalculatorBuildCost.negative", $(this)).length && !$(".ResourceCalculatorBuildCost.upgradeStorage", $(this)).length) {
 					// Retrieve costs
 					var costs = $(".ResourceCalculatorBuildCost", $(this));
-					var r1 = parseInt($(costs[0]).text().replace("(", ""), 10) || 0;
-					var r2 = parseInt($(costs[1]).text().replace("(", ""), 10) || 0;
-					var r3 = parseInt($(costs[2]).text().replace("(", ""), 10) || 0;
-					var r4 = parseInt($(costs[3]).text().replace("(", ""), 10) || 0;
+					var r1 = parseInt($(costs[0]).text().replace("(", "").replace(",", ""), 10) || 0;
+					var r2 = parseInt($(costs[1]).text().replace("(", "").replace(",", ""), 10) || 0;
+					var r3 = parseInt($(costs[2]).text().replace("(", "").replace(",", ""), 10) || 0;
+					var r4 = parseInt($(costs[3]).text().replace("(", "").replace(",", ""), 10) || 0;
 
 					$(this).append("<br/><div>You can send missing resources from another village:</div>");
 					FillVillagesList($(this));
@@ -93,6 +63,40 @@ function ResourceSender() {
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
 		}
+	};
+
+	var HandleMarketplaceRequest = function() {
+		Log("In marketplace on Send resources tab. Checking for send request...");
+
+		var query = ParseQuery(ActivePageQuery);
+		var resourceDestination = query.resourceDestinationId;
+		var resourceValues = query.resourceSend;
+		if (!resourceDestination || !resourceValues) {
+			Log("No valid resource send request.", "ResourceSender");
+			return;
+		}
+
+		// Retrieve destination name
+		DLog("Retrieving destination village name...", "ResourceSender");
+		var destinationName = "unknown";
+		for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
+			if (ActiveProfile.Villages[index].VID == resourceDestination) {
+				destinationName = ActiveProfile.Villages[index].Name;
+			}
+		}
+		DLog("Destination village name: " + destinationName, "ResourceSender");
+
+		// Append resource values to textboxes
+		DLog("Appending send resource value...");
+		var values = resourceValues.split(",");
+		$("#send_select input[id*='r']").each(function (index) {
+			$(this).val(values[index].replace("-", ""));
+		});
+
+		// Append destination name to village name textbox
+		$("#enterVillageName").val(destinationName);
+
+		Log("Send request processed.");
 	};
 
 	var GetMarketplaceLink = function(villageId, receiverVillageId, amountR1, amountR2, amountR3, amountR4) {

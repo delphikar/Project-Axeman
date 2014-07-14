@@ -609,11 +609,6 @@ function Services() {
 		/// <param name="server">Server address of profiles to match</param>
 		/// <returns type="Array[integer]">Returns an list of integers, indexes of matched profiles</returns>
 
-		console.warn(AvailableProfiles[0]);
-		console.warn(uid);
-		console.warn(name);
-		console.warn(server);
-
 		// Search for matching profiles
 		var matchedProfilesIndexes = [];
 		for (var index = 0, cache = AvailableProfiles.length; index < cache; index++) {
