@@ -10,7 +10,7 @@
  *****************************************************************************/
 
 // Development and debuging variables
-var IsDevelopmentMode = true;
+var IsDevelopmentMode = isDevMode() || false;
 var IsDebugMode = true;
 
 // Active page variables
@@ -24,3 +24,19 @@ var IsLogedIn = false;
 var AvailableProfiles = new Array();
 var ActiveProfile = function () { };
 var ActiveVillageIndex = 0;
+
+function isDevMode() {
+    if (IsDevelopmentMode == null) {
+        var mUrl = chrome.runtime.getURL('manifest.json');
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", mUrl, false);
+        xhr.onload = function () {
+            var json = JSON.parse(this.responseText);
+            IsDevelopmentMode = !('update_url' in json);
+            console.log("IsDevelopmentMode: " + IsDevelopmentMode);
+        };
+        xhr.send();
+    }
+
+    return IsDevelopmentMode;
+}
