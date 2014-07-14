@@ -17,6 +17,14 @@
 //
 var GlobalPluginsList = new Array();
 
+// Google analytics
+if (!IsDevelopmentMode) {
+	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	ga.src = 'https://ssl.google-analytics.com/ga.js';
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-33221456-3']);
+}
+
 function PluginsManager() {
 	var pluginsLoaded = 0;
 	var pluginsTotal = 0;
@@ -26,23 +34,13 @@ function PluginsManager() {
 	this.Initialize = function() {
 		Log("PluginsManager: Initializing...");
 
-		// Google analytics
+		this.RegisterPlugins(GlobalPluginsList);
+
 		if (!IsDevelopmentMode) {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = 'https://ssl.google-analytics.com/ga.js';
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-
-			for (var i in GlobalPluginsList) {
-				_gaq.push(['_trackEvent', 'Plugin', (GlobalPluginsList[i].Category + '/' + GlobalPluginsList[i].Name)]);
-			}
-
 			(function () {
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
 		}
-
-		this.RegisterPlugins(GlobalPluginsList);
 	};
 
 
@@ -89,6 +87,11 @@ function PluginsManager() {
 				if ((response == null || !response.State) && state == "On" || response.State == "On") {
 					Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is active...");
 					Log("PluginsManager: Registering '" + pluginMetadata.Name + "'");
+
+					// Google analytics
+					if (!IsDevelopmentMode) {
+						_gaq.push(['_trackEvent', 'Plugin', (pluginMetadata.Category + '/' + pluginMetadata.Name)]);
+					}
 
 					var pluginObject = new pluginMetadata.Class();
 					pluginObject.Register();
