@@ -53,6 +53,7 @@
 				"Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js",
 				"Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancements.js",
 				"Plugins/Utility/TravianPLUS/TravianPLUS.js",
+				"Plugins/Utility/AutoAdventure/AutoAdventure.js",
 				"Plugins/Development/_Development/_Development.js",
 				"Scripts/App/App.js",
 				"Scripts/App/AppLauncher.js"
