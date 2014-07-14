@@ -9,7 +9,7 @@
  *
  *****************************************************************************/
 
-// Global list of available plugins this list is used for registering 
+// Global list of available plugins this list is used for registering
 // all plugins so that developer doesn't have to write script path to
 // a lot of places (Only in manifest.json and Development notes.txt)
 //
@@ -125,7 +125,7 @@ function PluginsManager() {
 				break;
 			}
 		}
-		
+
 		// Development check - Check if plugin uses parseInt (indicates this hould be crawled in Service)
 		if (IsDevelopmentMode && pluginMetadata.Class.toString().search("parseInt") >= 0) {
 			Warn("Plugin uses \"parseInt\" method. This should be replaced with crawled data!");
