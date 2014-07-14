@@ -29,26 +29,7 @@ function ResourceSender() {
 
 		// Process all show costs containers
 		if (ActiveProfile.Villages.length > 1) {
-			$(".showCosts").each(function () {
-				// Check if there is any negative costs in current container
-				if ($(".ResourceCalculatorBuildCost.negative", $(this)).length && !$(".ResourceCalculatorBuildCost.upgradeStorage", $(this)).length) {
-					// Retrieve costs
-					var costs = $(".ResourceCalculatorBuildCost", $(this));
-					var r1 = parseInt($(costs[0]).text().replace("(", "").replace(",", ""), 10) || 0;
-					var r2 = parseInt($(costs[1]).text().replace("(", "").replace(",", ""), 10) || 0;
-					var r3 = parseInt($(costs[2]).text().replace("(", "").replace(",", ""), 10) || 0;
-					var r4 = parseInt($(costs[3]).text().replace("(", "").replace(",", ""), 10) || 0;
-
-					$(this).append("<br/><div>You can send missing resources from another village:</div>");
-					FillVillagesList($(this));
-					AddSendButton($(this), "Send from this village",
-						r1 < 0 ? r1 : 0,
-						r2 < 0 ? r2 : 0,
-						r3 < 0 ? r3 : 0,
-						r4 < 0 ? r4 : 0);
-					$(this).append("<br/><br/>");
-				}
-			});
+			BuildingsSender();
 		}
 
 		if (!IsDevelopmentMode) {
@@ -64,6 +45,29 @@ function ResourceSender() {
 			})();
 		}
 	};
+
+	var BuildingsSender = function() {
+		$(".showCosts").each(function () {
+			// Check if there is any negative costs in current container
+			if ($(".ResourceCalculatorBuildCost.negative", $(this)).length && !$(".ResourceCalculatorBuildCost.upgradeStorage", $(this)).length) {
+				// Retrieve costs
+				var costs = $(".ResourceCalculatorBuildCost", $(this));
+				var r1 = parseInt($(costs[0]).text().replace("(", "").replace(",", ""), 10) || 0;
+				var r2 = parseInt($(costs[1]).text().replace("(", "").replace(",", ""), 10) || 0;
+				var r3 = parseInt($(costs[2]).text().replace("(", "").replace(",", ""), 10) || 0;
+				var r4 = parseInt($(costs[3]).text().replace("(", "").replace(",", ""), 10) || 0;
+
+				$(this).append("<br/><div>You can send missing resources from another village:</div>");
+				FillVillagesList($(this));
+				AddSendButton($(this), "Send from this village",
+					r1 < 0 ? r1 : 0,
+					r2 < 0 ? r2 : 0,
+					r3 < 0 ? r3 : 0,
+					r4 < 0 ? r4 : 0);
+				$(this).append("<br/><br/>");
+			}
+		});
+	}
 
 	var HandleMarketplaceRequest = function() {
 		Log("In marketplace on Send resources tab. Checking for send request...");
