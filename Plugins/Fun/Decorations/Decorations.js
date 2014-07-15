@@ -28,10 +28,19 @@ function Decorations() {
 		/// </summary>
 
 		Log("Removing in game help...", "Decorations");
-
 		$("#ingameManual").remove();
-
 		Log("In game help removed!", "Decorations");
+
+		AllianceNumbered();
+	};
+
+	var AllianceNumbered = function() {
+		if(MatchPages([Enums.TravianPages.Alliance]) && $('#member .pla').length) {
+			Log("Found alliance page, lets order it", "Decorations");
+			$('#member .pla').each(function(index) {
+				$(this).prepend((index + 1) + '. ');
+			})
+		}
 	};
 }
 
