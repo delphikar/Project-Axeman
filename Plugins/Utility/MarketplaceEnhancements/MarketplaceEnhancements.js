@@ -72,22 +72,6 @@ function MarketplaceEnhancements() {
 			//Perhaps works, maybe not, but useful
 			IncomingSum();
 		})/*()*/;
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Utility/MarketplaceEnhancements']);
-
-			(function() {
-				var ga = document.createElement('script');
-				ga.type = 'text/javascript';
-				ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0];
-				s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
 
 	var AddHourProductionButton = function() {
@@ -113,7 +97,7 @@ function MarketplaceEnhancements() {
 		$("#r1, #r2, #r3, #r4").change(function () { ValidateHourButton(); });
 		$("#r1, #r2, #r3, #r4").on("input", function () { ValidateHourButton(); });
 	};
-	
+
 	var ValidateHourButton = function () {
 		var hourButton = $("#PAMEHourProductionButton");
 		hourButton.attr("title", "Add this village's hour production");
@@ -147,7 +131,7 @@ function MarketplaceEnhancements() {
 
 	var FillVillagesList = function () {
 		/// <summary>
-		/// Adds Select element under the village name textbox so that is 
+		/// Adds Select element under the village name textbox so that is
 		/// simplifies sending resources to owned villages
 		/// </summary>
 
@@ -204,7 +188,7 @@ function MarketplaceEnhancements() {
 		$("#r1, #r2, #r3, #r4").each(function (index, obj) {
 			// Get stored amount of current resource
 			var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[index];
-			
+
 			// Apply spinner to current resource input textbox
 			$(obj).spinner({
 				incremental: true,
@@ -305,7 +289,7 @@ function MarketplaceEnhancements() {
 
 		var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[targetResourceIndex - 1];
 		var junkAmount = (parseInt($(".junkAmount").text(), 10) || 0);
-		
+
 		targetElement.spinner("value", resourceReserved + Math.min(junkAmount, stored - resourceReserved));
 		targetElement.change();
 	};
@@ -333,7 +317,7 @@ function MarketplaceEnhancements() {
 		var junkAmount = tradersNeeded * traderCarryAmount - resSum;
 
 		// Chane styles when use requested too many traders
-		if (tradersNeeded > tradersAvailable) 
+		if (tradersNeeded > tradersAvailable)
 			$(".tradersNeeded").parent().addClass("PAMEJunkTableErrorRow");
 		else $(".tradersNeeded").parent().removeClass("PAMEJunkTableErrorRow");
 
@@ -392,23 +376,23 @@ function MarketplaceEnhancements() {
 						inputElement.change();
 					}
 				}).text(traderCarryAmount);
-			
+
 			container.append(shortcutElement);
 		}
 
 		// Validate shortcuts on input change
 		$("#r1, #r2, #r3, #r4").change(ValidateTransportShortcuts);
-		
+
 		Log("Transport shortcuts added successfully!", "MarketplaceEnhancements");
 	};
 
 	var ValidateTransportShortcuts = function () {
 		// TODO Comment
-		
+
 		var inputElement = $(this);
 		var currentAmount = inputElement.spinner("value");
 		var shortcuts = $(".PAMEShortcut", inputElement.parent().parent().parent());
-		
+
 		$.each(shortcuts, function() {
 			var element = $(this);
 			if (currentAmount >= inputElement.spinner("option", "max")) {
@@ -460,7 +444,7 @@ function MarketplaceEnhancements() {
 				}
 			});
 
-			// Get resource sum by splitting all resource strings and adding them to array by 
+			// Get resource sum by splitting all resource strings and adding them to array by
 			// index mod 4 and offset by 1 because split returns unused value (first)
 			var resourceSplit = $(".res > td > span", arrivingTables).text().split(" ");
 			for (var index = 1, cache = resourceSplit.length; index < cache; index++) {

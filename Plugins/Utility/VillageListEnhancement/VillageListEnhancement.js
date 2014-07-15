@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * VillageListEnhancement.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek
  *
@@ -12,7 +12,7 @@
 
 function VillageListEnhancement() {
 	/// <summary>
-	/// Initializes object 
+	/// Initializes object
 	/// </summary>
 	this.Register = function () {
 		Log("VillageListEnhancement: Registering VillageListEnhancement plugin...");
@@ -30,7 +30,7 @@ function VillageListEnhancement() {
 			"-webkit-filter": "grayscale(0)",
 			"cursor": "pointer"
 		};
-		
+
 		// Retrieve villahe list and header
 		var villageListPanel = $("#villageList");
 		var villageListHead = $(".head", villageListPanel);
@@ -48,7 +48,7 @@ function VillageListEnhancement() {
 		buttonSortDesc.css("background-image", "url('" + GetURL("Plugins/Utility/VillageListEnhancement/SortDescending.png") + "')");
 		buttonSortDesc.hover(function () { $(this).css(buttonHoverStyle); }, function () { $(this).css(buttonStyle); });
 		buttonSortDesc.click(sortVillageListDescending);
-		
+
 		// Sort hiarachical button
 		var buttonSortHia = $("<div>");
 		buttonSortHia.css(buttonStyle);
@@ -58,26 +58,13 @@ function VillageListEnhancement() {
 		});
 		buttonSortHia.hover(function () { $(this).css(buttonHoverStyle); }, function () { $(this).css(buttonStyle); });
 		buttonSortHia.click(sortVillageListHiararchical);
-		
+
 		// Append buttons to list
 		villageListHead.append(buttonSortHia);
 		villageListHead.append(buttonSortDesc);
 		villageListHead.append(buttonSortAsc);
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Utility/VillageListEnhancement']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
-	
+
 	// TODO Comment
 	// TODO Log
 	// TODO Implement
@@ -93,7 +80,7 @@ function VillageListEnhancement() {
 			Warn($(this)[0]);
 		});
 	};
-	
+
 	// TODO Comment
 	// TODO Log
 	// TODO Implement

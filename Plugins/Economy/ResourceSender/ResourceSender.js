@@ -1,12 +1,12 @@
 ﻿/******************************************************************************
  * ResourceSender.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek
- * 
+ *
  * Collaborator:
  *		Geczy
- * 
+ *
  * Donator:
  *		Geczy
  *
@@ -17,7 +17,7 @@
 
 function ResourceSender() {
 	/// <summary>
-	/// Initializes object 
+	/// Initializes object
 	/// </summary>
 	this.Register = function () {
 		Log("Registering ResourceSender plugin...", "ResourceSender");
@@ -30,19 +30,6 @@ function ResourceSender() {
 		// Process all show costs containers
 		if (ActiveProfile.Villages.length > 1) {
 			BuildingsSender();
-		}
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Economy/ResourceSender']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
 		}
 	};
 
@@ -131,7 +118,7 @@ function ResourceSender() {
 
 	var FillVillagesList = function (container) {
 		/// <summary>
-		/// Adds Select element under the village name textbox so that is 
+		/// Adds Select element under the village name textbox so that is
 		/// simplifies sending resources to owned villages
 		/// </summary>
 
@@ -181,7 +168,7 @@ function ResourceSender() {
 			var r4 = sendButton.data("r4");
 
 			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, ActiveProfile.Villages[ActiveVillageIndex].VID, r1, r2, r3, r4);
-			
+
 			sendButton.attr("href", selectedVillageSendLink);
 			sendButton.show();
 		});
