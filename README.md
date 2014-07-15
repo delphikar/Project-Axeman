@@ -1,7 +1,7 @@
 #Project Axeman
-_Current version 0.2.5_
+_Current version 0.2.7_
 
-_Development version 0.2.6_
+_Development version 0.2.8_
 
 
 ## Overview
@@ -15,7 +15,7 @@ _This extension uses [Google Chrome](http://www.google.com/chrome "Google Chrome
 
 **Version 0.2 is finally here!**
 
-- Support for up to 54 countries which means support for more than 200 servers
+- Support for up to 57 countries which means support for more than 200 servers
 - Support for all Travian 4 versions
 - Beautiful design that goes hand-in-hand with travian website
 - Advanced Plugin system where you can enable or disable plugins as you need
@@ -45,6 +45,7 @@ Developed by JustBuild Development
 
 Collaborators
 
+- Matt Gates _([Geczy](https://github.com/Geczy))_
 - Grzegorz Witczak _([kavillock](https://github.com/kavillock "Grzegorz Witczak on github"))_
 - Everton Moreth _([emoreth](https://github.com/emoreth "Everton Moreth on github"))_
 - Ignacio Munizaga _([thagat](https://github.com/emoreth "Everton Moreth on github"))_
@@ -55,6 +56,7 @@ Donators
 - Geczy
 
 ## Changelog
+- **Version 0.2.8** _(xx.07.2014.)_
 - **Version 0.2.7 & 0.2.6** _(14.07.2014.)_
 	- New: Resource Sender plugin
 	- New: Marketplace Enhancements plugin
