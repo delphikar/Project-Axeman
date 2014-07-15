@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * TravianPLUS.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek
  *
@@ -12,7 +12,7 @@
 
 function TravianPLUS() {
 	/// <summary>
-	/// Initializes object 
+	/// Initializes object
 	/// </summary>
 	this.Register = function () {
 		Log("Registering TravianPLUS plugin...", "TravianPLUS");
@@ -27,23 +27,10 @@ function TravianPLUS() {
 		// Account overview
 		// Notepad
 		// Crop finder
-		
+
 
 		// Reports/Messages 'Check all' option
 		ReportsShowCheckAll();
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Utility/TravianPLUS']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
 
 	var ReportsShowCheckAll = function () {

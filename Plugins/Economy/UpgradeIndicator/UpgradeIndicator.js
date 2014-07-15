@@ -1,9 +1,9 @@
 ﻿/******************************************************************************
  * FieldUpgradeIndicator.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek
- * 
+ *
  * Collaborators:
  * 		Grzegorz Witczak
  *
@@ -15,7 +15,7 @@
 
 function UpgradeIndicator() {
 	/// <summary>
-	/// Initializes object 
+	/// Initializes object
 	/// </summary>
 	this.Register = function () {
 		// TODO Refactor
@@ -28,19 +28,6 @@ function UpgradeIndicator() {
 		// Check if we can apply states
 		if (MatchPages([Enums.TravianPages.VillageOut])) FieldUpgradeIndicator();
 		if (MatchPages([Enums.TravianPages.VillageIn])) BuildingUpgradeIndicator();
-		
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Economy/UpgradeIndicator']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
 
 
@@ -63,7 +50,7 @@ function UpgradeIndicator() {
 					SetUIElementState(field, "UnderConstruction");
 					continue; // Skip to next field
 				}
-				
+
 				var fieldUpgradeState = "Upgradeable";
 				var fieldLevel = ActiveProfile.Villages[ActiveVillageIndex].VillageOut.Levels[availableFields[rIndex][fIndex]];
 				var fieldMaxLevel = ActiveProfile.Villages[ActiveVillageIndex].IsMainCity ? 20 : 10;
@@ -73,7 +60,7 @@ function UpgradeIndicator() {
 					SetUIElementState(field, "MaxUpgraded");
 					continue;; // Skip to next field
 				}
-				
+
 				// Get upgrade cost for current level
 				var fieldUpgradeCost = Enums.Fields[rIndex][fieldLevel];
 
@@ -95,7 +82,7 @@ function UpgradeIndicator() {
 						// warehouse/granary cost difference even if we can't
 						// upgrade field. Can be case where we can't upgarade
 						// because of wood and we would break at first itteration
-						// but field clay cost is larger than what can be store. 
+						// but field clay cost is larger than what can be store.
 					}
 				}
 
@@ -143,7 +130,7 @@ function UpgradeIndicator() {
 								// warehouse/granary cost difference even if we can't
 								// upgrade field. Can be case where we can't upgarade
 								// because of wood and we would break at first itteration
-								// but field clay cost is larger than what can be store. 
+								// but field clay cost is larger than what can be store.
 							}
 						}
 
@@ -159,7 +146,7 @@ function UpgradeIndicator() {
 			SetUIElementState(levelObject, upgradeState);
 		});
 	};
-	
+
 	var SetUIElementState = function (field, state) {
 		// Apply styles
 		$(field).addClass("PAUIElement " + state);
