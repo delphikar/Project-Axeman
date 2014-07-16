@@ -36,9 +36,9 @@ function ResourceSender() {
 	var BuildingsSender = function() {
 		$(".showCosts").each(function () {
 			// Check if there is any negative costs in current container
-			if ($(".ResourceCalculatorBuildCost.negative", $(this)).length && !$(".ResourceCalculatorBuildCost.upgradeStorage", $(this)).length) {
+			if (($(".ResourceCalculatorBuildCost.negative", $(this)).length || $("[class^='ResourceCalculatorR']", $(this)).length) && !$(".ResourceCalculatorBuildCost.upgradeStorage", $(this)).length) {
 				// Retrieve costs
-				var costs = $(".ResourceCalculatorBuildCost", $(this));
+				var costs = !$(".ResourceCalculatorBuildCost", $(this)).length ? $("[class^='ResourceCalculatorR']", $(this)) : $(".ResourceCalculatorBuildCost", $(this));
 				var r1 = parseInt($(costs[0]).text().replace("(", "").replace(",", ""), 10) || 0;
 				var r2 = parseInt($(costs[1]).text().replace("(", "").replace(",", ""), 10) || 0;
 				var r3 = parseInt($(costs[2]).text().replace("(", "").replace(",", ""), 10) || 0;
