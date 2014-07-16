@@ -112,9 +112,9 @@ function MarketplaceEnhancements() {
 			var production = villageResources.Production[index];
 			var alreadySet = $("#r" + (index + 1)).spinner("value");
 			if (stored < (production + alreadySet)) {
-				DLog("No enough " + Enums.FieldNames[index] + " stored [" + stored + "] to send " + (alreadySet ? "more than" : "hour production") + " [" + (production + alreadySet) + "]", "MarketplaceEnhancements");
+				DLog("Not enough " + Enums.FieldNames[index] + " stored [" + stored + "] to send " + (alreadySet ? "more than" : "hour production") + " [" + (production + alreadySet) + "]", "MarketplaceEnhancements");
 				hourButton.button("option", "disabled", true);
-				hourButton.attr("title", hourButton.attr("title") + "\nNo enough " + Enums.FieldNames[index] + " - " + (production + alreadySet - stored) + " more needed");
+				hourButton.attr("title", hourButton.attr("title") + "\nNot enough " + Enums.FieldNames[index] + " - " + (production + alreadySet - stored) + " more needed");
 			}
 
 			productionSum += production + alreadySet;
@@ -123,9 +123,9 @@ function MarketplaceEnhancements() {
 		// Check if enough traders is available
 		var canTransport = tradersAvailable * traderCarryAmount;
 		if (canTransport < productionSum) {
-			DLog("No enough traders to send [" + productionSum + "] resources", "MarketplaceEnhancements");
+			DLog("Not enough traders to send [" + productionSum + "] resources", "MarketplaceEnhancements");
 			hourButton.button("option", "disabled", true);
-			hourButton.attr("title", hourButton.attr("title") + "\nNo enough traders available - " + (Math.ceil(productionSum / traderCarryAmount) - tradersAvailable) + " more needed");
+			hourButton.attr("title", hourButton.attr("title") + "\nNot enough traders available - " + (Math.ceil(productionSum / traderCarryAmount) - tradersAvailable) + " more needed");
 		}
 	};
 
