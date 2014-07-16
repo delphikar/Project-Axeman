@@ -59,6 +59,7 @@ function MarketplaceEnhancements() {
 		// Add village hour production button
 		// TODO Add second button that adds hour production from all villages
 		AddHourProductionButton();
+		AddFullButton();
 
 		// Inserts junk resources table
 		InsertJunkResourceTable();
@@ -96,6 +97,40 @@ function MarketplaceEnhancements() {
 
 		$("#r1, #r2, #r3, #r4").change(function () { ValidateHourButton(); });
 		$("#r1, #r2, #r3, #r4").on("input", function () { ValidateHourButton(); });
+	};
+
+	var AddFullButton = function() {
+		var fill = $("<span>").text("Full").attr({
+			id: "PAMEFullButton",
+			title: "Fill up your selected village",
+		}).css({
+			margin: "0"
+		}).button({
+			icons: { primary: "ui-icon-plus" }
+		}).click(function () {
+
+            var VillageIndex = document.getElementById('enterVillageName_list').value;
+            var villageStorage = ActiveProfile.Villages[VillageIndex].Resources.Stored;
+            var villageMaxStorage = ActiveProfile.Villages[VillageIndex].Resources.Storage;
+
+            console.log(villageMaxStorage);
+            console.log(ActiveProfile.Villages[VillageIndex]);
+
+            for (var i = 0; i < 4; i++) {
+            	var id = 'r' + (i + 1);
+				var store = (villageMaxStorage[i] - villageStorage[i]);
+				console.log(store);
+                store = Math.floor((store - 100) / 10) * 10;
+
+                $('#' + id).val(store);
+            }
+
+			$.each($("#send_select input"), function (index, obj) {
+				$(obj).change();
+			});
+		});
+
+		$("#send_select tr:eq(4) td").append(' ').append(fill);
 	};
 
 	var ValidateHourButton = function () {
