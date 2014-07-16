@@ -39,10 +39,10 @@ function ResourceSender() {
 			if ($(".ResourceCalculatorBuildCost.negative", $(this)).length && !$(".ResourceCalculatorBuildCost.upgradeStorage", $(this)).length) {
 				// Retrieve costs
 				var costs = $(".ResourceCalculatorBuildCost", $(this));
-				var r1 = parseInt($(costs[0]).text().replace("(", "").replace(",", ""), 10) || 0;
-				var r2 = parseInt($(costs[1]).text().replace("(", "").replace(",", ""), 10) || 0;
-				var r3 = parseInt($(costs[2]).text().replace("(", "").replace(",", ""), 10) || 0;
-				var r4 = parseInt($(costs[3]).text().replace("(", "").replace(",", ""), 10) || 0;
+				var r1 = Math.floor(parseInt($(costs[0]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+				var r2 = Math.floor(parseInt($(costs[1]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+				var r3 = Math.floor(parseInt($(costs[2]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+				var r4 = Math.floor(parseInt($(costs[3]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
 
 				$(this).append("<br/><div>You can send missing resources from another village:</div>");
 				FillVillagesList($(this));
