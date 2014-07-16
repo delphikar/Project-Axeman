@@ -137,16 +137,6 @@ function MarketplaceEnhancements() {
 
 		Log("Adding village list selector...", "MarketplaceEnhancements");
 
-		// Gets village names to array
-		var villages = [];
-		for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
-			var obj = ActiveProfile.Villages[index];
-
-			// Check if village is not currently active village
-			if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID)
-				villages[villages.length] = obj.Name;
-		}
-
 		// Build dropdown selector
 		var selectInput = $("<select>").attr({
 			'id': 'enterVillageName_list',
@@ -155,10 +145,16 @@ function MarketplaceEnhancements() {
 
 		selectInput.append("<option disabled selected>Select a village</option>");
 
-		// Add village names to list
-		$.each(villages, function (current, value) {
-			selectInput.append("<option>" + value + "</option>");
-		});
+		// Gets village names to array
+		var villages = [];
+		for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
+			var obj = ActiveProfile.Villages[index];
+
+			// Check if village is not currently active village
+			if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID) {
+				selectInput.append("<option value="+index+">" + obj.Name + "</option>");
+			}
+		}
 
 		// Append selector
 		$(".compactInput").append($("<br>"));
@@ -166,7 +162,7 @@ function MarketplaceEnhancements() {
 
 		// Change village needs to delete coords
 		$(selectInput).change(function () {
-			$("#enterVillageName").val($(this).val());
+			$("#enterVillageName").val($('option:selected', this).text());
 			$("#xCoordInput, #yCoordInput").val("");
 		});
 
