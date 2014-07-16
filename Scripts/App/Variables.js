@@ -32,7 +32,6 @@ function isDevMode() {
         xhr.onload = function () {
             var json = JSON.parse(this.responseText);
             IsDevelopmentMode = !('update_url' in json);
-            console.log("IsDevelopmentMode: " + IsDevelopmentMode);
         };
         xhr.send();
     }
