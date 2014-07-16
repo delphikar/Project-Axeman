@@ -264,10 +264,10 @@ function MarketplaceEnhancements() {
 			cellspacing: 1
 		});
 
-		var mercantsRow = $("<tr>");
-		mercantsRow.append($("<td>").attr("colspan", "2").append("Mercants"));
-		mercantsRow.append($("<td>").addClass("tradersNeeded").append("0"));
-		mercantsRow.append($("<td>").addClass("tradersAvailable").append("/ " + tradersAvailable));
+		var merchantsRow = $("<tr>");
+		merchantsRow.append($("<td>").attr("colspan", "2").append("Merchants"));
+		merchantsRow.append($("<td>").addClass("tradersNeeded").append("0"));
+		merchantsRow.append($("<td>").addClass("tradersAvailable").append("/ " + tradersAvailable));
 
 		var currentRow = $("<tr>");
 		currentRow.append($("<td>").attr("colspan", "2").append("Current"));
@@ -284,7 +284,7 @@ function MarketplaceEnhancements() {
 				.append($("<img>").addClass("r3 PAMEJunkTableResourceLink Disabled").attr({ src: "img/x.gif", title: "Add waste to Iron" }).click(UseJunkResource))
 				.append($("<img>").addClass("r4 PAMEJunkTableResourceLink Disabled").attr({ src: "img/x.gif", title: "Add waste to Crop" }).click(UseJunkResource))));
 
-		junkResourcesTable.append(mercantsRow);
+		junkResourcesTable.append(merchantsRow);
 		junkResourcesTable.append(currentRow);
 		junkResourcesTable.append(wastedRow);
 
