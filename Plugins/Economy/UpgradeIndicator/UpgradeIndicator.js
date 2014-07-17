@@ -86,6 +86,10 @@ function UpgradeIndicator() {
 					}
 				}
 
+				if(fieldUpgradeCost && fieldUpgradeCost.length >= 4 && ActiveProfile.Villages[ActiveVillageIndex].Resources.FreeCrop < fieldUpgradeCost[4]) {
+					fieldUpgradeState = "NonUpgradeable";
+				}
+
 				// Set field state
 				SetUIElementState(field, fieldUpgradeState);
 			}
@@ -141,6 +145,10 @@ function UpgradeIndicator() {
 				}
 			} else {
 				upgradeState = "UnderConstruction";
+			}
+
+			if(buildingUpgradeCost && buildingUpgradeCost.length >= 4 && ActiveProfile.Villages[ActiveVillageIndex].Resources.FreeCrop < buildingUpgradeCost[4]) {
+				upgradeState = "NonUpgradeable";
 			}
 
 			SetUIElementState(levelObject, upgradeState);
