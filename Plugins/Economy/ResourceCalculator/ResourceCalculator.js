@@ -169,6 +169,7 @@ function ResourceCalculator() {
 
 				// Create element to show resource difference
 				var costElement = $("<div>");
+				costElement.addClass("ResourceCalculatorBuildCost");
 				costElement.addClass("ResourceCalculatorR" + rindex);
 				costElement.css("color", "#0C9E21");
 				costElement.css("text-align", "right");
@@ -207,8 +208,14 @@ function ResourceCalculator() {
 			var color = diff < 0 ? "#B20C08" : "#0C9E21";
 
 			// Update elements
-			$(".ResourceCalculatorR" + rindex, cost).html("(" + NumberWithCommas(diff) + ")");
-			$(".ResourceCalculatorR" + rindex, cost).css("color", color);
+			var costElement = $(".ResourceCalculatorR" + rindex, cost);
+			costElement.html("(" + NumberWithCommas(diff) + ")");
+			costElement.css("color", color);
+			if (diff < 0) {
+				costElement.addClass("negative");
+			} else {
+				costElement.removeClass("negative");
+			}
 		}
 	};
 };
