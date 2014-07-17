@@ -1,12 +1,12 @@
 ﻿/******************************************************************************
  * ResourceSender.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek
- * 
+ *
  * Collaborator:
  *		Geczy
- * 
+ *
  * Donator:
  *		Geczy
  *
@@ -17,7 +17,7 @@
 
 function ResourceSender() {
 	/// <summary>
-	/// Initializes object 
+	/// Initializes object
 	/// </summary>
 	this.Register = function () {
 		Log("Registering ResourceSender plugin...", "ResourceSender");
@@ -31,19 +31,6 @@ function ResourceSender() {
 		if (ActiveProfile.Villages.length > 1) {
 			BuildingsSender();
 		}
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Economy/ResourceSender']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
 
 	var BuildingsSender = function() {
@@ -52,10 +39,10 @@ function ResourceSender() {
 			if ($(".ResourceCalculatorBuildCost.negative", $(this)).length && !$(".ResourceCalculatorBuildCost.upgradeStorage", $(this)).length) {
 				// Retrieve costs
 				var costs = $(".ResourceCalculatorBuildCost", $(this));
-				var r1 = parseInt($(costs[0]).text().replace("(", "").replace(",", ""), 10) || 0;
-				var r2 = parseInt($(costs[1]).text().replace("(", "").replace(",", ""), 10) || 0;
-				var r3 = parseInt($(costs[2]).text().replace("(", "").replace(",", ""), 10) || 0;
-				var r4 = parseInt($(costs[3]).text().replace("(", "").replace(",", ""), 10) || 0;
+				var r1 = Math.floor(parseInt($(costs[0]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+				var r2 = Math.floor(parseInt($(costs[1]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+				var r3 = Math.floor(parseInt($(costs[2]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+				var r4 = Math.floor(parseInt($(costs[3]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
 
 				$(this).append("<br/><div>You can send missing resources from another village:</div>");
 				FillVillagesList($(this));
@@ -131,7 +118,7 @@ function ResourceSender() {
 
 	var FillVillagesList = function (container) {
 		/// <summary>
-		/// Adds Select element under the village name textbox so that is 
+		/// Adds Select element under the village name textbox so that is
 		/// simplifies sending resources to owned villages
 		/// </summary>
 
@@ -181,7 +168,7 @@ function ResourceSender() {
 			var r4 = sendButton.data("r4");
 
 			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, ActiveProfile.Villages[ActiveVillageIndex].VID, r1, r2, r3, r4);
-			
+
 			sendButton.attr("href", selectedVillageSendLink);
 			sendButton.show();
 		});

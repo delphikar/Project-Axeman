@@ -59,6 +59,7 @@ function MarketplaceEnhancements() {
 		// Add village hour production button
 		// TODO Add second button that adds hour production from all villages
 		AddHourProductionButton();
+		AddFullButton();
 
 		// Inserts junk resources table
 		InsertJunkResourceTable();
@@ -72,22 +73,6 @@ function MarketplaceEnhancements() {
 			//Perhaps works, maybe not, but useful
 			IncomingSum();
 		})/*()*/;
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Utility/MarketplaceEnhancements']);
-
-			(function() {
-				var ga = document.createElement('script');
-				ga.type = 'text/javascript';
-				ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0];
-				s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
 
 	var AddHourProductionButton = function() {
@@ -113,7 +98,41 @@ function MarketplaceEnhancements() {
 		$("#r1, #r2, #r3, #r4").change(function () { ValidateHourButton(); });
 		$("#r1, #r2, #r3, #r4").on("input", function () { ValidateHourButton(); });
 	};
-	
+
+	var AddFullButton = function() {
+		var fill = $("<span>").text("Full").attr({
+			id: "PAMEFullButton",
+			title: "Fill up your selected village",
+		}).css({
+			margin: "0"
+		}).button({
+			icons: { primary: "ui-icon-plus" }
+		}).click(function () {
+
+            var VillageIndex = document.getElementById('enterVillageName_list').value;
+            var villageStorage = ActiveProfile.Villages[VillageIndex].Resources.Stored;
+            var villageMaxStorage = ActiveProfile.Villages[VillageIndex].Resources.Storage;
+
+            console.log(villageMaxStorage);
+            console.log(ActiveProfile.Villages[VillageIndex]);
+
+            for (var i = 0; i < 4; i++) {
+            	var id = 'r' + (i + 1);
+				var store = (villageMaxStorage[i] - villageStorage[i]);
+				console.log(store);
+                store = Math.floor((store - 100) / 10) * 10;
+
+                $('#' + id).val(store);
+            }
+
+			$.each($("#send_select input"), function (index, obj) {
+				$(obj).change();
+			});
+		});
+
+		$("#send_select tr:eq(4) td").append(' ').append(fill);
+	};
+
 	var ValidateHourButton = function () {
 		var hourButton = $("#PAMEHourProductionButton");
 		hourButton.attr("title", "Add this village's hour production");
@@ -128,9 +147,9 @@ function MarketplaceEnhancements() {
 			var production = villageResources.Production[index];
 			var alreadySet = $("#r" + (index + 1)).spinner("value");
 			if (stored < (production + alreadySet)) {
-				DLog("No enough " + Enums.FieldNames[index] + " stored [" + stored + "] to send " + (alreadySet ? "more than" : "hour production") + " [" + (production + alreadySet) + "]", "MarketplaceEnhancements");
+				DLog("Not enough " + Enums.FieldNames[index] + " stored [" + stored + "] to send " + (alreadySet ? "more than" : "hour production") + " [" + (production + alreadySet) + "]", "MarketplaceEnhancements");
 				hourButton.button("option", "disabled", true);
-				hourButton.attr("title", hourButton.attr("title") + "\nNo enough " + Enums.FieldNames[index] + " - " + (production + alreadySet - stored) + " more needed");
+				hourButton.attr("title", hourButton.attr("title") + "\nNot enough " + Enums.FieldNames[index] + " - " + (production + alreadySet - stored) + " more needed");
 			}
 
 			productionSum += production + alreadySet;
@@ -139,29 +158,19 @@ function MarketplaceEnhancements() {
 		// Check if enough traders is available
 		var canTransport = tradersAvailable * traderCarryAmount;
 		if (canTransport < productionSum) {
-			DLog("No enough traders to send [" + productionSum + "] resources", "MarketplaceEnhancements");
+			DLog("Not enough traders to send [" + productionSum + "] resources", "MarketplaceEnhancements");
 			hourButton.button("option", "disabled", true);
-			hourButton.attr("title", hourButton.attr("title") + "\nNo enough traders available - " + (Math.ceil(productionSum / traderCarryAmount) - tradersAvailable) + " more needed");
+			hourButton.attr("title", hourButton.attr("title") + "\nNot enough traders available - " + (Math.ceil(productionSum / traderCarryAmount) - tradersAvailable) + " more needed");
 		}
 	};
 
 	var FillVillagesList = function () {
 		/// <summary>
-		/// Adds Select element under the village name textbox so that is 
+		/// Adds Select element under the village name textbox so that is
 		/// simplifies sending resources to owned villages
 		/// </summary>
 
 		Log("Adding village list selector...", "MarketplaceEnhancements");
-
-		// Gets village names to array
-		var villages = [];
-		for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
-			var obj = ActiveProfile.Villages[index];
-
-			// Check if village is not currently active village
-			if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID)
-				villages[villages.length] = obj.Name;
-		}
 
 		// Build dropdown selector
 		var selectInput = $("<select>").attr({
@@ -171,10 +180,16 @@ function MarketplaceEnhancements() {
 
 		selectInput.append("<option disabled selected>Select a village</option>");
 
-		// Add village names to list
-		$.each(villages, function (current, value) {
-			selectInput.append("<option>" + value + "</option>");
-		});
+		// Gets village names to array
+		var villages = [];
+		for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
+			var obj = ActiveProfile.Villages[index];
+
+			// Check if village is not currently active village
+			if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID) {
+				selectInput.append("<option value="+index+">" + obj.Name + "</option>");
+			}
+		}
 
 		// Append selector
 		$(".compactInput").append($("<br>"));
@@ -182,7 +197,7 @@ function MarketplaceEnhancements() {
 
 		// Change village needs to delete coords
 		$(selectInput).change(function () {
-			$("#enterVillageName").val($(this).val());
+			$("#enterVillageName").val($('option:selected', this).text());
 			$("#xCoordInput, #yCoordInput").val("");
 		});
 
@@ -204,7 +219,7 @@ function MarketplaceEnhancements() {
 		$("#r1, #r2, #r3, #r4").each(function (index, obj) {
 			// Get stored amount of current resource
 			var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[index];
-			
+
 			// Apply spinner to current resource input textbox
 			$(obj).spinner({
 				incremental: true,
@@ -249,10 +264,10 @@ function MarketplaceEnhancements() {
 			cellspacing: 1
 		});
 
-		var mercantsRow = $("<tr>");
-		mercantsRow.append($("<td>").attr("colspan", "2").append("Mercants"));
-		mercantsRow.append($("<td>").addClass("tradersNeeded").append("0"));
-		mercantsRow.append($("<td>").addClass("tradersAvailable").append("/ " + tradersAvailable));
+		var merchantsRow = $("<tr>");
+		merchantsRow.append($("<td>").attr("colspan", "2").append("Merchants"));
+		merchantsRow.append($("<td>").addClass("tradersNeeded").append("0"));
+		merchantsRow.append($("<td>").addClass("tradersAvailable").append("/ " + tradersAvailable));
 
 		var currentRow = $("<tr>");
 		currentRow.append($("<td>").attr("colspan", "2").append("Current"));
@@ -269,7 +284,7 @@ function MarketplaceEnhancements() {
 				.append($("<img>").addClass("r3 PAMEJunkTableResourceLink Disabled").attr({ src: "img/x.gif", title: "Add waste to Iron" }).click(UseJunkResource))
 				.append($("<img>").addClass("r4 PAMEJunkTableResourceLink Disabled").attr({ src: "img/x.gif", title: "Add waste to Crop" }).click(UseJunkResource))));
 
-		junkResourcesTable.append(mercantsRow);
+		junkResourcesTable.append(merchantsRow);
 		junkResourcesTable.append(currentRow);
 		junkResourcesTable.append(wastedRow);
 
@@ -305,7 +320,7 @@ function MarketplaceEnhancements() {
 
 		var stored = ActiveProfile.Villages[ActiveVillageIndex].Resources.Stored[targetResourceIndex - 1];
 		var junkAmount = (parseInt($(".junkAmount").text(), 10) || 0);
-		
+
 		targetElement.spinner("value", resourceReserved + Math.min(junkAmount, stored - resourceReserved));
 		targetElement.change();
 	};
@@ -333,7 +348,7 @@ function MarketplaceEnhancements() {
 		var junkAmount = tradersNeeded * traderCarryAmount - resSum;
 
 		// Chane styles when use requested too many traders
-		if (tradersNeeded > tradersAvailable) 
+		if (tradersNeeded > tradersAvailable)
 			$(".tradersNeeded").parent().addClass("PAMEJunkTableErrorRow");
 		else $(".tradersNeeded").parent().removeClass("PAMEJunkTableErrorRow");
 
@@ -392,23 +407,23 @@ function MarketplaceEnhancements() {
 						inputElement.change();
 					}
 				}).text(traderCarryAmount);
-			
+
 			container.append(shortcutElement);
 		}
 
 		// Validate shortcuts on input change
 		$("#r1, #r2, #r3, #r4").change(ValidateTransportShortcuts);
-		
+
 		Log("Transport shortcuts added successfully!", "MarketplaceEnhancements");
 	};
 
 	var ValidateTransportShortcuts = function () {
 		// TODO Comment
-		
+
 		var inputElement = $(this);
 		var currentAmount = inputElement.spinner("value");
 		var shortcuts = $(".PAMEShortcut", inputElement.parent().parent().parent());
-		
+
 		$.each(shortcuts, function() {
 			var element = $(this);
 			if (currentAmount >= inputElement.spinner("option", "max")) {
@@ -460,7 +475,7 @@ function MarketplaceEnhancements() {
 				}
 			});
 
-			// Get resource sum by splitting all resource strings and adding them to array by 
+			// Get resource sum by splitting all resource strings and adding them to array by
 			// index mod 4 and offset by 1 because split returns unused value (first)
 			var resourceSplit = $(".res > td > span", arrivingTables).text().split(" ");
 			for (var index = 1, cache = resourceSplit.length; index < cache; index++) {

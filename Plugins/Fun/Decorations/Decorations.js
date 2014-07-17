@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * Decorations.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek
  *
@@ -12,25 +12,12 @@
 
 function Decorations() {
 	/// <summary>
-	/// Initializes object 
+	/// Initializes object
 	/// </summary>
 	this.Register = function () {
 		Log("Registering Decorations plugin...", "Decorations");
 
 		RemoveInGameHelp();
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Fun/Decorations']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
 
 	var RemoveInGameHelp = function () {
@@ -41,10 +28,19 @@ function Decorations() {
 		/// </summary>
 
 		Log("Removing in game help...", "Decorations");
-
 		$("#ingameManual").remove();
-
 		Log("In game help removed!", "Decorations");
+
+		AllianceNumbered();
+	};
+
+	var AllianceNumbered = function() {
+		if(MatchPages([Enums.TravianPages.Alliance]) && $('#member .pla').length) {
+			Log("Found alliance page, lets order it", "Decorations");
+			$('#member .pla').each(function(index) {
+				$(this).prepend((index + 1) + '. ');
+			})
+		}
 	};
 }
 

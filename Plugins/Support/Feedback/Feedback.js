@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * Feedback.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek (AleksandarDev)
  *
@@ -46,19 +46,6 @@ function Feedback() {
 		$("#PAFeedback").click(function () {
 			app.ShowModalView("Plugins/Support/Feedback/FeedbackForm.html");
 		});
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Support/Feedback']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
 }
 
