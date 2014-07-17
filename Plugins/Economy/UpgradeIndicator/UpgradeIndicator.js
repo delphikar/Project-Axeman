@@ -86,7 +86,7 @@ function UpgradeIndicator() {
 					}
 				}
 
-				if(ActiveProfile.Villages[ActiveVillageIndex].Resources.FreeCrop < fieldUpgradeCost[4]) {
+				if(fieldUpgradeCost && fieldUpgradeCost.length >= 4 && ActiveProfile.Villages[ActiveVillageIndex].Resources.FreeCrop < fieldUpgradeCost[4]) {
 					fieldUpgradeState = "NonUpgradeable";
 				}
 
@@ -147,7 +147,7 @@ function UpgradeIndicator() {
 				upgradeState = "UnderConstruction";
 			}
 
-			if(ActiveProfile.Villages[ActiveVillageIndex].Resources.FreeCrop < buildingUpgradeCost[4]) {
+			if(buildingUpgradeCost && buildingUpgradeCost.length >= 4 && ActiveProfile.Villages[ActiveVillageIndex].Resources.FreeCrop < buildingUpgradeCost[4]) {
 				upgradeState = "NonUpgradeable";
 			}
 
