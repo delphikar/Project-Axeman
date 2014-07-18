@@ -28,32 +28,83 @@ function ResourceSender() {
 		}
 
 		// Process all show costs containers
-		if (ActiveProfile.Villages.length > 1) {
+		if (ActiveProfile.Villages.length >= 1) {
 			BuildingsSender();
 		}
 	};
 
-	var BuildingsSender = function() {
-		$(".showCosts").each(function () {
-			// Check if there is any negative costs in current container
-			if (($(".ResourceCalculatorBuildCost.negative", $(this)).length || $("[class^='ResourceCalculatorR']", $(this)).length) && !$(".ResourceCalculatorBuildCost.upgradeStorage", $(this)).length) {
-				// Retrieve costs
-				var costs = $(".ResourceCalculatorBuildCost", $(this));
-				var r1 = Math.floor(parseInt($(costs[0]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
-				var r2 = Math.floor(parseInt($(costs[1]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
-				var r3 = Math.floor(parseInt($(costs[2]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
-				var r4 = Math.floor(parseInt($(costs[3]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+	var BuildingsSender = function () {
+		Log("In build page. Building UI...", "ResourceSender");
 
-				$(this).append("<br/><div>You can send missing resources from another village:</div>");
-				FillVillagesList($(this));
-				AddSendButton($(this), "Send from this village",
-					r1 < 0 ? r1 : 0,
-					r2 < 0 ? r2 : 0,
-					r3 < 0 ? r3 : 0,
-					r4 < 0 ? r4 : 0);
-				$(this).append("<br/><br/>");
+		$(".showCosts").each(function(index) {
+			var container = $(this);
+
+			// Check if there is any negative costs in current container
+
+			DLog("Creating UI elements for cost block", "ResourceSender");
+
+			// Retrieve costs
+			var rx = GetBlockResourceDifference(index);
+
+			DLog("Got costs: " + rx[0] + ", " + rx[1] + ", " + rx[2] + ", " + rx[3], "ResourceSender");
+
+			// Build block UI
+			var block = $("<div>")
+				.addClass("ResourceSenderBlock")
+				.data("blockindex", index);
+			block.append("<br/><div>You can send missing resources from another village:</div>");
+			FillVillagesList(block);
+			AddSendButton(block, index, "Send from this village", rx[0], rx[1], rx[2], rx[3]);
+			if ($("[class*='ResourceCalculatorR']", container).length) {
+				AttachInputChangeWatcher($("input[name*='t']", container.parent()), index);
+			}
+			block.append("<br/><br/>");
+
+			// Append block to container
+			container.append(block);
+
+			// Determine whether this block need to be shown to user
+			if ($(".ResourceCalculatorBuildCost.negative", container).length && !$(".ResourceCalculatorBuildCost.upgradeStorage", container).length) {
+				block.show();
+			} else {
+				block.hide();
 			}
 		});
+	}
+
+	var AttachInputChangeWatcher = function(input, index) {
+		$(input).on("input", function () {
+			DLog("Input (" + index + ") changed...", "ResourceSender");
+
+			var container = $(".showCosts:eq(" + index + ")");
+			if ($(".ResourceCalculatorBuildCost.negative", container).length) {
+				DLog("Showing troops block", "ResourceSender");
+
+				var rx = GetBlockResourceDifference(index);
+				DLog("Got costs: " + rx[0] + ", " + rx[1] + ", " + rx[2] + ", " + rx[3], "ResourceSender");
+
+				UpdateSendButton(index, rx[0], rx[1], rx[2], rx[3]);
+
+				$(".ResourceSenderBlock", container).show();
+				$(".ResourceSendVillageNameList", container).change();
+			} else {
+				DLog("Hidding troops block", "ResourceSender");
+
+				$(".ResourceSenderBlock", container).hide();
+			}
+		});
+	}
+
+	var GetBlockResourceDifference = function(index) {
+		var container = $(".showCosts:eq(" + index + ")");
+		
+		var costs = $(".ResourceCalculatorBuildCost", container);
+		var r1 = Math.floor(parseInt($(costs[0]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+		var r2 = Math.floor(parseInt($(costs[1]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+		var r3 = Math.floor(parseInt($(costs[2]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+		var r4 = Math.floor(parseInt($(costs[3]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+
+		return [r1, r2, r3, r4];
 	}
 
 	var HandleMarketplaceRequest = function() {
@@ -94,26 +145,35 @@ function ResourceSender() {
 		return "http://" + ActiveServerAddress + Enums.TravianPages.Build + "?gid=17&t=5&newdid=" + villageId + "&resourceDestinationId=" + receiverVillageId + "&resourceSend=" + amountR1 + "," + amountR2 + "," + amountR3 + "," + amountR4;
 	};
 
-	var AddSendButton = function(container, text, amountR1, amountR2, amountR3, amountR4) {
+	var UpdateSendButton = function (blockIndex, amountR1, amountR2, amountR3, amountR4) {
+		DLog("Updating button (" + blockIndex + ") data", "ResourceSender");
+
+		var button = $("#ResourceSendSendButton" + blockIndex);
+		button.data("r1", amountR1 < 0 ? amountR1 : 0);
+		button.data("r2", amountR2 < 0 ? amountR2 : 0);
+		button.data("r3", amountR3 < 0 ? amountR3 : 0);
+		button.data("r4", amountR4 < 0 ? amountR4 : 0);
+	}
+
+	var AddSendButton = function(container, blockIndex, text, amountR1, amountR2, amountR3, amountR4) {
 		/// <summary>
 		/// Adds a travian like button with given link and text
 		/// </summary>
 
-		container.append($("<a>")
+		var button = $("<a>")
 			.attr({
-				"id": "ResourceSendSendButton" + $(".ResourceSendSendButton").length,
+				"id": "ResourceSendSendButton" + blockIndex,
 				"class": "ResourceSendSendButton",
-				"href": "#",
-				"data-r1": amountR1,
-				"data-r2": amountR2,
-				"data-r3": amountR3,
-				"data-r4": amountR4
+				"href": "#"
 			})
 			.css({
 				"margin-left": "12px",
 				"display": "none"
 			})
-			.html(text));
+			.html(text);
+		container.append(button);
+
+		UpdateSendButton(blockIndex, amountR1, amountR2, amountR3, amountR4);
 	};
 
 	var FillVillagesList = function (container) {
@@ -130,7 +190,7 @@ function ResourceSender() {
 			var obj = ActiveProfile.Villages[index];
 
 			// Check if village is not currently active village
-			if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID)
+			//if (ActiveProfile.Villages[ActiveVillageIndex].VID != obj.VID)
 				villages[villages.length] = obj;
 		}
 
@@ -151,16 +211,18 @@ function ResourceSender() {
 
 		// Add village names to list
 		$.each(villages, function (current, value) {
-			console.log(current);
-			console.log(value);
 			selectInput.append("<option data-villageId='" + value.VID + "'>" + value.Name + "</option>");
 		});
 
 		// Update link if selection changes
 		$(selectInput).change(function () {
+			DLog("Village selection changed", "ResourceSender");
+
 			var selectedVillageId = $("option:selected", $(this)).data("villageid");
 			var selectInputSendButtonId = $(this).data("sendbuttonid");
 			var sendButton = $("#" + selectInputSendButtonId);
+
+			if (!selectedVillageId) return;
 
 			var r1 = sendButton.data("r1");
 			var r2 = sendButton.data("r2");
