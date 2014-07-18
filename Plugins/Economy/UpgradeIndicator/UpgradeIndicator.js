@@ -46,6 +46,20 @@ function UpgradeIndicator() {
 
 				DLog("Index: " + availableFields[rIndex][fIndex]);
 
+				// Get upgrade cost for current level
+				var fieldUpgradeCost = Enums.Fields[rIndex][fieldLevel];
+
+	            // Show upgrade efficiency
+	            if (fieldUpgradeCost && fieldUpgradeCost.length >= 4) {
+	                var total = fieldUpgradeCost[0] + fieldUpgradeCost[1] + fieldUpgradeCost[2] + fieldUpgradeCost[3];
+	                var rPerWheat = fieldUpgradeCost[4] > 0 ? Math.floor(total / fieldUpgradeCost[4]) : 0;
+
+	                if (rPerWheat > 0) {
+	                    var resEfficiencyit = [rPerWheat, fieldLevel, Enums.FieldNames[rIndex], (availableFields[rIndex][fIndex] + 1)];
+	                    resEfficiency.push(resEfficiencyit);
+	                }
+	            }
+
 				// Check if field is under construction
 				if (field.hasClass("underConstruction")) {
 					SetUIElementState(field, "UnderConstruction");
@@ -61,9 +75,6 @@ function UpgradeIndicator() {
 					SetUIElementState(field, "MaxUpgraded");
 					continue;; // Skip to next field
 				}
-
-				// Get upgrade cost for current level
-				var fieldUpgradeCost = Enums.Fields[rIndex][fieldLevel];
 
 				// Go through all resources
 				for (var resource = 0; resource < 4; resource++) {
@@ -90,17 +101,6 @@ function UpgradeIndicator() {
 				if(fieldUpgradeCost && fieldUpgradeCost.length >= 4 && ActiveProfile.Villages[ActiveVillageIndex].Resources.FreeCrop < fieldUpgradeCost[4]) {
 					fieldUpgradeState = "NonUpgradeable";
 				}
-
-	            // Show upgrade efficiency
-	            if (fieldUpgradeCost && fieldUpgradeCost.length >= 4) {
-	                var total = fieldUpgradeCost[0] + fieldUpgradeCost[1] + fieldUpgradeCost[2] + fieldUpgradeCost[3];
-	                var rPerWheat = fieldUpgradeCost[4] > 0 ? Math.floor(total / fieldUpgradeCost[4]) : 0;
-
-	                if (rPerWheat > 0) {
-	                    var resEfficiencyit = [rPerWheat, fieldLevel, Enums.FieldNames[rIndex], (availableFields[rIndex][fIndex] + 1)];
-	                    resEfficiency.push(resEfficiencyit);
-	                }
-	            }
 
 				// Set field state
 				SetUIElementState(field, fieldUpgradeState);
@@ -131,14 +131,26 @@ function UpgradeIndicator() {
 		var resEfficiency = [];
 		buildings.each(function(index) {
 			var levelObject = $("#levels div", villageMap)[index];
-			if (!$(levelObject).is(".underConstruction")) {
-				// Get current building level and GID
-				// TODO Pull this from profile.village model
-				var buildingLevel = parseInt($(levelObject).text(), 10) || 0;
-				var buildingGID = $(this).attr("class").match(/g([0-9]{1,2})/)[1];
-				var building = Enums.Buildings[GIDs[buildingGID]];
-				var buildingUpgradeCost = building[buildingLevel];
 
+			// Get current building level and GID
+			// TODO Pull this from profile.village model
+			var buildingLevel = parseInt($(levelObject).text(), 10) || 0;
+			var buildingGID = $(this).attr("class").match(/g([0-9]{1,2})/)[1];
+			var building = Enums.Buildings[GIDs[buildingGID]];
+			var buildingUpgradeCost = building[buildingLevel];
+
+            // Show upgrade efficiency
+            if (buildingUpgradeCost && buildingUpgradeCost.length >= 4) {
+                var total = buildingUpgradeCost[0] + buildingUpgradeCost[1] + buildingUpgradeCost[2] + buildingUpgradeCost[3];
+                var rPerWheat = buildingUpgradeCost[4] > 0 ? Math.floor(total / buildingUpgradeCost[4]) : 0;
+
+                if (rPerWheat > 0) {
+                    var resEfficiencyit = [rPerWheat, buildingLevel, GIDs[buildingGID], buildingGID];
+                    resEfficiency.push(resEfficiencyit);
+                }
+            }
+
+			if (!$(levelObject).is(".underConstruction")) {
 				DLog("------" + buildingGID + ": " + GIDs[buildingGID]);
 
 				var upgradeState = "Upgradeable";
@@ -176,17 +188,6 @@ function UpgradeIndicator() {
 			if(buildingUpgradeCost && buildingUpgradeCost.length >= 4 && ActiveProfile.Villages[ActiveVillageIndex].Resources.FreeCrop < buildingUpgradeCost[4]) {
 				upgradeState = "NonUpgradeable";
 			}
-
-            // Show upgrade efficiency
-            if (buildingUpgradeCost && buildingUpgradeCost.length >= 4) {
-                var total = buildingUpgradeCost[0] + buildingUpgradeCost[1] + buildingUpgradeCost[2] + buildingUpgradeCost[3];
-                var rPerWheat = buildingUpgradeCost[4] > 0 ? Math.floor(total / buildingUpgradeCost[4]) : 0;
-
-                if (rPerWheat > 0) {
-                    var resEfficiencyit = [rPerWheat, buildingLevel, GIDs[buildingGID], buildingGID];
-                    resEfficiency.push(resEfficiencyit);
-                }
-            }
 
 			SetUIElementState(levelObject, upgradeState);
 		});
