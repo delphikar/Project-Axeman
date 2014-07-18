@@ -31,14 +31,19 @@ function VillageListEnhancement() {
 			"cursor": "pointer"
 		};
 
-		// Retrieve villahe list and header
-		var villageListPanel = $("#villageList");
-		var villageListHead = $(".head", villageListPanel);
+		// Retrieve village list and header
+		var villageListPanel = $("#sidebarBoxVillagelist");
+		var villageListHead = $(".content", villageListPanel);
+
+		// Message
+		// TODO Localize
+		var message = "<div style='float:left;margin-top:5px;'>Sort villages</div>";
 
 		// Sort ascending button
 		var buttonSortAsc = $("<div>");
 		buttonSortAsc.css(buttonStyle);
 		buttonSortAsc.css("background-image", "url('" + GetURL("Plugins/Utility/VillageListEnhancement/SortAscending.png") + "')");
+		buttonSortAsc.attr("title", "Sort ascending");
 		buttonSortAsc.hover(function () { $(this).css(buttonHoverStyle); }, function () { $(this).css(buttonStyle); });
 		buttonSortAsc.click(sortVillageListAscending);
 
@@ -46,21 +51,21 @@ function VillageListEnhancement() {
 		var buttonSortDesc = $("<div>");
 		buttonSortDesc.css(buttonStyle);
 		buttonSortDesc.css("background-image", "url('" + GetURL("Plugins/Utility/VillageListEnhancement/SortDescending.png") + "')");
+		buttonSortDesc.attr("title", "Sort descending");
 		buttonSortDesc.hover(function () { $(this).css(buttonHoverStyle); }, function () { $(this).css(buttonStyle); });
 		buttonSortDesc.click(sortVillageListDescending);
 
-		// Sort hiarachical button
-		var buttonSortHia = $("<div>");
-		buttonSortHia.css(buttonStyle);
-		buttonSortHia.css({
-			"padding-left": "14px",
-			"background-image": "url('" + GetURL("Plugins/Utility/VillageListEnhancement/SortHierarchical.png") + "')"
-		});
-		buttonSortHia.hover(function () { $(this).css(buttonHoverStyle); }, function () { $(this).css(buttonStyle); });
-		buttonSortHia.click(sortVillageListHiararchical);
+		// Sort hierachical button
+		var buttonSortHie = $("<div>");
+		buttonSortHie.css(buttonStyle);
+		buttonSortHie.css("background-image", "url('" + GetURL("Plugins/Utility/VillageListEnhancement/SortHierarchical.png") + "')");
+		buttonSortHie.attr("title", "Sort hierachically");
+		buttonSortHie.hover(function () { $(this).css(buttonHoverStyle); }, function () { $(this).css(buttonStyle); });
+		buttonSortHie.click(sortVillageListHiararchical);
 
 		// Append buttons to list
-		villageListHead.append(buttonSortHia);
+		villageListHead.append(message);
+		villageListHead.append(buttonSortHie);
 		villageListHead.append(buttonSortDesc);
 		villageListHead.append(buttonSortAsc);
 	};
