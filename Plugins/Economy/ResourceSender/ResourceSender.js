@@ -179,8 +179,6 @@ function ResourceSender() {
 			})
 			.html(text);
 		container.append(button);
-
-		UpdateSendButton(blockIndex, amounts);
 	};
 
 	var FillVillagesList = function (container) {
