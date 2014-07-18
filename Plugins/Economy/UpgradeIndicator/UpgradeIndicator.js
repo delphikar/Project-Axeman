@@ -47,13 +47,14 @@ function UpgradeIndicator() {
 				DLog("Index: " + availableFields[rIndex][fIndex]);
 
 				var fieldLevel = ActiveProfile.Villages[ActiveVillageIndex].VillageOut.Levels[availableFields[rIndex][fIndex]];
+				fieldLevel = field.hasClass("underConstruction") ? (fieldLevel + 1) : fieldLevel;
 				var fieldMaxLevel = ActiveProfile.Villages[ActiveVillageIndex].IsMainCity ? 20 : 10;
 
 				// Get upgrade cost for current level
 				var fieldUpgradeCost = Enums.Fields[rIndex][fieldLevel];
 
 	            // Show upgrade efficiency
-	            if (fieldUpgradeCost && fieldUpgradeCost.length >= 4) {
+	            if (fieldLevel < fieldMaxLevel && fieldUpgradeCost && fieldUpgradeCost.length >= 4) {
 	                var total = fieldUpgradeCost[0] + fieldUpgradeCost[1] + fieldUpgradeCost[2] + fieldUpgradeCost[3];
 	                var rPerWheat = fieldUpgradeCost[4] > 0 ? Math.floor(total / fieldUpgradeCost[4]) : 0;
 
@@ -136,12 +137,13 @@ function UpgradeIndicator() {
 			// Get current building level and GID
 			// TODO Pull this from profile.village model
 			var buildingLevel = parseInt($(levelObject).text(), 10) || 0;
+			buildingLevel = $(levelObject).is(".underConstruction") ? (buildingLevel + 1) : buildingLevel;
 			var buildingGID = $(this).attr("class").match(/g([0-9]{1,2})/)[1];
 			var building = Enums.Buildings[GIDs[buildingGID]];
 			var buildingUpgradeCost = building[buildingLevel];
 
             // Show upgrade efficiency
-            if (buildingUpgradeCost && buildingUpgradeCost.length >= 4) {
+            if (buildingLevel < building.length && buildingUpgradeCost && buildingUpgradeCost.length >= 4) {
                 var total = buildingUpgradeCost[0] + buildingUpgradeCost[1] + buildingUpgradeCost[2] + buildingUpgradeCost[3];
                 var rPerWheat = buildingUpgradeCost[4] > 0 ? Math.floor(total / buildingUpgradeCost[4]) : 0;
 
