@@ -72,18 +72,22 @@ function VillageListEnhancement() {
 
 	// TODO Comment
 	// TODO Log
-	// TODO Implement
 	var sortVillageListAscending = function() {
+		$("#sidebarBoxVillagelist .content > ul > li").sortElements(function (a, b) {
+			return $(".name", a).text() > $(".name", b).text() ? 1 : -1;
+		});
 
+		// TODO Save selection
 	};
 
 	// TODO Comment
 	// TODO Log
-	// TODO Implement
 	var sortVillageListDescending = function () {
-		$.each($("#villageList #villageListLinks li"), function() {
-			Warn($(this)[0]);
+		$("#sidebarBoxVillagelist .content > ul > li").sortElements(function (a, b) {
+			return $(".name", a).text() > $(".name", b).text() ? -1 : 1;
 		});
+
+		// TODO Save selection
 	};
 
 	// TODO Comment
