@@ -53,7 +53,7 @@ function ResourceSender() {
 				.addClass("ResourceSenderBlock")
 				.data("blockindex", index);
 			block.append("<br/><div>You can send missing resources from another village:</div>");
-			FillVillagesList(block);
+			FillVillagesList(block, container);
 			AddSendButton(block, index, "Send from this village", rx);
 			if ($("[class*='ResourceCalculatorR']", container).length) {
 				AttachInputChangeWatcher($("input[name*='t']", container.parent()), index);
@@ -141,31 +141,7 @@ function ResourceSender() {
 		Log("Send request processed.");
 	};
 
-	var GetMarketplaceLink = function(villageId, receiverVillageId, amounts) {
-		var canSend = true;
-		var sendFrom = false;
-		for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
-			if (ActiveProfile.Villages[index].VID == villageId) {
-				sendFrom = ActiveProfile.Villages[index].Resources;
-			}
-		}
-
-		for (var i = 0; i < amounts.length; i++) {
-			if(amounts[i] > 0){
-				amounts[i] = 0;
-			}
-
-			amounts[i] = Math.abs(amounts[i]);
-
-			// Check if vill even has this amount
-			console.log(sendFrom.Stored[i]);
-			console.log(amounts[i]);
-			if( amounts[i] != 0 && sendFrom.Stored[i] < amounts[i] ) {
-				canSend = false;
-				break;
-			}
-		}
-
+	var GetMarketplaceLink = function(villageId, receiverVillageId, amounts, canSend) {
 		return ! canSend ? '#' : "http://" + ActiveServerAddress + Enums.TravianPages.Build + "?gid=17&t=5&newdid=" + villageId + "&resourceDestinationId=" + receiverVillageId + "&resourceSend=" + amounts[0] + "," + amounts[1] + "," + amounts[2] + "," + amounts[3];
 	};
 
@@ -197,7 +173,7 @@ function ResourceSender() {
 		container.append(button);
 	};
 
-	var FillVillagesList = function (container) {
+	var FillVillagesList = function (block, container) {
 		/// <summary>
 		/// Adds Select element under the village name textbox so that is
 		/// simplifies sending resources to owned villages
@@ -229,16 +205,47 @@ function ResourceSender() {
 		// TODO Localize
 		selectInput.append("<option disabled selected>Select a village</option>");
 
+		var amounts = [];
+		for (var i = 0; i < 4; i++) {
+			amounts[i] = container.parent().find('span.resources.r' + (i + 1) + ' > div:first').text().replace(',', '').replace('(', '').replace(')', '');
+			if(amounts[i] > 0){
+				amounts[i] = 0;
+			}
+
+			amounts[i] = Math.abs(amounts[i]);
+		}
+
 		// Add village names to list
 		$.each(villages, function (current, value) {
-			selectInput.append("<option data-villageId='" + value.VID + "'>" + value.Name + "</option>");
+			var canSend = true;
+			var sendFrom = false;
+
+			for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
+				if (ActiveProfile.Villages[index].VID == value.VID) {
+					sendFrom = ActiveProfile.Villages[index].Resources;
+				}
+			}
+
+			for (var i = 0; i < amounts.length; i++) {
+
+				// Check if vill even has this amount
+				if( amounts[i] != 0 && sendFrom.Stored[i] < amounts[i] ) {
+					canSend = false;
+					break;
+				}
+			}
+
+			var htmlClass = !canSend ? 'style="color: #B20C08"' : 'style="color: #0C9E21"';
+			selectInput.append("<option data-villageId='" + value.VID + "' "+htmlClass+">" + value.Name + "</option>");
 		});
 
 		// Update link if selection changes
 		$(selectInput).change(function () {
 			DLog("Village selection changed", "ResourceSender");
 
-			var selectedVillageId = $("option:selected", $(this)).data("villageid");
+			var option = $("option:selected", $(this));
+			var canSend = option.css('color') == '#B20C08' || option.css('color') == 'rgb(12, 158, 33)';
+			var selectedVillageId = option.data("villageid");
 			if (!selectedVillageId) return;
 
 			var amounts = [];
@@ -246,7 +253,7 @@ function ResourceSender() {
 				amounts[i] = $(this).parent().parent().find('span.resources.r' + (i + 1) + ' > div:first').text().replace(',', '').replace('(', '').replace(')', '');
 			}
 
-			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, ActiveProfile.Villages[ActiveVillageIndex].VID, amounts);
+			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, ActiveProfile.Villages[ActiveVillageIndex].VID, amounts, canSend);
 			var sendButton = $(this).parent().find('a.ResourceSendSendButton');
 			sendButton.attr("href", selectedVillageSendLink);
 			sendButton.text(selectedVillageSendLink == '#' ? 'Not enough resources in village' : 'Send from this village');
@@ -258,7 +265,7 @@ function ResourceSender() {
 		});
 
 		// Append selector
-		container.append(selectInput);
+		block.append(selectInput);
 
 		Log("Village list selector successfully added!", "ResourceSender");
 	};
