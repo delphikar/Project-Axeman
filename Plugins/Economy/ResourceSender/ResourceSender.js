@@ -54,7 +54,7 @@ function ResourceSender() {
 				.data("blockindex", index);
 			block.append("<br/><div>You can send missing resources from another village:</div>");
 			FillVillagesList(block);
-			AddSendButton(block, index, "Send from this village", rx[0], rx[1], rx[2], rx[3]);
+			AddSendButton(block, index, "Send from this village", rx);
 			if ($("[class*='ResourceCalculatorR']", container).length) {
 				AttachInputChangeWatcher($("input[name*='t']", container.parent()), index);
 			}
@@ -83,7 +83,7 @@ function ResourceSender() {
 				var rx = GetBlockResourceDifference(index);
 				DLog("Got costs: " + rx[0] + ", " + rx[1] + ", " + rx[2] + ", " + rx[3], "ResourceSender");
 
-				UpdateSendButton(index, rx[0], rx[1], rx[2], rx[3]);
+				UpdateSendButton(index, rx);
 
 				$(".ResourceSenderBlock", container).show();
 				$(".ResourceSendVillageNameList", container).change();
@@ -96,15 +96,15 @@ function ResourceSender() {
 	}
 
 	var GetBlockResourceDifference = function(index) {
+		var resources = [];
 		var container = $(".showCosts:eq(" + index + ")");
-		
 		var costs = $(".ResourceCalculatorBuildCost", container);
-		var r1 = Math.floor(parseInt($(costs[0]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
-		var r2 = Math.floor(parseInt($(costs[1]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
-		var r3 = Math.floor(parseInt($(costs[2]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
-		var r4 = Math.floor(parseInt($(costs[3]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
 
-		return [r1, r2, r3, r4];
+		for (var i = 0; i < 4; i++) {
+			resources[i] = Math.floor(parseInt($(costs[i]).text().replace("(", "").replace(",", ""), 10) / 10) * 10 || 0;
+		}
+
+		return resources;
 	}
 
 	var HandleMarketplaceRequest = function() {
@@ -145,17 +145,16 @@ function ResourceSender() {
 		return "http://" + ActiveServerAddress + Enums.TravianPages.Build + "?gid=17&t=5&newdid=" + villageId + "&resourceDestinationId=" + receiverVillageId + "&resourceSend=" + amountR1 + "," + amountR2 + "," + amountR3 + "," + amountR4;
 	};
 
-	var UpdateSendButton = function (blockIndex, amountR1, amountR2, amountR3, amountR4) {
+	var UpdateSendButton = function (blockIndex, amounts) {
 		DLog("Updating button (" + blockIndex + ") data", "ResourceSender");
 
 		var button = $("#ResourceSendSendButton" + blockIndex);
-		button.data("r1", amountR1 < 0 ? amountR1 : 0);
-		button.data("r2", amountR2 < 0 ? amountR2 : 0);
-		button.data("r3", amountR3 < 0 ? amountR3 : 0);
-		button.data("r4", amountR4 < 0 ? amountR4 : 0);
+		for (var i = 0; i < amounts.length; i++) {
+			button.data("r" + (i + 1), amounts[i] < 0 ? amounts[i] : 0);
+		}
 	}
 
-	var AddSendButton = function(container, blockIndex, text, amountR1, amountR2, amountR3, amountR4) {
+	var AddSendButton = function(container, blockIndex, text, amounts) {
 		/// <summary>
 		/// Adds a travian like button with given link and text
 		/// </summary>
@@ -173,7 +172,7 @@ function ResourceSender() {
 			.html(text);
 		container.append(button);
 
-		UpdateSendButton(blockIndex, amountR1, amountR2, amountR3, amountR4);
+		UpdateSendButton(blockIndex, amounts);
 	};
 
 	var FillVillagesList = function (container) {
