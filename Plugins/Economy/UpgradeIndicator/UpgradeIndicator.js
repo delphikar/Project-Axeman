@@ -46,6 +46,9 @@ function UpgradeIndicator() {
 
 				DLog("Index: " + availableFields[rIndex][fIndex]);
 
+				var fieldLevel = ActiveProfile.Villages[ActiveVillageIndex].VillageOut.Levels[availableFields[rIndex][fIndex]];
+				var fieldMaxLevel = ActiveProfile.Villages[ActiveVillageIndex].IsMainCity ? 20 : 10;
+
 				// Get upgrade cost for current level
 				var fieldUpgradeCost = Enums.Fields[rIndex][fieldLevel];
 
@@ -67,8 +70,6 @@ function UpgradeIndicator() {
 				}
 
 				var fieldUpgradeState = "Upgradeable";
-				var fieldLevel = ActiveProfile.Villages[ActiveVillageIndex].VillageOut.Levels[availableFields[rIndex][fIndex]];
-				var fieldMaxLevel = ActiveProfile.Villages[ActiveVillageIndex].IsMainCity ? 20 : 10;
 
 				// Check if max upgraded
 				if (fieldLevel >= fieldMaxLevel) {
