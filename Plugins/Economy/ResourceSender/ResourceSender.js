@@ -141,8 +141,8 @@ function ResourceSender() {
 		Log("Send request processed.");
 	};
 
-	var GetMarketplaceLink = function(villageId, receiverVillageId, amountR1, amountR2, amountR3, amountR4) {
-		return "http://" + ActiveServerAddress + Enums.TravianPages.Build + "?gid=17&t=5&newdid=" + villageId + "&resourceDestinationId=" + receiverVillageId + "&resourceSend=" + amountR1 + "," + amountR2 + "," + amountR3 + "," + amountR4;
+	var GetMarketplaceLink = function(villageId, receiverVillageId, amounts) {
+		return "http://" + ActiveServerAddress + Enums.TravianPages.Build + "?gid=17&t=5&newdid=" + villageId + "&resourceDestinationId=" + receiverVillageId + "&resourceSend=" + amounts[0] + "," + amounts[1] + "," + amounts[2] + "," + amounts[3];
 	};
 
 	var UpdateSendButton = function (blockIndex, amounts) {
@@ -223,12 +223,12 @@ function ResourceSender() {
 
 			if (!selectedVillageId) return;
 
-			var r1 = sendButton.data("r1");
-			var r2 = sendButton.data("r2");
-			var r3 = sendButton.data("r3");
-			var r4 = sendButton.data("r4");
+			var amounts = [];
+			for (var i = 0; i < 4; i++) {
+				amounts[i] = sendButton.data("r" + (i + 1));
+			}
 
-			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, ActiveProfile.Villages[ActiveVillageIndex].VID, r1, r2, r3, r4);
+			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, ActiveProfile.Villages[ActiveVillageIndex].VID, amounts);
 
 			sendButton.attr("href", selectedVillageSendLink);
 			sendButton.show();
