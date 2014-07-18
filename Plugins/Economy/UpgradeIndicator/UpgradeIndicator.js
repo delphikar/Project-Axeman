@@ -103,6 +103,7 @@ function UpgradeIndicator() {
 		var villageMap = $("#village_map");
 		var GIDs = Enums.VillageInGID;
 		var buildings = $("img", villageMap).not(".iso, .clickareas, #lswitch, .onTop");
+		var resEfficiency = [];
 		buildings.each(function(index) {
 			var levelObject = $("#levels div", villageMap)[index];
 			if (!$(levelObject).is(".underConstruction")) {
@@ -151,8 +152,32 @@ function UpgradeIndicator() {
 				upgradeState = "NonUpgradeable";
 			}
 
+            // Show upgrade efficiency
+            if (buildingUpgradeCost && buildingUpgradeCost.length >= 4) {
+                var total = buildingUpgradeCost[0] + buildingUpgradeCost[1] + buildingUpgradeCost[2] + buildingUpgradeCost[3];
+                var rPerWheat = buildingUpgradeCost[4] > 0 ? Math.floor(total / buildingUpgradeCost[4]) : 0;
+
+                if (rPerWheat > 0) {
+                    var resEfficiencyit = [rPerWheat, buildingLevel, GIDs[buildingGID], buildingGID];
+                    resEfficiency.push(resEfficiencyit);
+                }
+            }
+
 			SetUIElementState(levelObject, upgradeState);
 		});
+
+      if (resEfficiency.length) {
+            resEfficiency.sort(function(a, b) {
+                return a[0] - b[0];
+            });
+
+            var html = '<ul>'
+            for (var i = 0; i < resEfficiency.length; i++) {
+                html += '<li><a href="build.php?gid=' + resEfficiency[i][3] + '">' + (i + 1) + '. Level ' + resEfficiency[i][1] + ' ' + resEfficiency[i][2] + '</a></li>';
+            }
+            html += '</ul>';
+            CreateTravianSidebar('Efficiency queue', html)
+        }
 	};
 
 	var SetUIElementState = function (field, state) {
