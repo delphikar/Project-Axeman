@@ -221,7 +221,7 @@ function ResourceSender() {
 
 			var amounts = [];
 			for (var i = 0; i < 4; i++) {
-				amounts[i] = $(this).parent().parent().find('span.resources.r' + (i + 1) + ' > div:first').text().replace('(', '').replace(')', '');
+				amounts[i] = $(this).parent().parent().find('span.resources.r' + (i + 1) + ' > div:first').text().replace(',', '').replace('(', '').replace(')', '');
 			}
 
 			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, ActiveProfile.Villages[ActiveVillageIndex].VID, amounts);
