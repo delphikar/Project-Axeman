@@ -142,6 +142,14 @@ function ResourceSender() {
 	};
 
 	var GetMarketplaceLink = function(villageId, receiverVillageId, amounts) {
+		for (var i = 0; i < amounts.length; i++) {
+			if(amounts[i] > 0){
+				amounts[i] = 0;
+			}
+
+			amounts[i] = Math.abs(amounts[i]);
+		}
+
 		return "http://" + ActiveServerAddress + Enums.TravianPages.Build + "?gid=17&t=5&newdid=" + villageId + "&resourceDestinationId=" + receiverVillageId + "&resourceSend=" + amounts[0] + "," + amounts[1] + "," + amounts[2] + "," + amounts[3];
 	};
 
@@ -150,7 +158,7 @@ function ResourceSender() {
 
 		var button = $("#ResourceSendSendButton" + blockIndex);
 		for (var i = 0; i < amounts.length; i++) {
-			button.data("r" + (i + 1), amounts[i] < 0 ? amounts[i] : 0);
+			button.data("r" + (i + 1), amounts[i]);
 		}
 	}
 
