@@ -18,6 +18,7 @@ function Decorations() {
 		Log("Registering Decorations plugin...", "Decorations");
 
 		RemoveInGameHelp();
+		AllianceNumbered();
 	};
 
 	var RemoveInGameHelp = function () {
@@ -30,8 +31,6 @@ function Decorations() {
 		Log("Removing in game help...", "Decorations");
 		$("#ingameManual").remove();
 		Log("In game help removed!", "Decorations");
-
-		AllianceNumbered();
 	};
 
 	var AllianceNumbered = function() {
