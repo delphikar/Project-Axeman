@@ -199,7 +199,6 @@ function ResourceSender() {
 			.attr({
 				'id': 'ResourceSendVillageNameList' + index,
 				'class': "ResourceSendVillageNameList",
-				"data-sendButtonId": "ResourceSendSendButton" + index
 			})
 			.css({
 				"width": "40%"
@@ -218,18 +217,15 @@ function ResourceSender() {
 			DLog("Village selection changed", "ResourceSender");
 
 			var selectedVillageId = $("option:selected", $(this)).data("villageid");
-			var selectInputSendButtonId = $(this).data("sendbuttonid");
-			var sendButton = $("#" + selectInputSendButtonId);
-
 			if (!selectedVillageId) return;
 
 			var amounts = [];
 			for (var i = 0; i < 4; i++) {
-				amounts[i] = sendButton.data("r" + (i + 1));
+				amounts[i] = $(this).parent().parent().find('span.resources.r' + (i + 1) + ' > div:first').text().replace('(', '').replace(')', '');
 			}
 
 			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, ActiveProfile.Villages[ActiveVillageIndex].VID, amounts);
-
+			var sendButton = $(this).parent().find('a.ResourceSendSendButton');
 			sendButton.attr("href", selectedVillageSendLink);
 			sendButton.show();
 		});
