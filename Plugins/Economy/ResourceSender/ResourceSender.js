@@ -142,15 +142,31 @@ function ResourceSender() {
 	};
 
 	var GetMarketplaceLink = function(villageId, receiverVillageId, amounts) {
+		var canSend = true;
+		var sendFrom = false;
+		for (var index = 0, cache = ActiveProfile.Villages.length; index < cache; index++) {
+			if (ActiveProfile.Villages[index].VID == villageId) {
+				sendFrom = ActiveProfile.Villages[index].Resources;
+			}
+		}
+
 		for (var i = 0; i < amounts.length; i++) {
 			if(amounts[i] > 0){
 				amounts[i] = 0;
 			}
 
 			amounts[i] = Math.abs(amounts[i]);
+
+			// Check if vill even has this amount
+			console.log(sendFrom.Stored[i]);
+			console.log(amounts[i]);
+			if( amounts[i] != 0 && sendFrom.Stored[i] < amounts[i] ) {
+				canSend = false;
+				break;
+			}
 		}
 
-		return "http://" + ActiveServerAddress + Enums.TravianPages.Build + "?gid=17&t=5&newdid=" + villageId + "&resourceDestinationId=" + receiverVillageId + "&resourceSend=" + amounts[0] + "," + amounts[1] + "," + amounts[2] + "," + amounts[3];
+		return ! canSend ? '#' : "http://" + ActiveServerAddress + Enums.TravianPages.Build + "?gid=17&t=5&newdid=" + villageId + "&resourceDestinationId=" + receiverVillageId + "&resourceSend=" + amounts[0] + "," + amounts[1] + "," + amounts[2] + "," + amounts[3];
 	};
 
 	var UpdateSendButton = function (blockIndex, amounts) {
@@ -233,6 +249,11 @@ function ResourceSender() {
 			var selectedVillageSendLink = GetMarketplaceLink(selectedVillageId, ActiveProfile.Villages[ActiveVillageIndex].VID, amounts);
 			var sendButton = $(this).parent().find('a.ResourceSendSendButton');
 			sendButton.attr("href", selectedVillageSendLink);
+			sendButton.text(selectedVillageSendLink == '#' ? 'Not enough resources in village' : 'Send from this village');
+			sendButton.css({
+				'color': (selectedVillageSendLink == '#' ? '#B20C08' : '#99C01A'),
+				'font-weight': (selectedVillageSendLink == '#' ? 'normal' : 'bold')
+			});
 			sendButton.show();
 		});
 
