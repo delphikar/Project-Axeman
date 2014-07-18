@@ -35,6 +35,7 @@ function UpgradeIndicator() {
 		// Get village levels map
 		var villageType = ActiveProfile.Villages[ActiveVillageIndex].VillageOut.Type;
 		var availableFields = Enums.VillageOutMaps[villageType];
+		var resEfficiency = [];
 
 		// Go through all available resource types
 		for (var rIndex = 0, rcache = availableFields.length; rIndex < rcache; rIndex++) {
@@ -90,10 +91,34 @@ function UpgradeIndicator() {
 					fieldUpgradeState = "NonUpgradeable";
 				}
 
+	            // Show upgrade efficiency
+	            if (fieldUpgradeCost && fieldUpgradeCost.length >= 4) {
+	                var total = fieldUpgradeCost[0] + fieldUpgradeCost[1] + fieldUpgradeCost[2] + fieldUpgradeCost[3];
+	                var rPerWheat = fieldUpgradeCost[4] > 0 ? Math.floor(total / fieldUpgradeCost[4]) : 0;
+
+	                if (rPerWheat > 0) {
+	                    var resEfficiencyit = [rPerWheat, fieldLevel, Enums.FieldNames[rIndex], (availableFields[rIndex][fIndex] + 1)];
+	                    resEfficiency.push(resEfficiencyit);
+	                }
+	            }
+
 				// Set field state
 				SetUIElementState(field, fieldUpgradeState);
 			}
 		}
+
+	      if (resEfficiency.length) {
+	            resEfficiency.sort(function(a, b) {
+	                return a[0] - b[0];
+	            });
+
+	            var html = '<ul>'
+	            for (var i = 0; i < resEfficiency.length; i++) {
+	                html += '<li><a href="build.php?id=' + resEfficiency[i][3] + '">' + (i + 1) + '. Level ' + resEfficiency[i][1] + ' ' + resEfficiency[i][2] + '</a></li>';
+	            }
+	            html += '</ul>';
+	            CreateTravianSidebar('Efficiency queue', html)
+	        }
 	};
 
 	var BuildingUpgradeIndicator = function() {
