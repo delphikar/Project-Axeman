@@ -343,3 +343,32 @@ function _timed(func) {
 	var endTime = (new Date()).getTime();
 	return endTime - startTime;
 }
+
+function CreateTravianSidebar(header, content)
+{
+	html = '';
+	html += '<div id="" class="sidebarBox">\
+		<div class="sidebarBoxBaseBox">\
+			<div class="baseBox baseBoxTop">\
+				<div class="baseBox baseBoxBottom">\
+					<div class="baseBox baseBoxCenter"></div>\
+				</div>\
+			</div>\
+		</div>\
+		<div class="sidebarBoxInnerBox">\
+			<div class="innerBox header">\
+				<button type="button" id="" class="layoutButton overviewWhite green" onclick="return false;">\
+				</button>\
+				<div class="clear"></div>\
+				<div class="boxTitle">' + header + '</div>\
+			</div>\
+			<div class="innerBox content">\
+				<div class="linklistNotice">' + content + '</div>\
+			</div>\
+			<div class="innerBox footer">\
+			</div>\
+		</div>\
+	</div>';
+
+	return $('#sidebarBoxLinklist').after(html);
+}
