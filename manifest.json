@@ -32,6 +32,7 @@
             "run_at": "document_end",
             "js": [
                 "Scripts/jQuery.js",
+                "Scripts/jQuery.sortElements.js",
                 "Scripts/jQueryUI.js",
                 "Utils/pageslide/jquery.pageslide.js",
                 "Utils/underscore/underscore.js",
