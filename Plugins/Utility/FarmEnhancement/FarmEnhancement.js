@@ -27,14 +27,18 @@ function FarmEnhancement() {
     this.notify = function() {
         var raidTimes = JSON.parse(localStorage.getItem('lastRaids')) || {};
         var endDate = new Date();
+        var size = Object.keys(raidTimes).length;
+        var html = "<br/>Send raids:";
         for (var i in raidTimes) {
             var startDate = raidTimes[i].begin;
             var diff = (startDate - endDate.getTime()) / 1000;
 
             if (diff < 0) {
-                $("#sidebarBoxVillagelist .innerBox.content").append("<br/><div><a href='/build.php?tt=99&id=39' style='color: #00BC00; text-decoration: underline;'>Send</a> " + raidTimes[i].title + " raids.</div>");
+                html += "<span>[" + (parseInt(i) + 1) + "/" + size + "] <a href='/build.php?tt=99&id=39' style='color: #00BC00; text-decoration: underline;'>" + raidTimes[i].title + "</a></span>";
             }
         }
+
+        $("#sidebarBoxVillagelist .innerBox.content").append(html);
     },
 
     /// <summary>
