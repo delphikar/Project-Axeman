@@ -120,7 +120,7 @@ function Error(message) {
 
 	if (!message) return 0;
 
-	if (IsDevelopmentMode) {
+	if (IsLogging && IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
 		console.error(category + message);
 	}
@@ -134,7 +134,7 @@ function Warn(message) {
 	/// </summary>
 	/// <param name="message">Message to write</param>
 
-	if (IsDevelopmentMode) {
+	if (IsLogging && IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
 		console.warn("%c" + category + message, "color: #B88E07");
 	}
@@ -147,7 +147,7 @@ function Log(message) {
 	/// </summary>
 	/// <param name="message">Message to write</param>
 
-	if (IsDevelopmentMode) {
+	if (IsLogging && IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
 		console.log(category + message);
 	}
@@ -160,7 +160,7 @@ function DLog(message) {
 	/// </summary>
 	/// <param name="message">Message to write</param>
 
-	if (IsDevelopmentMode) {
+	if (IsLogging && IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
 		console.log("%c" + category + message, "color: #AAAAAA");
 	}

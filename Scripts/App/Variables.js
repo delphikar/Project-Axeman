@@ -11,6 +11,7 @@
 
 // Development and debuging variables
 var IsDevelopmentMode = isDevMode() || false;
+var IsLogging = false;
 
 // Active page variables
 var ActiveServerAddress = "travian.com";
