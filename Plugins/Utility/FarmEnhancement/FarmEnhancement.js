@@ -73,7 +73,7 @@ function FarmEnhancement() {
                 e.preventDefault();
                 var endDate = new Date();
                 var index = $(this).parent().attr('id').replace('raidTimer-', '');
-                var title = $(this).closest('.listTitleText').text().trim();
+                var title = $(this).closest('.listEntry').find('.listTitleText').text().trim();
                 var minutes = parseInt($(this).parent().find('input.raidTimerInput').val()) || 15;
                 var startDate = resetStartDate(index, minutes, title);
                 var diff = (startDate - endDate.getTime()) / 1000;
