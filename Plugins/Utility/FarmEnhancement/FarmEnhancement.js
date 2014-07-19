@@ -58,7 +58,10 @@ function FarmEnhancement() {
             var title = $(this).find('.listTitleText').text().trim();
             startDate = raidTimes[index] ? raidTimes[index].begin : resetStartDate(index, minutes, title);
             var diff = (startDate - endDate.getTime()) / 1000;
-            if (diff < 0) diff = 0;
+            if (diff <= 0) {
+                diff = 0;
+                $(this).find('.listTitle, .listContent').css('background-color', 'rgba(255, 0, 0, 0.36)').css('border', 'rgba(255, 0, 0, 0.36) solid 1px')
+            }
 
             var closeMark = $(this).find('.markAll:first');
 
