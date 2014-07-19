@@ -17,28 +17,59 @@ function FarmEnhancement() {
     this.Register = function() {
         Log("Registering FarmEnhancement plugin...", "FarmEnhancement");
 
+        this.raidTimes = JSON.parse(localStorage.getItem('lastRaids')) || {};
+        this.raidSize = Object.keys(this.raidTimes).length;
+
         if (MatchPages([Enums.TravianPages.Build]) && $('.listEntry').length) {
             this.initialize();
         }
 
         this.notify();
+        this.addSummary();
     },
 
     this.notify = function() {
-        var raidTimes = JSON.parse(localStorage.getItem('lastRaids')) || {};
+        var raidTimes = this.raidTimes;
         var endDate = new Date();
-        var size = Object.keys(raidTimes).length;
         var html = "<br/>Send raids:";
         for (var i in raidTimes) {
             var startDate = raidTimes[i].begin;
             var diff = (startDate - endDate.getTime()) / 1000;
 
             if (diff < 0) {
-                html += "<span>[" + (parseInt(i) + 1) + "/" + size + "] <a href='/build.php?tt=99&id=39' style='color: #00BC00; text-decoration: underline;'>" + raidTimes[i].title + "</a></span>";
+                html += "<span>[" + (parseInt(i) + 1) + "/" + this.raidSize + "] <a href='/build.php?tt=99&id=39' style='color: #00BC00; text-decoration: underline;'>" + raidTimes[i].title + "</a></span>";
             }
         }
 
         $("#sidebarBoxVillagelist .innerBox.content").append(html);
+    },
+
+    this.addSummary = function() {
+        var endDate = new Date();
+        var html = 'List summary:<br>';
+        for (var i in this.raidTimes) {
+            var startDate = this.raidTimes[i].begin;
+            var diff = (startDate - endDate.getTime()) / 1000;
+            diff = diff < 0 ? 0 : diff;
+
+            if (diff == 0)
+                var color = "#B20C08";
+            else if (diff < 60)
+                var color = "#B20C08";
+            else if (diff < 180)
+                var color = "#CCA758";
+            else
+                var color = "black";
+
+            html += "<span>[" + (parseInt(i) + 1) + "/" + this.raidSize + "] ";
+            html += "<span style='color:" + color + "'>" + ConvertSecondsToTime(diff) + "</span>";
+            html += " <a href='/build.php?tt=99&id=39' style='color: #00BC00; text-decoration: underline;'>" + this.raidTimes[i].title + "</a>";
+            html += "</span><br>";
+        }
+
+        html += "<br>";
+        CreateTravianSidebar('Raid Summary', html);
+        // $('.listEntry:first').prepend(html);
     },
 
     /// <summary>
@@ -46,7 +77,7 @@ function FarmEnhancement() {
     /// </summary>
 
     this.initialize = function() {
-        var raidTimes = JSON.parse(localStorage.getItem('lastRaids')) || {};
+        var raidTimes = this.raidTimes;
         var endDate = new Date();
 
         $('.listEntry').each(function(index) {
@@ -88,6 +119,8 @@ function FarmEnhancement() {
                 var span = $(this).parent().find('span');
                 span.text(ConvertSecondsToTime(diff));
                 span.attr('data-seconds', diff);
+
+                $(this).parent().parent().find('input[type="checkbox"]').prop('checked', true);
             })
 
             var input = $('<input>');
