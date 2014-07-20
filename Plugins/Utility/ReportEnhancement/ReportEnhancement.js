@@ -2,10 +2,10 @@
  * ReportEnhancement.js
  *
  * Author:
- * 		Geczy
+ *      Geczy
  *
  * Created on:
- * 		14.07.2014.
+ *      14.07.2014.
  *
  *****************************************************************************/
 
@@ -16,6 +16,69 @@ function ReportEnhancement() {
     this.Register = function() {
         Log("Registering ReportEnhancement plugin...", "ReportEnhancement");
 
+        if ($('#attacker').length) {
+            this.TroopLoss();
+        }
+
+        if ($('.reports').length) {
+            this.AddFilters();
+        }
+    },
+
+    this.AddFilters = function() {
+        var html = '';
+        html += '<input class="check" type="checkbox" id="sCarryNFull">';
+        html += '<span style="margin-left: 8px;"><label for="sCarryNFull">select green & not full</label></span>';
+        html += '<br>';
+
+        html += '<input class="check" type="checkbox" id="sRaids">';
+        html += '<span style="margin-left: 8px;"><label for="sRaids">select all green raids</label></span>';
+        html += '<br>';
+
+        $('form[action="berichte.php"]').after(html);
+
+        this.FilterListen();
+    },
+
+    this.FilterListen = function() {
+        $('#sCarryNFull').change(function(e) {
+            var count = 0;
+            $('.reportInfo.carry').not('.full').each(function() {
+                var isNoDefence = $(this).closest('.sub').find('img.iReport.iReport1').attr('alt');
+
+                if (isNoDefence) {
+                    count++;
+                    var input = $(this).closest('tr').find('.sel > input');
+                    input.click();
+                }
+            });
+
+            if (!count) {
+                // $('div#thelper-alert').remove();
+                // $('label[for="sCarryNFull"]').parent().prepend('<div id="thelper-alert"><b>No matching reports found</b></div>');
+            }
+        });
+
+        $('#sRaids').change(function(e) {
+            var count = 0;
+            $('.reportInfo.carry').each(function() {
+                var isNoDefence = $(this).closest('.sub').find('img.iReport.iReport1').attr('alt');
+
+                if (isNoDefence && $(this).parent().find('a[href^="berichte.php?id="]').text().trim().indexOf('raids')) {
+                    count++;
+                    var input = $(this).closest('tr').find('.sel > input');
+                    input.click();
+                }
+            });
+
+            if (!count) {
+                // $('div#thelper-alert').remove();
+                // $('label[for="sCarryNFull"]').parent().prepend('<div id="thelper-alert"><b>No matching reports found</b></div>');
+            }
+        });
+    }
+
+    this.TroopLoss = function() {
         $('#message table').has('td.role').each(function(i) {
             var id = '#message table:eq(' + $('#message table').index(this) + ')';
             var totalTroopLoss = [0, 0, 0, 0];
@@ -165,12 +228,6 @@ function ReportEnhancement() {
         });
 
     };
-
-    var FillVillagesList = function(container) {
-
-
-        Log("Village list selector successfully added!", "ReportEnhancement");
-    };
 }
 
 // Metadata for this plugin (Development)
@@ -185,7 +242,6 @@ var DevelopmentMetadata = {
 
     Settings: {
         RunOnPages: [Enums.TravianPages.Reports],
-        PageMustContain: ["#attacker"],
         IsLoginRequired: true
     },
 
