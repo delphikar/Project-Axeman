@@ -133,7 +133,8 @@ function FarmEnhancement() {
 
             container.append(input);
             container.append(reset);
-            closeMark.after(container);
+            $(this).prepend('<div class="clear"></div>');
+            $(this).prepend(container);
         });
     }
 
