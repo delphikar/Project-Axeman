@@ -19,6 +19,7 @@ function Decorations() {
 
 		RemoveInGameHelp();
 		AllianceNumbered();
+		CommasOnStatistics();
 	};
 
 	var RemoveInGameHelp = function () {
@@ -39,6 +40,14 @@ function Decorations() {
 			$('#member .pla').each(function(index) {
 				$(this).prepend((index + 1) + '. ');
 			})
+		}
+	};
+
+	var CommasOnStatistics = function() {
+		if($('.val.lc').length) {
+			$('.val.lc').each(function(index) {
+				$(this).text(NumberWithCommas($(this).text()));
+			});
 		}
 	};
 }
