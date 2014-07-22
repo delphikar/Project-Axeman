@@ -39,7 +39,7 @@ function Decorations() {
 			Log("Found alliance page, lets order it", "Decorations");
 			$('#member .pla').each(function(index) {
 				$(this).prepend((index + 1) + '. ');
-			})
+			});
 		}
 	};
 
@@ -57,14 +57,13 @@ var DecorationsMetadata = {
 	Name: "Decorations",
 	Alias: "Decorations",
 	Category: "Fun",
-	Version: "0.0.0.1",
-	Description: "TODO",
+	Version: "0.0.1.0",
+	Description: "Removes in game help link, adds grouped numbers into statistics and numberes alliance members",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
 	Flags: {
-		Alpha: true,
-		Internal: true
+		Beta: true
 	},
 
 	Class: Decorations
