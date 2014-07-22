@@ -127,7 +127,8 @@ function FarmEnhancement() {
                 span.text(ConvertSecondsToTime(diff));
                 span.attr('data-seconds', diff);
 
-                $(this).parent().parent().find('input[type="checkbox"]').click();
+                $(this).closest('.listEntry').find('input[type="checkbox"]').click();
+                return false;
             })
 
             var input = $('<input>');
