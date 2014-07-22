@@ -46,7 +46,7 @@ function FarmEnhancement() {
 
     this.addSummary = function() {
         var endDate = new Date();
-        var html = 'List summary:<br>';
+        var html = '';
         for (var i in this.raidTimes) {
             var startDate = this.raidTimes[i].begin;
             var diff = (startDate - endDate.getTime()) / 1000;
