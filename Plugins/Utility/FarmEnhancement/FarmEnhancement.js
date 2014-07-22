@@ -37,7 +37,7 @@ function FarmEnhancement() {
             var diff = (startDate - endDate.getTime()) / 1000;
 
             if (diff < 0) {
-                html += "<span>[" + (parseInt(i) + 1) + "/" + this.raidSize + "] <a href='/build.php?tt=99&id=39' style='color: #00BC00; text-decoration: underline;'>" + raidTimes[i].title + "</a></span>";
+                html += "<span><a href='/build.php?tt=99&id=39' style='color: #00BC00; text-decoration: underline;'>" + raidTimes[i].title + "</a></span>";
             }
         }
 
@@ -61,7 +61,7 @@ function FarmEnhancement() {
             else
                 var color = "black";
 
-            html += "<span>[" + (parseInt(i) + 1) + "/" + this.raidSize + "] ";
+            html += "<span>";
             html += "<span style='color:" + color + "'>" + ConvertSecondsToTime(diff) + "</span>";
             html += " <a href='/build.php?tt=99&id=39' style='color: #00BC00; text-decoration: underline;'>" + this.raidTimes[i].title + "</a>";
             html += "</span><br>";
@@ -80,8 +80,10 @@ function FarmEnhancement() {
         var raidTimes = this.raidTimes;
         var endDate = new Date();
 
-        $('.listEntry').each(function(index) {
+        $('.listEntry').each(function(i) {
             var minutes = parseInt($(this).find('input.raidTimerInput').val()) || 15;
+            var index = $(this).attr('id');
+
             if (raidTimes[index]) {
                 minutes = raidTimes[index].minutes;
             }
@@ -140,12 +142,6 @@ function FarmEnhancement() {
 
     var resetStartDate = function(index, minutes, title) {
         var raidTimes = JSON.parse(localStorage.getItem('lastRaids')) || {};
-        var index = parseInt(index);
-
-        if (isNaN(index)) {
-            return false;
-        }
-
         var endDate = new Date();
         var startDate = new Date(endDate);
         var durationInMinutes = minutes;
