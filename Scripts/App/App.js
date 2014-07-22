@@ -141,7 +141,7 @@ function App() {
 		Log("App: Reading current page...");
 
 		var currentAddress = window.location.hostname;
-		var currentPath = window.location.pathname;
+		var currentPath = window.location.pathname.replace("//", "/");
 		var currentQuery = window.location.search;
 
 		DLog("App: Current page address [" + currentAddress + "]");
