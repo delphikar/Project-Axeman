@@ -99,8 +99,9 @@ function FarmEnhancement() {
             var closeMark = $(this).find('.markAll:first');
 
             var container = $('<div>');
-            container.css('float', 'left');
-            container.css('margin', '10px 0 0 75px');
+            container.css('float', 'right');
+            container.css('margin', '0 0 0 75px');
+            container.css('padding-right', '5px');
             container.attr('id', 'raidTimer-' + index);
             container.attr('class', 'raidTimer');
             container.append('<span data-seconds="' + diff + '">' + ConvertSecondsToTime(diff) + '</span>');
@@ -111,6 +112,10 @@ function FarmEnhancement() {
             reset.text('Reset')
             reset.on('click', function(e) {
                 e.preventDefault();
+                if ($(this).closest('.listTitle').find('.switchClosed').length) {
+                    alert('Open the raid list to start the timer');
+                    return false;
+                }
                 var endDate = new Date();
                 var index = $(this).parent().attr('id').replace('raidTimer-', '');
                 var title = $(this).closest('.listEntry').find('.listTitleText').text().trim();
@@ -135,8 +140,7 @@ function FarmEnhancement() {
 
             container.append(input);
             container.append(reset);
-            $(this).prepend('<div class="clear"></div>');
-            $(this).prepend(container);
+            $(this).find('.listTitle').prepend(container);
         });
     }
 
