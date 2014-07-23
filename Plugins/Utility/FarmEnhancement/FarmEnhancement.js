@@ -26,7 +26,43 @@ function FarmEnhancement() {
 
         this.notify();
         this.addSummary();
+
+        // Create refresh data
+        var data = {
+            ColorZero: "#0C9E21",
+            ColorLow: "#AEBF61",
+            ColorMedium: "#A6781C",
+            ColorHigh: "#B20C08"
+        };
+        setInterval(this.refresh, 1000, data);
     },
+
+    this.refresh = function(data) {
+        // Go through all seconds indicators
+        $(".raidTimerCountdown").each(function() {
+            var secondsLeft = parseInt($(this).attr("data-seconds"), 10);
+            if (secondsLeft >= 0) {
+                if (secondsLeft > 0) {
+                    secondsLeft--;
+                    $(this).attr("data-seconds", secondsLeft);
+                    $(this).html(ConvertSecondsToTime(secondsLeft));
+                } else $(this).css("opacity", "0.3");
+            } else {
+                $(this).html("never");
+            }
+
+            if (secondsLeft == 0)
+                var color = "#B20C08";
+            else if (secondsLeft < 60)
+                var color = "#B20C08";
+            else if (secondsLeft < 180)
+                var color = "#CCA758";
+            else
+                var color = "black";
+
+            $(this).css("color", color);
+        });
+    }
 
     this.notify = function() {
         var raidTimes = this.raidTimes;
@@ -62,7 +98,7 @@ function FarmEnhancement() {
                 var color = "black";
 
             html += "<span>";
-            html += "<span style='color:" + color + "'>" + ConvertSecondsToTime(diff) + "</span>";
+            html += "<span class='raidTimerCountdown' data-seconds='" + diff + "' style='color:" + color + "'>" + ConvertSecondsToTime(diff) + "</span>";
             html += " <a href='/build.php?tt=99&id=39' style='color: #00BC00; text-decoration: underline;'>" + this.raidTimes[i].title + "</a>";
             html += "</span><br>";
         }
@@ -104,7 +140,7 @@ function FarmEnhancement() {
             container.css('padding-right', '5px');
             container.attr('id', 'raidTimer-' + index);
             container.attr('class', 'raidTimer');
-            container.append('<span data-seconds="' + diff + '">' + ConvertSecondsToTime(diff) + '</span>');
+            container.append('<span class="raidTimerCountdown" data-seconds="' + diff + '">' + ConvertSecondsToTime(diff) + '</span>');
 
             var reset = $('<a>');
             reset.attr('href', '#');
