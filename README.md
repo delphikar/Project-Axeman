@@ -1,7 +1,7 @@
 #Project Axeman
-_Current version 0.2.7_
+_Current version 0.2.8_
 
-_Development version 0.2.8_
+_Development version 0.2.9_
 
 
 ## Overview
@@ -56,7 +56,12 @@ Donators
 - Geczy
 
 ## Changelog
-- **Version 0.2.8** _(xx.07.2014.)_
+- **Version 0.2.8** _(23.07.2014.)_
+	- New: Support for troops in Resource Sender plugin
+	- New: Resport Enhancement plugin
+	- New: Decorations plugin
+	- Fix: Extension was slowing down all websites
+	- Fix: Upgrade Indicator didn't take crop in consideration
 - **Version 0.2.7 & 0.2.6** _(14.07.2014.)_
 	- New: Resource Sender plugin
 	- New: Marketplace Enhancements plugin
