@@ -158,6 +158,7 @@ function FarmEnhancement() {
 
             var input = $('<input>');
             input.attr('class', 'raidTimerInput');
+            input.attr('title', 'minutes');
             input.attr('type', 'number');
             input.attr('placeholder', minutes);
             input.val(minutes);
