@@ -20,6 +20,12 @@ function Decorations() {
 		RemoveInGameHelp();
 		AllianceNumbered();
 
+		$('.openedClosedSwitch.switchClosed').on('click', function(e) {
+			AddCoordsToFarmList();
+		});
+
+		AddCoordsToFarmList();
+
 		var commaClasses = [
 			".rArea",
 			".carry",
@@ -30,6 +36,25 @@ function Decorations() {
 			AddCommas(commaClasses[i]);
 		}
 	};
+
+	var AddCoordsToFarmList = function() {
+		$('.village').each(function(i) {
+			if ($(this).find('.coordDecoration').length) {
+				return true;
+			}
+
+			coords = SplitURL($(this).find('a').attr('href'));
+
+			if (!coords["x"]) {
+				return true;
+			}
+
+			var html = '';
+			html += '<span class="coordDecoration">' + coords["x"] + '|' + coords["y"] + '</span>';
+
+			$(this).prepend(html);
+		});
+	}
 
 	var RemoveInGameHelp = function() {
 		/// <summary>
