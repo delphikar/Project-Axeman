@@ -19,7 +19,16 @@ function Decorations() {
 
 		RemoveInGameHelp();
 		AllianceNumbered();
-		AddCommas();
+
+		var commaClasses = [
+			".rArea",
+			".carry",
+			".val.lc",
+		];
+
+		for (var i in commaClasses) {
+			AddCommas(commaClasses[i]);
+		}
 	};
 
 	var RemoveInGameHelp = function() {
@@ -43,19 +52,9 @@ function Decorations() {
 		}
 	};
 
-	var AddCommas = function() {
-		if ($('.rArea').length) {
-			$('.rArea').each(function(index) {
-				$(this).html($(this).html().replace($(this).text(), NumberWithCommas($(this).text())));
-			});
-		}
-		if ($('.carry').length) {
-			$('.carry').each(function(index) {
-				$(this).html($(this).html().replace($(this).text(), NumberWithCommas($(this).text())));
-			});
-		}
-		if ($('.val.lc').length) {
-			$('.val.lc').each(function(index) {
+	var AddCommas = function(commaClass) {
+		if ($(commaClass).length) {
+			$(commaClass).each(function(index) {
 				$(this).html($(this).html().replace($(this).text(), NumberWithCommas($(this).text())));
 			});
 		}
