@@ -27,28 +27,17 @@ function FarmEnhancement() {
         this.notify();
         this.addSummary();
 
-        // Create refresh data
-        var data = {
-            ColorZero: "#0C9E21",
-            ColorLow: "#AEBF61",
-            ColorMedium: "#A6781C",
-            ColorHigh: "#B20C08"
-        };
-        setInterval(this.refresh, 1000, data);
+        setInterval(this.refresh, 1000);
     },
 
-    this.refresh = function(data) {
+    this.refresh = function() {
         // Go through all seconds indicators
         $(".raidTimerCountdown").each(function() {
             var secondsLeft = parseInt($(this).attr("data-seconds"), 10);
-            if (secondsLeft >= 0) {
-                if (secondsLeft > 0) {
-                    secondsLeft--;
-                    $(this).attr("data-seconds", secondsLeft);
-                    $(this).html(ConvertSecondsToTime(secondsLeft));
-                } else $(this).css("opacity", "0.3");
-            } else {
-                $(this).html("never");
+            if (secondsLeft > 0) {
+                secondsLeft--;
+                $(this).attr("data-seconds", secondsLeft);
+                $(this).html(ConvertSecondsToTime(secondsLeft));
             }
 
             if (secondsLeft == 0)
