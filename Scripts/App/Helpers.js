@@ -22,6 +22,27 @@ function GetImageURL(category, filename) {
 	return GetURL("Images/" + category + "/" + filename);
 };
 
+function SplitURL(theURL) {
+    theURL = theURL ? theURL : window.location.href;
+
+    if (theURL.indexOf('?') === -1) {
+        return false;
+    }
+
+    var fullUrl = theURL.split('?');
+    var urlParams = fullUrl[1].split('&');
+
+    gets = new Array();
+
+    for (i = 0; i <= urlParams.length - 1; ++i) {
+        var param = urlParams[i].split('=');
+        var name = param[0];
+        var value = param[1];
+        gets[name] = value;
+    }
+    return gets;
+};
+
 function GetURL(path) {
 	/// <summary>
 	/// Gets chrome extension URL of given path
