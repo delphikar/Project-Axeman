@@ -14,15 +14,15 @@ function Decorations() {
 	/// <summary>
 	/// Initializes object
 	/// </summary>
-	this.Register = function () {
+	this.Register = function() {
 		Log("Registering Decorations plugin...", "Decorations");
 
 		RemoveInGameHelp();
 		AllianceNumbered();
-		CommasOnStatistics();
+		AddCommas();
 	};
 
-	var RemoveInGameHelp = function () {
+	var RemoveInGameHelp = function() {
 		/// <summary>
 		/// Removes in game help link from every travian page.
 		/// On some servers this will not remove stone and book since they are
@@ -35,7 +35,7 @@ function Decorations() {
 	};
 
 	var AllianceNumbered = function() {
-		if(MatchPages([Enums.TravianPages.Alliance]) && $('#member .pla').length) {
+		if (MatchPages([Enums.TravianPages.Alliance]) && $('#member .pla').length) {
 			Log("Found alliance page, lets order it", "Decorations");
 			$('#member .pla').each(function(index) {
 				$(this).prepend((index + 1) + '. ');
@@ -43,10 +43,20 @@ function Decorations() {
 		}
 	};
 
-	var CommasOnStatistics = function() {
-		if($('.val.lc').length) {
+	var AddCommas = function() {
+		if ($('.rArea').length) {
+			$('.rArea').each(function(index) {
+				$(this).html($(this).html().replace($(this).text(), NumberWithCommas($(this).text())));
+			});
+		}
+		if ($('.carry').length) {
+			$('.carry').each(function(index) {
+				$(this).html($(this).html().replace($(this).text(), NumberWithCommas($(this).text())));
+			});
+		}
+		if ($('.val.lc').length) {
 			$('.val.lc').each(function(index) {
-				$(this).text(NumberWithCommas($(this).text()));
+				$(this).html($(this).html().replace($(this).text(), NumberWithCommas($(this).text())));
 			});
 		}
 	};
