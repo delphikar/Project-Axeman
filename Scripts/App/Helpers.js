@@ -43,6 +43,20 @@ function SplitURL(theURL) {
     return gets;
 };
 
+function getDistance( point1, point2 ) {
+	var xs = 0;
+	var ys = 0;
+
+	xs = point2.x - point1.x;
+	xs = xs * xs;
+
+	ys = point2.y - point1.y;
+	ys = ys * ys;
+
+	var num = Math.sqrt( xs + ys );
+	return Math.round(num * 10) / 10;
+}
+
 function GetURL(path) {
 	/// <summary>
 	/// Gets chrome extension URL of given path
