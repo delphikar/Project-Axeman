@@ -14,13 +14,49 @@ function Decorations() {
 	/// <summary>
 	/// Initializes object
 	/// </summary>
-	this.Register = function () {
+	this.Register = function() {
 		Log("Registering Decorations plugin...", "Decorations");
 
 		RemoveInGameHelp();
+		AllianceNumbered();
+
+		$('.openedClosedSwitch.switchClosed').on('click', function(e) {
+			AddCoordsToFarmList();
+		});
+
+		AddCoordsToFarmList();
+
+		var commaClasses = [
+			".rArea",
+			".carry",
+			".val.lc",
+		];
+
+		for (var i in commaClasses) {
+			AddCommas(commaClasses[i]);
+		}
 	};
 
-	var RemoveInGameHelp = function () {
+	var AddCoordsToFarmList = function() {
+		$('.village').each(function(i) {
+			if ($(this).find('.coordDecoration').length) {
+				return true;
+			}
+
+			coords = SplitURL($(this).find('a').attr('href'));
+
+			if (!coords["x"]) {
+				return true;
+			}
+
+			var html = '';
+			html += '<span class="coordDecoration">' + coords["x"] + '|' + coords["y"] + '</span>';
+
+			$(this).prepend(html);
+		});
+	}
+
+	var RemoveInGameHelp = function() {
 		/// <summary>
 		/// Removes in game help link from every travian page.
 		/// On some servers this will not remove stone and book since they are
@@ -30,16 +66,22 @@ function Decorations() {
 		Log("Removing in game help...", "Decorations");
 		$("#ingameManual").remove();
 		Log("In game help removed!", "Decorations");
-
-		AllianceNumbered();
 	};
 
 	var AllianceNumbered = function() {
-		if(MatchPages([Enums.TravianPages.Alliance]) && $('#member .pla').length) {
+		if (MatchPages([Enums.TravianPages.Alliance]) && $('#member .pla').length) {
 			Log("Found alliance page, lets order it", "Decorations");
 			$('#member .pla').each(function(index) {
 				$(this).prepend((index + 1) + '. ');
-			})
+			});
+		}
+	};
+
+	var AddCommas = function(commaClass) {
+		if ($(commaClass).length) {
+			$(commaClass).each(function(index) {
+				$(this).html($(this).html().replace($(this).text(), NumberWithCommas($(this).text())));
+			});
 		}
 	};
 }
@@ -49,14 +91,13 @@ var DecorationsMetadata = {
 	Name: "Decorations",
 	Alias: "Decorations",
 	Category: "Fun",
-	Version: "0.0.0.1",
-	Description: "TODO",
+	Version: "0.0.1.0",
+	Description: "Removes in game help link, adds grouped numbers into statistics and numberes alliance members",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
 	Flags: {
-		Alpha: true,
-		Internal: true
+		Beta: true
 	},
 
 	Class: Decorations
