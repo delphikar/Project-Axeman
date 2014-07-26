@@ -18,7 +18,6 @@ function FarmEnhancement() {
         Log("Registering FarmEnhancement plugin...", "FarmEnhancement");
 
         this.raidTimes = JSON.parse(localStorage.getItem('lastRaids')) || {};
-        this.raidSize = Object.keys(this.raidTimes).length;
 
         if (MatchPages([Enums.TravianPages.Build]) && $('.listEntry').length) {
             this.initialize();
@@ -40,7 +39,7 @@ function FarmEnhancement() {
                 $(this).html(ConvertSecondsToTime(secondsLeft));
             }
 
-            if (secondsLeft == 0)
+            if (secondsLeft < 1)
                 var color = "#B20C08";
             else if (secondsLeft < 60)
                 var color = "#B20C08";
@@ -54,15 +53,14 @@ function FarmEnhancement() {
     }
 
     this.notify = function() {
-        var raidTimes = this.raidTimes;
         var endDate = new Date();
         var html = "<br/>Send raids:";
-        for (var i in raidTimes) {
-            var startDate = raidTimes[i].begin;
+        for (var i in this.raidTimes) {
+            var startDate = this.raidTimes[i].begin;
             var diff = (startDate - endDate.getTime()) / 1000;
 
-            if (diff < 0) {
-                html += "<span><a href='/build.php?tt=99&id=39' style='color: #00BC00; text-decoration: underline;'>" + raidTimes[i].title + "</a></span>";
+            if (diff < 1 && this.raidTimes[i].minutes != -1) {
+                html += "<span><a href='/build.php?tt=99&id=39' style='color: #00BC00; text-decoration: underline;'>" + this.raidTimes[i].title + "</a></span>";
             }
         }
 
@@ -73,9 +71,14 @@ function FarmEnhancement() {
         var endDate = new Date();
         var html = '';
         for (var i in this.raidTimes) {
+
+            if (this.raidTimes[i].minutes == -1) {
+                continue;
+            }
+
             var startDate = this.raidTimes[i].begin;
             var diff = (startDate - endDate.getTime()) / 1000;
-            diff = diff < 0 ? 0 : diff;
+            diff = diff < 1 ? 0 : diff;
 
             if (diff == 0)
                 var color = "#B20C08";
@@ -116,8 +119,8 @@ function FarmEnhancement() {
             var title = $(this).find('.listTitleText').text().trim();
             startDate = raidTimes[index] ? raidTimes[index].begin : resetStartDate(index, minutes, title);
             var diff = (startDate - endDate.getTime()) / 1000;
-            if (diff <= 0) {
-                diff = 0;
+            diff = diff < 1 ? 0 : diff;
+            if (diff < 1 && raidTimes[index].minutes != -1) {
                 $(this).find('.listTitle, .listContent').css('background-color', 'rgba(255, 0, 0, 0.36)').css('border', 'rgba(255, 0, 0, 0.36) solid 1px')
             }
 
@@ -141,18 +144,22 @@ function FarmEnhancement() {
                     alert('Open the raid list to start the timer');
                     return false;
                 }
+
                 var endDate = new Date();
                 var index = $(this).parent().attr('id').replace('raidTimer-', '');
                 var title = $(this).closest('.listEntry').find('.listTitleText').text().trim();
                 var minutes = parseInt($(this).parent().find('input.raidTimerInput').val()) || 15;
                 var startDate = resetStartDate(index, minutes, title);
-                var diff = (startDate - endDate.getTime()) / 1000;
+                var diff = minutes < 1 ? 0 : (startDate - endDate.getTime()) / 1000;
 
                 var span = $(this).parent().find('span');
                 span.text(ConvertSecondsToTime(diff));
                 span.attr('data-seconds', diff);
 
-                $(this).closest('.listEntry').find('input[type="checkbox"]').click();
+                if (minutes > 0) {
+                    $(this).closest('.listEntry').find('input[type="checkbox"]').click();
+                }
+
                 return false;
             })
 
