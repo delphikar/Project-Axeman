@@ -203,7 +203,7 @@ var FarmEnhancementMetadata = {
     Alias: "Farm Timer",
     Category: "Utility",
     Version: "0.0.0.1",
-    Description: "Timer on raids",
+    Description: "Timer on raids. On the farm list, enter the minutes to countdown before sending another raid. Enter -1 to disable the list from raiding.",
     Author: "Geczy",
     Site: "https://github.com/JustBuild/Project-Axeman/wiki",
 
