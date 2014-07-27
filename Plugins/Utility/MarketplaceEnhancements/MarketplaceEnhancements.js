@@ -68,12 +68,60 @@ function MarketplaceEnhancements() {
 		// Replace built-in shortcuts with custom
 		AddTransportShortcuts();
 
-		//Test Area ;)
-		(function () {
-			//Perhaps works, maybe not, but useful
-			IncomingSum();
-		})/*()*/;
+		//Perhaps works, maybe not, but useful
+		TrackTransports();
 	};
+
+    var TrackTransports = function() {
+        var transports = {};
+        $('.traders').each(function(index) {
+            var sender = $(this).find('thead > tr > td > a');
+            var senderUID = parseInt(sender.attr('href').replace('spieler.php?uid=', '').trim());
+            var senderName = sender.text().trim();
+
+            var resources = $(this).find('.res > td > span');
+            var res = resources.text().trim().replace(/\s+/g, ' ');
+
+            var repeat = 1;
+            var repeatHTML = $(this).find('.repeat').text().trim();
+            var m = new RegExp('.*?' + '(\\d+)', ["i"]).exec(repeatHTML);
+            if (m != null) {
+                var repeat = m[1];
+                res = res.replace(repeatHTML, '').trim();
+            }
+
+            res = res.split(' ');
+            for (var i = 0; i < res.length; i++) {
+                // res[i] = res[i] * repeat;
+                res[i] = parseInt(res[i]);
+            }
+
+            if (transports[senderUID] && transports[senderUID].length) {
+                for (var i in transports[senderUID]) {
+                    transports[senderUID][i] = (transports[senderUID][i] + res[i]);
+                }
+            } else {
+                transports[senderUID] = res;
+            }
+        });
+
+		totalRes = [0,0,0,0];
+		for( var uid in transports) {
+			for (var i = 0; i < 4; i++) {
+				totalRes[i] += transports[uid][i];
+			}
+		}
+
+		var html = '';
+		html += '<h4 class="spacer">Total incoming</h4>';
+		html += '<span>';
+		for (var i in totalRes) {
+			var res = (1 + parseInt(i));
+			html += ' <img class="r'+res+'" src="img/x.gif" alt=""> ' + totalRes[i];
+		}
+		html += '</span>';
+	$('#merchantsOnTheWay').prepend(html);
+    };
 
 	var AddHourProductionButton = function() {
 		var useHour = $("<span>").text("1h").attr({
@@ -440,12 +488,12 @@ function MarketplaceEnhancements() {
 		// TODO Move this to Services
 		var CrawlMarketplaceTables = function() {
 			// Get groups(types) of trades incomming/outgoing
-			var groups = $("#merchantsOnTheWayFormular h4").length;
+			var groups = $("#merchantsOnTheWayFormular table").length;
 			var arrivingTables = undefined;
 
-			if (groups === 2) {
+			if (groups > 1) {
 				// First group is arriving merchants
-				arrivingTables = $("#merchantsOnTheWayFormular h4:first:first-of-type").nextUntil("h4");
+				arrivingTables = $("#merchantsOnTheWayFormular table");
 			} else if (groups === 1) {
 				//if  traders available=total traders
 				//    incoming=true
@@ -475,12 +523,24 @@ function MarketplaceEnhancements() {
 				}
 			});
 
+
 			// Get resource sum by splitting all resource strings and adding them to array by
 			// index mod 4 and offset by 1 because split returns unused value (first)
 			var resourceSplit = $(".res > td > span", arrivingTables).text().split(" ");
-			for (var index = 1, cache = resourceSplit.length; index < cache; index++) {
-				resourceSum[(index - 1) % 4] += Number($.trim(resourceSplit[index]));
+			for (var i = 1; i <= 4; i++) {
+				// if(resourceSplit[i].iOf('‬×') !== -1) {
+				// 	resourceSplit[i] = resourceSplit[i].replace('1×', '');
+				// 	resourceSplit[i] = resourceSplit[i].replace('2×', '');
+				// 	resourceSplit[i] = resourceSplit[i].replace('3×', '');
+				// }
+
+				console.log($.trim(resourceSplit[i]));
+
+				resourceSum[(i - 1) % 4] += Number($.trim(resourceSplit[i]));
 			}
+
+			console.log(resourceSum);
+
 		};
 		CrawlMarketplaceTables();
 
