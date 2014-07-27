@@ -407,3 +407,7 @@ function CreateTravianSidebar(header, content)
 
 	return $('#sidebarBoxLinklist').after(html);
 }
+
+function URLContains(text) {
+	return document.URL.indexOf(text) != -1;
+}
