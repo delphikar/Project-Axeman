@@ -75,6 +75,12 @@ function MarketplaceEnhancements() {
     var TrackTransports = function() {
         var transports = {};
         $('.traders').each(function(index) {
+
+        	// Do incoming only
+        	if(!$('thead:contains("Transport from")', this).length) {
+        		return true;
+        	}
+
             var sender = $(this).find('thead > tr > td > a');
             var senderUID = parseInt(sender.attr('href').replace('spieler.php?uid=', '').trim());
             var senderName = sender.text().trim();
