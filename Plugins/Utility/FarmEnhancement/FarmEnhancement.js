@@ -18,18 +18,21 @@ function FarmEnhancement() {
         Log("Registering FarmEnhancement plugin...", "FarmEnhancement");
 
         this.raidTimes = JSON.parse(localStorage.getItem('lastRaids')) || {};
+        this.doingRaid = false;
 
         if (MatchPages([Enums.TravianPages.Build]) && $('.listEntry').length) {
             this.initialize();
         }
 
-        this.notify();
+        // this.notify();
         this.addSummary();
 
         setInterval(this.refresh, 1000);
     },
 
     this.refresh = function() {
+        var doingRaid = this.doingRaid;
+
         // Go through all seconds indicators
         $(".raidTimerCountdown").each(function() {
             var secondsLeft = parseInt($(this).attr("data-seconds"), 10);
@@ -39,9 +42,18 @@ function FarmEnhancement() {
                 $(this).html(ConvertSecondsToTime(secondsLeft));
             }
 
-            if (secondsLeft < 1)
+            if (secondsLeft < 1) {
                 var color = "#B20C08";
-            else if (secondsLeft < 60)
+
+                if (!URLContains('build.php?tt=99&id=39')) {
+                    // location.href = "/build.php?tt=99&id=39";
+                } else if (!doingRaid) {
+                    // doRaid();
+                }
+
+                // return false;
+
+            } else if (secondsLeft < 60)
                 var color = "#B20C08";
             else if (secondsLeft < 180)
                 var color = "#CCA758";
@@ -137,6 +149,7 @@ function FarmEnhancement() {
             var reset = $('<a>');
             reset.attr('href', '#');
             reset.css('margin', '0 0 0 5px');
+            reset.attr('data-ready', diff == 0 && raidTimes[index].minutes != -1)
             reset.text('Reset')
             reset.on('click', function(e) {
                 e.preventDefault();
@@ -146,13 +159,13 @@ function FarmEnhancement() {
                 }
 
                 var endDate = new Date();
-                var index = $(this).parent().attr('id').replace('raidTimer-', '');
+                var index = $(this).closest('.raidTimer').attr('id').replace('raidTimer-', '');
                 var title = $(this).closest('.listEntry').find('.listTitleText').text().trim();
-                var minutes = parseInt($(this).parent().find('input.raidTimerInput').val()) || 15;
+                var minutes = parseInt($(this).closest('.raidTimer').find('input.raidTimerInput').val()) || 15;
                 var startDate = resetStartDate(index, minutes, title);
                 var diff = minutes < 1 ? 0 : (startDate - endDate.getTime()) / 1000;
 
-                var span = $(this).parent().find('span');
+                var span = $(this).closest('.raidTimer').find('span');
                 span.text(ConvertSecondsToTime(diff));
                 span.attr('data-seconds', diff);
 
@@ -193,6 +206,16 @@ function FarmEnhancement() {
 
         localStorage.setItem('lastRaids', JSON.stringify(raidTimes));
         return startDate;
+    }
+
+    var doRaid = function() {
+        this.doingRaid = true;
+
+        $('.raidTimer a[data-ready="true"]').each(function(index) {
+            $(this).trigger('click');
+            $(this).closest('.listEntry').find('.green[value="start raid"]').trigger('click');
+            return false;
+        });
     }
 
 }
