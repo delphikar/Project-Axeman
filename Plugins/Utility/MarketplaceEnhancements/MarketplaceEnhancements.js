@@ -126,7 +126,7 @@ function MarketplaceEnhancements() {
 			html += ' <img class="r'+res+'" src="img/x.gif" alt=""> ' + totalRes[i];
 		}
 		html += '</span>';
-	$('#merchantsOnTheWay').prepend(html);
+	$('#merchantsOnTheWayFormular').prepend(html);
     };
 
 	var AddHourProductionButton = function() {
