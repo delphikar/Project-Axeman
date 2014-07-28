@@ -1,0 +1,3 @@
+[submodule "Pages/Options/chrome-bootstrap"]
+	path = Pages/Options/chrome-bootstrap
+	url = https://github.com/JustBuild/chrome-bootstrap.git
