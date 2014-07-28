@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<link id="favicon" rel="shortcut icon" type="image/​png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACwElEQVQ4jcWSW0hTARjH/2dnZ9vxOHUO784rTpshpZlZYkVRKUE+FF4wJCEksciHQjJBesiIIqykqEwke5GKkD0oQtIipzLvE+dlTc2d42VuTXPHza31kg9JEfXS9/R9/L/fH/58H/C/i/gXqKGhwddlnTmXceTSM/Jv4cbGRql9ouutnzxkfWh8qOOPwLv25qKnD+tu/xiJO9XnW6oqzlZv6b+MUFdbFbcyzx1OP5BEuS36m6yRk61JwuqWF+zR6fv2WEsv1178rYFWq41puVGhJb3W0OP5KtCkGPPTNjjdPEZ0LNZ5Xza3vObU6cJCHQAIthtMGYZVc7OmUI+EQliEHMqUcCSlBiEg2A+gaSxyc+GT+v7srX3hVqPTGaMEUl+ZxLMyOHkw27j4+VN8e6cZmXs34XJ+wyzngtMtws60RMTFKjwAoNFowgidzujPWi0PeMdmnoCAiSb5a+xY54t127Rs7asLFt4BSkTCnxZDLlOM+EtcUV5xzECkMqXMyRqLhFZ+/dGgYbpQAC/ioyJnNmxL6R91EzIp7RxLTU8MhZmVS4RCMCICAdFpdZx5JW+0rz8/UyAtiE1Ivitw8LzdR+hu4t2bMC1asjbs5mI/Hyd3NKckp7d/dmV4yIiennG0dY4AJO03bzYlE64FdA/oz2i1Wl6QdyzjwpXyklKK9Bos9tVAPbsRfehEcaWLJFl5cLAmMJSGhxZggltGT++HXZyNjxyYmgdJ+fAqlYogAeCNWr1Db+IqKYYRi3zlToeXUaqUkVoxJO9XvyzmB4VEuBURCS9zcvOqQDJzmxQze/JI1vWCgoJlIQCs2e1SGhuvaSGxnydEiQwj9IiAmeHRrscRMbur/WXyJcNIdxlFUa7qqxXPAeBV85Of769Wq2U19+p7au43tfWNjioAoLW1NXBLb6i/ldXR0cFs/5vvGSgijfFSzbcAAAAASUVORK5CYII=">
+		<title>Settings | Project Axeman</title>
+		
+		<link rel="stylesheet" type="text/css" href="chrome-bootstrap/chrome-bootstrap.css" />
+	</head>
+	<body class="chrome-bootstrap">
+		<div class="frame">
+			
+			<!-- Navigation -->
+			<div class="navigation">
+				<h1>Project-Axeman</h1>
+				
+				<ul class="menu">
+					<li class="selected">
+						<a href="#general">General</a>
+					</li>
+					<li>
+						<a href="#plugins">Plugins</a>
+					</li>
+				</ul>
+				<ul class="menu">
+					<li>
+						<a href="#help">Help</a>
+					</li>
+					<li>
+						<a href="#about">About</a>
+					</li>
+				</ul>
+			</div>
+			
+			<!-- Content -->
+			<div class="mainview view">
+				<!-- General -->
+				<div id="general" class="selected">
+					<p>General</p>
+				</div>
+				
+				<!-- Plugins -->
+				<div id="plugins">
+					<p>Plugins</p>
+				</div>
+				
+				<!-- Help -->
+				<div id="help">
+					<p>Help</p>
+				</div>
+				
+				<!-- About -->
+				<div id="about">
+					<p>About</p>
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="../../Scripts/jQuery.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$('.menu a').click(function(ev) {
+					ev.preventDefault();
+					var selected = 'selected';
+
+					$('.mainview > *').removeClass(selected);
+					$('.menu li').removeClass(selected);
+					setTimeout(function() {
+						$('.mainview > *:not(.selected)').css('display', 'none');
+					}, 100);
+
+					$(ev.currentTarget).parent().addClass(selected);
+					var currentView = $($(ev.currentTarget).attr('href'));
+					currentView.css('display', 'block');
+					setTimeout(function() {
+						currentView.addClass(selected);
+					}, 0);
+
+					setTimeout(function() {
+						$('body')[0].scrollTop = 0;
+					}, 200);
+				});
+
+				$('#launch_modal').click(function(ev) {
+					ev.preventDefault();
+					var modal = $('.overlay').clone();
+					$(modal).removeAttr('style');
+					$(modal).find('button, .close-button').click(function() {
+						$(modal).addClass('transparent');
+						setTimeout(function() {
+							$(modal).remove();
+						}, 1000);
+					});
+
+					$(modal).click(function() {
+						$(modal).find('.page').addClass('pulse');
+						$(modal).find('.page').on('webkitAnimationEnd', function() {
+							$(this).removeClass('pulse');
+						});
+					});
+					$(modal).find('.page').click(function(ev) {
+						ev.stopPropagation();
+					});
+					$('body').append(modal);
+				});
+
+				$('.mainview > *:not(.selected)').css('display', 'none');
+			});
+		</script>
+	</body>
+</html>
