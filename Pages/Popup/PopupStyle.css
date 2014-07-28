@@ -4,13 +4,13 @@
 	font-family: 'Segoe UI';
 	font-size: 0.85em;
 				
-	width: 320px;
+	width: 300px;
 	height: auto;
-	min-height: 280px;
 }
 
 #ProfilesList {
 	padding-bottom: 10px;
+	min-height: 180px;
 }
 	#ProfilesList > .Info {
 		margin-bottom: 10px;

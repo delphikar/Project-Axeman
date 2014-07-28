@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * ResourceCalculator.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek
  *
@@ -13,15 +13,15 @@
  *****************************************************************************/
 
 /// <summary>
-/// Informs user how much resources is needed 
+/// Informs user how much resources is needed
 /// to build or train field, building or unit
-/// and how long will it take to collect those 
+/// and how long will it take to collect those
 /// resources
 /// </summary>
 function ResourceCalculator() {
 
 	/// <summary>
-	/// Initializes object 
+	/// Initializes object
 	/// </summary>
 	this.Register = function () {
 		Log("ResourceCalculator: Registering ResourceCalculator plugin...");
@@ -29,20 +29,6 @@ function ResourceCalculator() {
 
 		BuildCostCalculator();
 		UnitCostCalculator();
-
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Economy/ResourceCalculator']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
 
 	var BuildCostCalculator = function () {
@@ -76,12 +62,14 @@ function ResourceCalculator() {
 
 					// Crete element
 					var costElement = $("<div>");
-					costElement.attr("class", "ResourceCalculatorBuildCost");
+					costElement.addClass("ResourceCalculatorBuildCost");
 					costElement.css({
 						"color": color,
 						"text-align": "right"
 					});
-					costElement.html("(" + diff + ")");
+					if (storage < res) costElement.addClass("upgradeStorage");
+					if (diff < 0) costElement.addClass("negative");
+					costElement.html("(" + NumberWithCommas(diff) + ")");
 					$(this).append(costElement);
 
 					DLog("ResourceCalculator - Appended cost element for resource [r" + (rindex + 1) + "] difference [" + diff + "]");
@@ -103,7 +91,7 @@ function ResourceCalculator() {
 					timeElement.addClass("ResourceCalculatorBuildFillTime");
 					timeElement.attr("data-timeleft", ratio * 3600);
 					timeElement.css("text-align", "right");
-					timeElement.append("time");
+					timeElement.append("00:00:00");
 					$(this).append(timeElement);
 
 					DLog("Appended time deference element for resource [r" + (rindex + 1) + "] difference [" + timeDifference + "]", "ResourceCalculator");
@@ -141,7 +129,7 @@ function ResourceCalculator() {
 					$(this).attr("data-timeLeft", secondsLeft);
 					$(this).html(ConvertSecondsToTime(secondsLeft));
 				}
-				else $(this).css("visibility", "hidden");
+				else $(this).css("opacity", "0.3");
 			}
 			else {
 				$(this).html("never");
@@ -175,12 +163,13 @@ function ResourceCalculator() {
 			for (var rindex = 0; rindex < 5; rindex++) {
 				// Layout fix for crop cost
 				if (rindex > 3) {
-					$("span:eq(" + rindex + ")", costs[iindex]).append($("<div>").append("empty").css("visibility", "hidden"));
+					$("span:eq(" + rindex + ")", costs[iindex]).append($("<div>").append("empty").hide());
 					continue;
 				}
 
 				// Create element to show resource difference
 				var costElement = $("<div>");
+				costElement.addClass("ResourceCalculatorBuildCost");
 				costElement.addClass("ResourceCalculatorR" + rindex);
 				costElement.css("color", "#0C9E21");
 				costElement.css("text-align", "right");
@@ -219,8 +208,14 @@ function ResourceCalculator() {
 			var color = diff < 0 ? "#B20C08" : "#0C9E21";
 
 			// Update elements
-			$(".ResourceCalculatorR" + rindex, cost).html("(" + diff + ")");
-			$(".ResourceCalculatorR" + rindex, cost).css("color", color);
+			var costElement = $(".ResourceCalculatorR" + rindex, cost);
+			costElement.html("(" + NumberWithCommas(diff) + ")");
+			costElement.css("color", color);
+			if (diff < 0) {
+				costElement.addClass("negative");
+			} else {
+				costElement.removeClass("negative");
+			}
 		}
 	};
 };
@@ -230,7 +225,7 @@ var ResourceCalculatorMetadata = {
 	Name: "ResourceCalculator",
 	Alias: "Resource Calculator",
 	Category: "Economy",
-	Version: "0.2.2.0",
+	Version: "0.2.4.0",
 	Description: "Shows you how much of each resource is needed to build field, building or train army. ",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",

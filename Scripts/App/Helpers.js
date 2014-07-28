@@ -1,7 +1,7 @@
 /******************************************************************************
  *
  * Helpers.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek,
  *
@@ -21,6 +21,41 @@ function GetImageURL(category, filename) {
 
 	return GetURL("Images/" + category + "/" + filename);
 };
+
+function SplitURL(theURL) {
+    theURL = theURL ? theURL : window.location.href;
+
+    if (theURL.indexOf('?') === -1) {
+        return false;
+    }
+
+    var fullUrl = theURL.split('?');
+    var urlParams = fullUrl[1].split('&');
+
+    gets = new Array();
+
+    for (i = 0; i <= urlParams.length - 1; ++i) {
+        var param = urlParams[i].split('=');
+        var name = param[0];
+        var value = param[1];
+        gets[name] = value;
+    }
+    return gets;
+};
+
+function getDistance( point1, point2 ) {
+	var xs = 0;
+	var ys = 0;
+
+	xs = point2.x - point1.x;
+	xs = xs * xs;
+
+	ys = point2.y - point1.y;
+	ys = ys * ys;
+
+	var num = Math.sqrt( xs + ys );
+	return Math.round(num * 10) / 10;
+}
 
 function GetURL(path) {
 	/// <summary>
@@ -101,7 +136,7 @@ function ParseQuery(query) {
 
 	// Split query by '&' symbol
 	var hashes = query.split('&');
-	
+
 	// Go through all parameters and add each to array
 	for (var index = 0; index < hashes.length; index++) {
 		var hash = hashes[index].split('=');
@@ -118,11 +153,11 @@ function Error(message) {
 	/// </summary>
 	/// <param name="message">Message to write</param>
 
-	if (IsDevelopmentMode) {
+	if (!message) return 0;
+
+	if (IsLogging && IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
 		console.error(category + message);
-		
-		(new Request("ConsoleOutput", "Error", null, { Message: message, Category: arguments[1] })).Send();
 	}
 	return 0;
 };
@@ -134,11 +169,9 @@ function Warn(message) {
 	/// </summary>
 	/// <param name="message">Message to write</param>
 
-	if (IsDevelopmentMode) {
+	if (IsLogging && IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
-		console.warn(category + message);
-		
-		(new Request("ConsoleOutput", "Warning", null, { Message: message, Category: arguments[1] })).Send();
+		console.warn("%c" + category + message, "color: #B88E07");
 	}
 };
 
@@ -149,11 +182,9 @@ function Log(message) {
 	/// </summary>
 	/// <param name="message">Message to write</param>
 
-	if (IsDevelopmentMode) {
+	if (IsLogging && IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
 		console.log(category + message);
-		
-		(new Request("ConsoleOutput", "Log", null, { Message: message, Category: arguments[1] })).Send();
 	}
 };
 
@@ -164,11 +195,9 @@ function DLog(message) {
 	/// </summary>
 	/// <param name="message">Message to write</param>
 
-	if (IsDebugMode == true && IsDevelopmentMode == true) {
+	if (IsLogging && IsDevelopmentMode) {
 		var category = arguments[1] !== undefined ? arguments[1] + ": " : "";
-		console.log(category + message);
-		
-		(new Request("ConsoleOutput", "Debug", null, { Message: message, Category: arguments[1] })).Send();
+		console.log("%c" + category + message, "color: #AAAAAA");
 	}
 };
 
@@ -286,6 +315,17 @@ function CreateStylesheet(path) {
 	return stylesheetLink;
 }
 
+function NumberWithCommas(x) {
+	/// <summary>
+	/// Transforms number into grouped digit number.
+	/// Group of three digits
+	/// </summary>
+	/// <param name="x">Number to transform</param>
+	/// <returns type="">string number with comas after group of four digits</returns>
+
+	return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 function _gim(name) {
 	/// <summary>
 	/// Gets locale message
@@ -337,4 +377,37 @@ function _timed(func) {
 	(func || function() {})();
 	var endTime = (new Date()).getTime();
 	return endTime - startTime;
+}
+
+function CreateTravianSidebar(header, content)
+{
+	html = '';
+	html += '<div id="" class="sidebarBox">\
+		<div class="sidebarBoxBaseBox">\
+			<div class="baseBox baseBoxTop">\
+				<div class="baseBox baseBoxBottom">\
+					<div class="baseBox baseBoxCenter"></div>\
+				</div>\
+			</div>\
+		</div>\
+		<div class="sidebarBoxInnerBox">\
+			<div class="innerBox header">\
+				<button type="button" id="" class="layoutButton overviewWhite green" onclick="return false;">\
+				</button>\
+				<div class="clear"></div>\
+				<div class="boxTitle">' + header + '</div>\
+			</div>\
+			<div class="innerBox content">\
+				<div class="linklistNotice">' + content + '</div>\
+			</div>\
+			<div class="innerBox footer">\
+			</div>\
+		</div>\
+	</div>';
+
+	return $('#sidebarBoxLinklist').after(html);
+}
+
+function URLContains(text) {
+	return document.URL.indexOf(text) != -1;
 }

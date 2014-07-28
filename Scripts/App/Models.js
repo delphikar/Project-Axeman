@@ -136,7 +136,6 @@ Models.Profile = function () {
 	this.UID = "unknown";
 	this.Tribe = "unknown";
 
-	this.Population = "unknown";
 	this.Villages = new Array();
 
 	this.Messages = new Models.MessagesCollection();

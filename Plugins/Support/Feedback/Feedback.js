@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * Feedback.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek (AleksandarDev)
  *
@@ -23,11 +23,16 @@ function Feedback() {
 
 		// Insert feedback image
 		DLog("Feedback: Injecting link image...");
-		$("#logo").after("<div style='margin:24px 31px 0 0;width:44px;height:33px;float:left;'><img id='PAFeedback' src='" + GetURL("Plugins/Support/Feedback/Image.png") + "' width='43px' height='43px' style='-webkit-filter:grayscale(1);' /></div>");
+
+		var style = "margin:24px 31px 0 0;width:44px;height:33px;float:left;";
+		if (ActivePageTravianVersion === "4.4") {
+			style = "margin:21px 31px 0 130px;width:44px;height:33px;float:left;"
+		}
+		$("#logo").after("<div style='" + style + "'><img id='PAFeedback' src='" + GetURL("Plugins/Support/Feedback/Image.png") + "' width='43px' height='43px' style='-webkit-filter:grayscale(1);' /></div>");
 
 		// Remove spacer
 		// TODO check if this  spacer means anything cause it has its own id maybe only for styling
-		$("#myGameLinkHeaderWrapper").remove();
+		//$("#myGameLinkHeaderWrapper").remove();
 
 		// On mouse over/leave grayscale effect
 		$("#PAFeedback").mouseenter(function () {
@@ -41,19 +46,6 @@ function Feedback() {
 		$("#PAFeedback").click(function () {
 			app.ShowModalView("Plugins/Support/Feedback/FeedbackForm.html");
 		});
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Support/Feedback']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
 }
 

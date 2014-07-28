@@ -43,9 +43,6 @@ function App() {
 		// Initiates loading
 		this.Load();
 
-		// Send request to check if this is first play
-		(new Request("Background", "Action", "IsFirstPlay")).Send();
-
 		if (!IsDevelopmentMode) {
 			// Google analytics
 			var _gaq = _gaq || [];
@@ -144,7 +141,7 @@ function App() {
 		Log("App: Reading current page...");
 
 		var currentAddress = window.location.hostname;
-		var currentPath = window.location.pathname;
+		var currentPath = window.location.pathname.replace("//", "/");
 		var currentQuery = window.location.search;
 
 		DLog("App: Current page address [" + currentAddress + "]");

@@ -1,9 +1,9 @@
 ﻿/******************************************************************************
  * FieldUpgradeIndicator.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek
- * 
+ *
  * Collaborators:
  * 		Grzegorz Witczak
  *
@@ -15,7 +15,7 @@
 
 function UpgradeIndicator() {
 	/// <summary>
-	/// Initializes object 
+	/// Initializes object
 	/// </summary>
 	this.Register = function () {
 		// TODO Refactor
@@ -28,19 +28,6 @@ function UpgradeIndicator() {
 		// Check if we can apply states
 		if (MatchPages([Enums.TravianPages.VillageOut])) FieldUpgradeIndicator();
 		if (MatchPages([Enums.TravianPages.VillageIn])) BuildingUpgradeIndicator();
-		
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Economy/UpgradeIndicator']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
 
 
@@ -48,6 +35,7 @@ function UpgradeIndicator() {
 		// Get village levels map
 		var villageType = ActiveProfile.Villages[ActiveVillageIndex].VillageOut.Type;
 		var availableFields = Enums.VillageOutMaps[villageType];
+		var resEfficiency = [];
 
 		// Go through all available resource types
 		for (var rIndex = 0, rcache = availableFields.length; rIndex < rcache; rIndex++) {
@@ -58,24 +46,37 @@ function UpgradeIndicator() {
 
 				DLog("Index: " + availableFields[rIndex][fIndex]);
 
+				var fieldLevel = ActiveProfile.Villages[ActiveVillageIndex].VillageOut.Levels[availableFields[rIndex][fIndex]];
+				fieldLevel = field.hasClass("underConstruction") ? (fieldLevel + 1) : fieldLevel;
+				var fieldMaxLevel = ActiveProfile.Villages[ActiveVillageIndex].IsMainCity ? 20 : 10;
+
+				// Get upgrade cost for current level
+				var fieldUpgradeCost = Enums.Fields[rIndex][fieldLevel];
+
+	            // Show upgrade efficiency
+	            if (fieldLevel < fieldMaxLevel && fieldUpgradeCost && fieldUpgradeCost.length >= 4) {
+	                var total = fieldUpgradeCost[0] + fieldUpgradeCost[1] + fieldUpgradeCost[2] + fieldUpgradeCost[3];
+	                var rPerWheat = fieldUpgradeCost[4] > 0 ? Math.floor(total / fieldUpgradeCost[4]) : 0;
+
+	                if (rPerWheat > 0) {
+	                    var resEfficiencyit = [rPerWheat, fieldLevel, Enums.FieldNames[rIndex], (availableFields[rIndex][fIndex] + 1)];
+	                    resEfficiency.push(resEfficiencyit);
+	                }
+	            }
+
 				// Check if field is under construction
 				if (field.hasClass("underConstruction")) {
 					SetUIElementState(field, "UnderConstruction");
 					continue; // Skip to next field
 				}
-				
+
 				var fieldUpgradeState = "Upgradeable";
-				var fieldLevel = ActiveProfile.Villages[ActiveVillageIndex].VillageOut.Levels[availableFields[rIndex][fIndex]];
-				var fieldMaxLevel = ActiveProfile.Villages[ActiveVillageIndex].IsMainCity ? 20 : 10;
 
 				// Check if max upgraded
 				if (fieldLevel >= fieldMaxLevel) {
 					SetUIElementState(field, "MaxUpgraded");
 					continue;; // Skip to next field
 				}
-				
-				// Get upgrade cost for current level
-				var fieldUpgradeCost = Enums.Fields[rIndex][fieldLevel];
 
 				// Go through all resources
 				for (var resource = 0; resource < 4; resource++) {
@@ -95,14 +96,31 @@ function UpgradeIndicator() {
 						// warehouse/granary cost difference even if we can't
 						// upgrade field. Can be case where we can't upgarade
 						// because of wood and we would break at first itteration
-						// but field clay cost is larger than what can be store. 
+						// but field clay cost is larger than what can be store.
 					}
+				}
+
+				if(fieldUpgradeCost && fieldUpgradeCost.length >= 4 && ActiveProfile.Villages[ActiveVillageIndex].Resources.FreeCrop < fieldUpgradeCost[4]) {
+					fieldUpgradeState = "NonUpgradeable";
 				}
 
 				// Set field state
 				SetUIElementState(field, fieldUpgradeState);
 			}
 		}
+
+	      if (resEfficiency.length) {
+	            resEfficiency.sort(function(a, b) {
+	                return a[0] - b[0];
+	            });
+
+	            var html = '<ul>'
+	            for (var i = 0; i < resEfficiency.length; i++) {
+	                html += '<li><a href="build.php?id=' + resEfficiency[i][3] + '">' + (i + 1) + '. Level ' + resEfficiency[i][1] + ' ' + resEfficiency[i][2] + '</a></li>';
+	            }
+	            html += '</ul>';
+	            CreateTravianSidebar('Efficiency queue', html)
+	        }
 	};
 
 	var BuildingUpgradeIndicator = function() {
@@ -112,16 +130,30 @@ function UpgradeIndicator() {
 		var villageMap = $("#village_map");
 		var GIDs = Enums.VillageInGID;
 		var buildings = $("img", villageMap).not(".iso, .clickareas, #lswitch, .onTop");
+		var resEfficiency = [];
 		buildings.each(function(index) {
 			var levelObject = $("#levels div", villageMap)[index];
-			if (!$(levelObject).is(".underConstruction")) {
-				// Get current building level and GID
-				// TODO Pull this from profile.village model
-				var buildingLevel = parseInt($(levelObject).text(), 10) || 0;
-				var buildingGID = $(this).attr("class").match(/g([0-9]{1,2})/)[1];
-				var building = Enums.Buildings[GIDs[buildingGID]];
-				var buildingUpgradeCost = building[buildingLevel];
 
+			// Get current building level and GID
+			// TODO Pull this from profile.village model
+			var buildingLevel = parseInt($(levelObject).text(), 10) || 0;
+			buildingLevel = $(levelObject).is(".underConstruction") ? (buildingLevel + 1) : buildingLevel;
+			var buildingGID = $(this).attr("class").match(/g([0-9]{1,2})/)[1];
+			var building = Enums.Buildings[GIDs[buildingGID]];
+			var buildingUpgradeCost = building[buildingLevel];
+
+            // Show upgrade efficiency
+            if (buildingLevel < building.length && buildingUpgradeCost && buildingUpgradeCost.length >= 4) {
+                var total = buildingUpgradeCost[0] + buildingUpgradeCost[1] + buildingUpgradeCost[2] + buildingUpgradeCost[3];
+                var rPerWheat = buildingUpgradeCost[4] > 0 ? Math.floor(total / buildingUpgradeCost[4]) : 0;
+
+                if (rPerWheat > 0) {
+                    var resEfficiencyit = [rPerWheat, buildingLevel, GIDs[buildingGID], buildingGID];
+                    resEfficiency.push(resEfficiencyit);
+                }
+            }
+
+			if (!$(levelObject).is(".underConstruction")) {
 				DLog("------" + buildingGID + ": " + GIDs[buildingGID]);
 
 				var upgradeState = "Upgradeable";
@@ -143,7 +175,7 @@ function UpgradeIndicator() {
 								// warehouse/granary cost difference even if we can't
 								// upgrade field. Can be case where we can't upgarade
 								// because of wood and we would break at first itteration
-								// but field clay cost is larger than what can be store. 
+								// but field clay cost is larger than what can be store.
 							}
 						}
 
@@ -156,10 +188,27 @@ function UpgradeIndicator() {
 				upgradeState = "UnderConstruction";
 			}
 
+			if(buildingUpgradeCost && buildingUpgradeCost.length >= 4 && ActiveProfile.Villages[ActiveVillageIndex].Resources.FreeCrop < buildingUpgradeCost[4]) {
+				upgradeState = "NonUpgradeable";
+			}
+
 			SetUIElementState(levelObject, upgradeState);
 		});
+
+      if (resEfficiency.length) {
+            resEfficiency.sort(function(a, b) {
+                return a[0] - b[0];
+            });
+
+            var html = '<ul>'
+            for (var i = 0; i < resEfficiency.length; i++) {
+                html += '<li><a href="build.php?gid=' + resEfficiency[i][3] + '">' + (i + 1) + '. Level ' + resEfficiency[i][1] + ' ' + resEfficiency[i][2] + '</a></li>';
+            }
+            html += '</ul>';
+            CreateTravianSidebar('Efficiency queue', html)
+        }
 	};
-	
+
 	var SetUIElementState = function (field, state) {
 		// Apply styles
 		$(field).addClass("PAUIElement " + state);

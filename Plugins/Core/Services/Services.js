@@ -1,6 +1,6 @@
 ﻿/******************************************************************************
  * Services.js
- * 
+ *
  * Author:
  * 		Aleksandar Toplek (AleksandarDev)
  *
@@ -13,49 +13,41 @@ function Services() {
 	/// <summary>
 	/// Plugin that takes care of all built-in models (fill and update), refreshes page and changes views randomly.
 	/// </summary>
-	
+
 	//
 	// Variables
 	//
 	var activeVillage;
 
-	
+
 	this.Register = function () {
 		/// <summary>
-		/// Registers plugin 
+		/// Registers plugin
 		/// </summary>
 
 		Log("Initializing...", "Services");
 
 		// Check if user is loged in
 		ProcessIsLogedIn();
-		
+
 		// Crawl for travian version
 		CrawlVersion();
-		
+
 		// Process profile
 		ProcessProfiles();
-		
+
 		// Crawl current page
 		CrawlPage();
-		
+
 		// Save changes
 		SaveActiveVillage();
 		SaveProfileChanges();
-		
+
 		// Try to auto-login profile if possible
 		AutoLoginUser();
 
 		// Initiate refresh service
 		InitializeNavigationService();
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'Plugin', 'Core/Services']);
-			(function () { var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = 'https://ssl.google-analytics.com/ga.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); })();
-		}
 	};
 
 	var InitializeNavigationService = function() {
@@ -68,7 +60,7 @@ function Services() {
 		/// </summary>
 
 		Log("Checking if user can login automatically", "Services");
-		
+
 		if (!IsLogedIn && ActiveProfile.IsAutoLogin && ActiveProfile.Password) {
 			$(".login input[name='name']").val(ActiveProfile.Name);
 			$(".login input[name='password']").val(ActiveProfile.Password);
@@ -105,7 +97,7 @@ function Services() {
 			CrawlLoyalty();
 			CrawlMessages();
 			CrawlReports();
-			
+
 			if (MatchPages([Enums.TravianPages.Player])) {
 
 				Log("Crawling Player page...", "Services");
@@ -138,13 +130,14 @@ function Services() {
 		/// <summary>
 		/// Crawls for server version that is currently active
 		/// </summary>
-		
+
 		if (!IsLogedIn) {
 			DLog("Can't crawl for travian version when player isn't loged in", "Services");
 			return;
 		}
-		
+
 		if ($(".sideInfoPlayer .signLink").length) ActivePageTravianVersion = "4";
+		else if ($("#sidebarBoxQuestachievements").length) ActivePageTravianVersion = "4.4";
 		else if ($(".sidebarBoxInnerBox .heroImage").length) ActivePageTravianVersion = "4.2";
 
 		DLog("Travian version: " + ActivePageTravianVersion, "Services");
@@ -153,7 +146,7 @@ function Services() {
 	var CrawlStorage = function () {
 		/// <summary>
 		/// Crawls for active village storages and crop production/consumption
-		/// Supported versions: 4, 4.2
+		/// Supported versions: 4, 4.2, 4.4
 		/// </summary>
 
 		Log("Crawling village storage...", "Services");
@@ -175,25 +168,27 @@ function Services() {
 				}
 			});
 		}
-		else if (ActivePageTravianVersion === "4.2") {
+		else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4") {
 			var warehouseSize = parseInt($("#stockBarWarehouse").text().replace(",", "").replace(" ", "").replace(".", ""), 10) || 0;
 			var granarySize = parseInt($("#stockBarGranary").text().replace(",", "").replace(" ", "").replace(".", ""), 10) || 0;
-			
+
 			for (var index = 0; index < 4; index++) {
 				activeVillage.Resources.Stored[index] = parseInt($("#l" + (index + 1)).text().replace(",", "").replace(" ", "").replace(".", ""), 10) || 0;
 				activeVillage.Resources.Storage[index] = index == 3 ? granarySize : warehouseSize;
 			}
+
+			// Crawl Free Crop
 			activeVillage.Resources.FreeCrop = parseInt($("#stockBarFreeCrop").text().replace(",", "").replace(" ", "").replace(".", ""), 10) || 0;
 		} else throw ("Unsuported travian version");
 
-		DLog("Stored in Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Stored + "] and crop [" + activeVillage.Resources.Consumption + " of " + activeVillage.Resources.TotalCropProduction + "]", "Services");
+		DLog("Stored in Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Stored + "] and free crop [" + activeVillage.Resources.FreeCrop + "]", "Services");
 		DLog("Storage of Village [" + activeVillage.VID + "] is [" + activeVillage.Resources.Storage + "]", "Services");
 	};
 
 	var CrawlProduction = function () {
 		/// <summary>
-		/// Crawls for active village production from production table (not from script) 
-		/// Supported versions: 4, 4.2
+		/// Crawls for active village production from production table (not from script)
+		/// Supported versions: 4, 4.2, 4.4
 		/// </summary>
 
 		Log("Crawling village production...", "Services");
@@ -219,18 +214,18 @@ function Services() {
 	var CrawlLoyalty = function () {
 		/// <summary>
 		/// Crawls for active village loyalty
-		/// Supported versions: 4, 4.2
+		/// Supported versions: 4, 4.2, 4.4
 		/// </summary>
-		
+
 		Log("Crawling village loyalty...", "Services");
 
 		if (ActivePageTravianVersion === "4") {
 			// Get loyalty span text
 			var loyaltyText = $("#villageName .loyalty").text();
-			
+
 			// Remove 'Loyalty' word parse right part to number
 			activeVillage.Loyalty = parseInt(loyaltyText.split(":")[1], 10) || 0;
-		} else if (ActivePageTravianVersion === "4.2")
+		} else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4")
 			activeVillage.Loyalty = parseInt($("#sidebarBoxActiveVillage div.loyalty.medium > span").text().replace(/[^\d]/g, ""), 10) || 0;
 		else throw ("Unsuported travian version");
 
@@ -242,7 +237,7 @@ function Services() {
 		/// Crawls Village list data
 		/// Supported versions: dependency
 		/// </summary>
-		
+
 		Log("Crawling Villages list...", "Services");
 
 		var villagesFomList = GetVillagesListData();
@@ -292,12 +287,25 @@ function Services() {
 				Log("New Village [" + village.id + "] registered!", "Services");
 			}
 		}
+
+		// Shows message to crawn profile page
+		var mainVillageFound = false;
+		for (var index = 0; index < ActiveProfile.Villages.length; index++) {
+			if (ActiveProfile.Villages[index].IsMainCity) {
+				mainVillageFound = true;
+				break;
+			}
+		}
+		if (!mainVillageFound) {
+			// TODO Localize
+			$("#sidebarBoxVillagelist .innerBox.content").append("<br/><div>Capital village not detected. Visit your <a href='/spieler.php' style='color: #00BC00; text-decoration: underline;'>profile page</a>.</div>");
+		}
 	};
-	
+
 	var GetVillagesListData = function () {
 		/// <summary>
 		/// Generates list of basic data for villages in the sidebar list
-		/// Suported versions: 4, 4.2
+		/// Suported versions: 4, 4.2, 4.4
 		/// </summary>
 		/// <returns type="Array[{ name: string, id: integer, isActive: boolean }]">Returns array of retrieved data from villages list</returns>
 
@@ -312,7 +320,7 @@ function Services() {
 					isActive: $(this).hasClass("active")
 				});
 			});
-		} else if (ActivePageTravianVersion === "4.2") {
+		} else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4") {
 			$("#sidebarBoxVillagelist div.content > ul > li").each(function () {
 				data.push({
 					name: $("> a > div", this).text().trim(),
@@ -332,7 +340,7 @@ function Services() {
 		/// </summary>
 
 		Log("Crawling messages...", "Services");
-		
+
 		var currentReportsCount = parseInt($(".messages > div.bubble > .bubble-content").text(), 10) || 0;
 		ActiveProfile.Messages.UnreadCount = currentReportsCount;
 
@@ -357,7 +365,7 @@ function Services() {
 						Warn("No message with same ID [" + messageID + "]", "Services");
 						return;
 					}
-					
+
 					DLog("Message [" + messageID + "] content set.", "Services");
 				} else {
 					// Go throigh all message lines and crawl data
@@ -406,7 +414,7 @@ function Services() {
 		/// <summary>
 		/// Crawls for new user reports
 		/// </summary>
-		
+
 		var currentReportsCount = parseInt($(".reports .bubble-content").text(), 10) || 0;
 
 		// Check if on Reports page
@@ -419,47 +427,47 @@ function Services() {
 
 		DLog("Services: CrawlReports found [" + currentReportsCount + "] new reports");
 	};
-	
+
 	var CrawlVillagesDetails = function () {
 		/// <summary>
 		/// Crawls for villages details
 		/// </summary>
-		
+
 		$.each(ActiveProfile.Villages, function (index, obj) {
 			// Get village detailc table
 			var village = $("#villages tbody tr").find("td:contains('"+obj.Name+"')").parent();
-		
+
 			// Crawl IsMainCity
 			var checkMainCity = ($(".name", village).has(".mainVillage").length ? true : false);
 			ActiveProfile.Villages[index].IsMainCity = checkMainCity;
 			DLog("Services: " + obj.Name + " " + (checkMainCity ? "is" : "isn't") + " main city");
-			
+
 			// Crawl village population
 			var villagePop =  parseInt($(".inhabitants", village).text(), 10) || 0;
 			ActiveProfile.Villages[index].Population = villagePop;
 			DLog("Services: Population of "+obj.Name+" is ["+villagePop+"]");
-			
+
 			// Crawl village position X Coordinate
 			var PositionX = $(".coordinateX", village).text();
 			PositionX = parseInt(PositionX.replace("(",""), 10) || 0;
 			ActiveProfile.Villages[index].Position.x = PositionX;
-			
+
 			// Crawl village position Y coordinate
 			var PositionY = $(".coordinateY", village).text();
 			PositionY = parseInt(PositionY.replace(")",""), 10) || 0;
 			ActiveProfile.Villages[index].Position.y = PositionY;
-			
+
 			DLog("Services: Coordinates for "+obj.Name+" are [("+PositionX+"|"+PositionY+")]");
 		});
 	};
-	
+
 	var CrawlVillageType = function () {
 		/// <summary>
 		/// Crawls village type
 		/// </summary>
-		
+
 		var currentVillageType = $("#village_map").attr("class") || "f3";
-	
+
 		activeVillage.VillageOut.Type = currentVillageType;
 
 		DLog("CrawlVillageType is [" + currentVillageType + "]", "Services");
@@ -477,7 +485,7 @@ function Services() {
 			var field = $(fieldObj);
 			var level = parseInt(field.text(), 10) || 0;
 			activeVillage.VillageOut.Levels[fieldIndex] = level;
-			
+
 			DLog("VillageOut Field(" + fieldIndex + ") at lvl." + level, "Services");
 		});
 	};
@@ -493,11 +501,11 @@ function Services() {
 	var CrawlVillageBuildTasks = function () {
 		// TODO Implement
 	};
-	
+
 	var CrawlVillageMovements = function () {
 		// TODO Implement
 	};
-	
+
 	var CrawlVillageTotalTroops = function () {
 		// TODO Implement
 	};
@@ -541,19 +549,23 @@ function Services() {
 
 		// Tryes to get active profile UID, name and tribe and match them to available profile
 		try {
-			DLog("Retrieving active profile info...");
+			DLog("Retrieving active profile info...", "Services");
 			activeProfileUID = GetActiveProfileUID();
 			activeProfileName = GetActiveProfileName();
 			activeProfileTribeID = GetActiveProfileTribe();
 			DLog("Active profile UID is [" + activeProfileUID + "] for \"" + activeProfileName + "\"", "Services");
-			
+
 			// Get matched profiles
 			var matchedProfilesIndexes = GetMatchingProfilesIndexes(activeProfileUID, activeProfileName, ActiveServerAddress);
 
 			// Check if multiple or none profiles were found
-			if (matchedProfilesIndexes != 1) {
-				Warn("Invalid number of profiles found that match current player [" + matchedProfilesIndexes.length + "]. Can't select profile automatically - selecting FIRST.", "Services");
+			if (matchedProfilesIndexes.length >= 1) {
 				ActiveProfile = AvailableProfiles[matchedProfilesIndexes[0]];
+
+				// Warning that profile was not matched unique
+				if (matchedProfilesIndexes.length != 1) {
+					Warn("Invalid number of profiles found that match current player [" + matchedProfilesIndexes.length + "]. Can't select profile automatically - selecting FIRST.", "Services");
+				}
 			}
 		}
 		catch (ex) {
@@ -596,9 +608,9 @@ function Services() {
 
 			// Match using Server Address and, UID or name
 			if (currentProfile.ServerAddress == server &&
-				(currentProfile.UID == uid ||
-					currentProfile.Name == name))
+				(currentProfile.UID == uid || currentProfile.Name == name)) {
 				matchedProfilesIndexes.push(index);
+			}
 		}
 		return matchedProfilesIndexes;
 	};
@@ -607,7 +619,7 @@ function Services() {
 		/// <summary>
 		/// Tryes to match existing profile to currently active profile
 		/// so that user can be loged in. This is lazy version of matching
-		/// that only uses server address to match to users 
+		/// that only uses server address to match to users
 		/// (can'try match two users of same server)
 		/// Supported versions: all
 		/// </summary>
@@ -634,14 +646,14 @@ function Services() {
 	var GetActiveProfileUID = function() {
 		/// <summary>
 		/// Matches element that contains profile UID and retrieves value
-		/// Supported versions: 4, 4.2
+		/// Supported versions: 4, 4.2, 4.4
 		/// </summary>
 		/// <returns type="integer">Returns UID of active profile</returns>
 
 		if (ActivePageTravianVersion === "4") {
 			var profileLinkElement = $(".sideInfoPlayer .signLink").attr("src");
 			return parseInt(profileLinkElement.replace("spieler.php?uid=", ""), 10) || 0;
-		} else if (ActivePageTravianVersion == "4.2") {
+		} else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4") {
 			var imageSource = $(".sidebarBoxInnerBox .heroImage").attr("src");
 			var start = imageSource.indexOf("uid");
 			var end = imageSource.indexOf("&");
@@ -652,27 +664,27 @@ function Services() {
 	var GetActiveProfileName = function () {
 		/// <summary>
 		/// Matches element that contains profile name and retrieves value
-		/// Suported versions: 4, 4.2
+		/// Suported versions: 4, 4.2, 4.4
 		/// </summary>
 		/// <returns type="string">Returns active profile name</returns>
 
 		if (ActivePageTravianVersion === "4") {
 			return $(".sideInfoPlayer .signLink span").text().trim();
-		} else if (ActivePageTravianVersion === "4.2") {
+		} else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4") {
 			return $(".sidebarBoxInnerBox .playerName").text().trim();
 		} else throw("Unsuported travian version");
 	};
-	
+
 	var GetActiveProfileTribe = function () {
 		/// <summary>
 		/// Matches element that contains currently active profile tribe and retrieves raw value
-		/// Suported versions: 4, 4.2
+		/// Suported versions: 4, 4.2, 4.4
 		/// </summary>
 		/// <returns type="string">Returns raw tribe value (eg. '2' for teutons, etc.)</returns>
 
 		if (ActivePageTravianVersion === "4") {
 			return $(".sideInfoPlayer img").attr("class").replace("nationBig nationBig", "");
-		} else if (ActivePageTravianVersion === "4.2") {
+		} else if (ActivePageTravianVersion === "4.2" || ActivePageTravianVersion === "4.4") {
 			return $(".sidebarBoxInnerBox .playerName > img").attr("class").replace("nation nation", "");
 		} else throw("Unsuported travian version");
 	};
@@ -683,7 +695,7 @@ function Services() {
 		/// Suported versions: all
 		/// </summary>
 		/// <returns type="Models.Village">Models.Village object representing currently active village</returns>
-		
+
 		return ActiveProfile.Villages[ActiveVillageIndex];
 	};
 
@@ -692,10 +704,10 @@ function Services() {
 		/// Updates active village
 		/// Suported versions: all
 		/// </summary>
-		
+
 		ActiveProfile.Villages[ActiveVillageIndex] = activeVillage;
 	};
-	
+
 	var SaveProfileChanges = function () {
 		/// <summary>
 		/// Updates AvailableProfiles list with new profile data
@@ -746,7 +758,7 @@ var ServicesMetadata = {
 	Name: "Services",
 	Alias: "Services",
 	Category: "Core",
-	Version: "0.0.3.0",
+	Version: "0.0.3.1",
 	Description: "Takes care of all data retrieving and is requeired for all plugins",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
