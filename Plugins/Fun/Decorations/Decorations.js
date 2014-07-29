@@ -44,7 +44,6 @@ function Decorations() {
 		}
 
 		$('#demolish option').each(function(index) {
-			console.log(index);
 			$(this).text($(this).text().replace($(this).val() + '.', ''));
 		});
 	}
