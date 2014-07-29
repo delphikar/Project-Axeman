@@ -46,6 +46,11 @@ function Decorations() {
 		$('#demolish option').each(function(index) {
 			$(this).text($(this).text().replace($(this).val() + '.', ''));
 		});
+
+		$("#demolish").append($("#demolish option").remove().sort(function(a, b) {
+			var at = $(a).text(), bt = $(b).text();
+			return (at > bt)?1:((at < bt)?-1:0);
+		}));
 	}
 
 	var AddCoordsToFarmList = function() {
