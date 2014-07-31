@@ -22,6 +22,41 @@ function GetImageURL(category, filename) {
 	return GetURL("Images/" + category + "/" + filename);
 };
 
+function SplitURL(theURL) {
+    theURL = theURL ? theURL : window.location.href;
+
+    if (theURL.indexOf('?') === -1) {
+        return false;
+    }
+
+    var fullUrl = theURL.split('?');
+    var urlParams = fullUrl[1].split('&');
+
+    gets = new Array();
+
+    for (i = 0; i <= urlParams.length - 1; ++i) {
+        var param = urlParams[i].split('=');
+        var name = param[0];
+        var value = param[1];
+        gets[name] = value;
+    }
+    return gets;
+};
+
+function getDistance( point1, point2 ) {
+	var xs = 0;
+	var ys = 0;
+
+	xs = point2.x - point1.x;
+	xs = xs * xs;
+
+	ys = point2.y - point1.y;
+	ys = ys * ys;
+
+	var num = Math.sqrt( xs + ys );
+	return Math.round(num * 10) / 10;
+}
+
 function GetURL(path) {
 	/// <summary>
 	/// Gets chrome extension URL of given path
@@ -371,4 +406,8 @@ function CreateTravianSidebar(header, content)
 	</div>';
 
 	return $('#sidebarBoxLinklist').after(html);
+}
+
+function URLContains(text) {
+	return document.URL.indexOf(text) != -1;
 }

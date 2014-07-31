@@ -235,7 +235,7 @@ var DevelopmentMetadata = {
     Name: "ReportEnhancement",
     Alias: "Report Enhancement",
     Category: "Utility",
-    Version: "0.0.0.1",
+    Version: "0.0.1.0",
     Description: "Show resource loss on report pages",
     Author: "Geczy",
     Site: "https://github.com/JustBuild/Project-Axeman/wiki",
