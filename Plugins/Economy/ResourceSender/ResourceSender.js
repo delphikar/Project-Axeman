@@ -212,7 +212,7 @@ function ResourceSender() {
 				amounts[i] = 0;
 			}
 
-			amounts[i] = Math.abs(amounts[i]);
+			amounts[i] = Math.ceil( Math.abs(amounts[i]) / 10) * 10;
 		}
 
 		// Add village names to list

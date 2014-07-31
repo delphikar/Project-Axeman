@@ -98,7 +98,7 @@ function Services() {
 			CrawlMessages();
 			CrawlReports();
 
-			if (MatchPages([Enums.TravianPages.Player])) {
+			if (MatchPages([Enums.TravianPages.Player]) && !URLContains('uid')) {
 
 				Log("Crawling Player page...", "Services");
 
