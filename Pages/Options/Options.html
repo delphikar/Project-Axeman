@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<link id="favicon" rel="shortcut icon" type="image/​png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACwElEQVQ4jcWSW0hTARjH/2dnZ9vxOHUO784rTpshpZlZYkVRKUE+FF4wJCEksciHQjJBesiIIqykqEwke5GKkD0oQtIipzLvE+dlTc2d42VuTXPHza31kg9JEfXS9/R9/L/fH/58H/C/i/gXqKGhwddlnTmXceTSM/Jv4cbGRql9ouutnzxkfWh8qOOPwLv25qKnD+tu/xiJO9XnW6oqzlZv6b+MUFdbFbcyzx1OP5BEuS36m6yRk61JwuqWF+zR6fv2WEsv1178rYFWq41puVGhJb3W0OP5KtCkGPPTNjjdPEZ0LNZ5Xza3vObU6cJCHQAIthtMGYZVc7OmUI+EQliEHMqUcCSlBiEg2A+gaSxyc+GT+v7srX3hVqPTGaMEUl+ZxLMyOHkw27j4+VN8e6cZmXs34XJ+wyzngtMtws60RMTFKjwAoNFowgidzujPWi0PeMdmnoCAiSb5a+xY54t127Rs7asLFt4BSkTCnxZDLlOM+EtcUV5xzECkMqXMyRqLhFZ+/dGgYbpQAC/ioyJnNmxL6R91EzIp7RxLTU8MhZmVS4RCMCICAdFpdZx5JW+0rz8/UyAtiE1Ivitw8LzdR+hu4t2bMC1asjbs5mI/Hyd3NKckp7d/dmV4yIiennG0dY4AJO03bzYlE64FdA/oz2i1Wl6QdyzjwpXyklKK9Bos9tVAPbsRfehEcaWLJFl5cLAmMJSGhxZggltGT++HXZyNjxyYmgdJ+fAqlYogAeCNWr1Db+IqKYYRi3zlToeXUaqUkVoxJO9XvyzmB4VEuBURCS9zcvOqQDJzmxQze/JI1vWCgoJlIQCs2e1SGhuvaSGxnydEiQwj9IiAmeHRrscRMbur/WXyJcNIdxlFUa7qqxXPAeBV85Of769Wq2U19+p7au43tfWNjioAoLW1NXBLb6i/ldXR0cFs/5vvGSgijfFSzbcAAAAASUVORK5CYII=">
-		<title>Settings | Project Axeman</title>
+		<title>Settings</title>
 		
 		<link rel="stylesheet" type="text/css" href="chrome-bootstrap/chrome-bootstrap.css" />
 	</head>
@@ -11,11 +11,13 @@
 			
 			<!-- Navigation -->
 			<div class="navigation">
-				<h1>Project-Axeman</h1>
+				<h1>
+					Axeman
+				</h1>
 				
 				<ul class="menu">
 					<li class="selected">
-						<a href="#general">General</a>
+						<a href="#settings">Settings</a>
 					</li>
 					<li>
 						<a href="#plugins">Plugins</a>
@@ -33,14 +35,79 @@
 			
 			<!-- Content -->
 			<div class="mainview view">
-				<!-- General -->
-				<div id="general" class="selected">
-					<p>General</p>
+				<!-- Settings -->
+				<div id="settings">
+					<header>
+						<h1>Settings</h1>
+					</header>
+					<div class="content">
+						<section>
+							<h3>Extension state</h3>
+							<div>
+								<input id="SettingsExtensionStateCheckbox" type="checkbox" checked />
+								<span>Enabled</span>
+							</div>
+							<p id="SettingsExtensionStateDisabledMessage" style="display: none; color: #DAA520">Disabling extension will prevent it from executing on any Travian websites.</p>
+						</section>
+						<section>
+							<h3>Advanced</h3>
+							<div>
+								<input id="SettingsAdvancedLogging" type="checkbox" />
+								<span>Enable logging</span>
+							</div>
+						</section>
+					</div>
 				</div>
 				
 				<!-- Plugins -->
-				<div id="plugins">
-					<p>Plugins</p>
+				<div id="plugins" class="selected">
+					<header>
+						<h1>Plugins</h1>
+					</header>
+					<div class="content">
+						<div data-bind="foreach: plugins" style="font-size: 1.1em; color: #333333; min-width: 576px; max-width: 738px;">
+							<div style="margin: 23px 0; display: -webkit-box;">
+								<div style="padding-right: 10px;">
+									<img data-bind="attr: { src: ImageSource }" style="width: 68px; height: 68px;"></img>
+									<div data-bind="if: Flags.Internal">
+										<div style="padding: 4px 10px; background-color: #333; color: white; border-radius: 5px; width: 48px; text-align: center; line-height: 20px; font-weight: bold; font-size: 0.75em; margin: 2px 0;">INTERNAL</div>
+									</div>
+									<div data-bind="if: Flags.Alpha">
+										<div style="padding: 4px 10px; background-color: #2D8AD6; color: white; border-radius: 5px; width: 48px; text-align: center; line-height: 20px; margin: 2px 0;">Alpha</div>
+									</div>
+									<div data-bind="if: Flags.Beta">
+										<div style="padding: 4px 10px; background-color: #C51A1A; color: white; border-radius: 5px; width: 48px; text-align: center; line-height: 20px; margin: 2px 0;">Beta</div>
+									</div>
+								</div>
+								<div style="-webkit-box-flex: 1; padding-right: 5px;">
+									<div>
+										<span data-bind="text: Alias" style="padding-right: 20px;"></span>
+										<span data-bind="text: Version"></span>
+									</div>
+									<div style="margin: 5px 0;">
+										<span data-bind="text: Description" style="color: rgb(151, 156, 160);"></span>
+										<a data-bind="attr: { href: Site }" style="margin-left: 0.5em;">Visit website</a>
+									</div>
+									<div style="margin: 5px 0;">
+										<span>Category: </span>
+										<span data-bind="text: Category"></span>
+									</div>
+									<div style="margin: 5px 0;">
+										<span>Author: </span>
+										<span data-bind="text: Author"></span>
+									</div>
+								</div>
+								<div style="position: relative; margin-right: 20px;">
+									<div>
+										<label style="padding: 7px 0;">
+											<input type="checkbox" data-bind="checked: State" />
+											<span style="min-width: 58px; margin-left: 0.6em; margin-right: 30px;">Enabled</span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				
 				<!-- Help -->
@@ -57,56 +124,6 @@
 		
 		<script type="text/javascript" src="../../Scripts/knockout.js"></script>
 		<script type="text/javascript" src="../../Scripts/jQuery.js"></script>
-		<script type="text/javascript">
-			$(function() {
-				$('.menu a').click(function(ev) {
-					ev.preventDefault();
-					var selected = 'selected';
-
-					$('.mainview > *').removeClass(selected);
-					$('.menu li').removeClass(selected);
-					setTimeout(function() {
-						$('.mainview > *:not(.selected)').css('display', 'none');
-					}, 100);
-
-					$(ev.currentTarget).parent().addClass(selected);
-					var currentView = $($(ev.currentTarget).attr('href'));
-					currentView.css('display', 'block');
-					setTimeout(function() {
-						currentView.addClass(selected);
-					}, 0);
-
-					setTimeout(function() {
-						$('body')[0].scrollTop = 0;
-					}, 200);
-				});
-
-				$('#launch_modal').click(function(ev) {
-					ev.preventDefault();
-					var modal = $('.overlay').clone();
-					$(modal).removeAttr('style');
-					$(modal).find('button, .close-button').click(function() {
-						$(modal).addClass('transparent');
-						setTimeout(function() {
-							$(modal).remove();
-						}, 1000);
-					});
-
-					$(modal).click(function() {
-						$(modal).find('.page').addClass('pulse');
-						$(modal).find('.page').on('webkitAnimationEnd', function() {
-							$(this).removeClass('pulse');
-						});
-					});
-					$(modal).find('.page').click(function(ev) {
-						ev.stopPropagation();
-					});
-					$('body').append(modal);
-				});
-
-				$('.mainview > *:not(.selected)').css('display', 'none');
-			});
-		</script>
 		
 		<!-- Extension scripts -->
 		<script type="text/javascript" src="../../Scripts/App/Enums.js"></script>
