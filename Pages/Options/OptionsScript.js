@@ -35,24 +35,37 @@
 			}
 
 			metadata["ImageSource"] = GetPluginImage(metadata);
-			metadata["State"] = GetActiveState(metadata);
+			metadata["State"] = GetActiveState(metadata) == "Enabled";
 			pluginsArray.push(metadata);
 			return true;
 		});
 
 		ko.applyBindings(new PluginsViewModel(pluginsArray));
+
+		$(".PluginStateCheckbox").change(function () {
+			var pluginName = $(this).data("plugin");
+			var isActive = $(this).prop("checked");
+			SetActiveState(pluginName, isActive);
+		});
 	};
 
-	function GetActiveState(obj) {
+	function SetActiveState(pluginName, isActive) {
+		var stateValue = isActive ? "Enabled" : "Disabled";
+		console.log(stateValue);
+
+		localStorage.setItem("IsPluginActive" + pluginName, JSON.stringify({ State: stateValue }));
+	}
+
+	function GetActiveState(metadata) {
 		var activeState = null;
 
 		// Gets currently set plugin state
-		var stateObject = JSON.parse(localStorage.getItem("IsPluginActive" + obj.Name));
+		var stateObject = JSON.parse(localStorage.getItem("IsPluginActive" + metadata.Name));
 
 		// If satte is not set, save default state else 
 		if (stateObject === null) {
-			activeState = obj.Default.State;
-			localStorage.setItem("IsPluginActive" + obj.Name, JSON.stringify({ State: activeState }));
+			activeState = metadata.Default.State;
+			localStorage.setItem("IsPluginActive" + metadata.Name, JSON.stringify({ State: activeState }));
 		}
 		else activeState = stateObject.State;
 

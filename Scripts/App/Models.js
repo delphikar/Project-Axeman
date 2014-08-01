@@ -38,7 +38,7 @@ Models.PluginMetadata = {
 	},
 
 	Default: {
-		State: "On"
+		State: "Enabled"
 	},
 
 	Flags: {

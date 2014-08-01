@@ -84,7 +84,7 @@ function PluginsManager() {
 			// Validate plugin registration
 			if (ValidatePluginRegistration(pluginMetadata)) {
 				// Check if plugin has state or default state is 'On'
-				if ((response == null || !response.State) && state == "On" || response.State == "On") {
+				if ((response == null || !response.State) && state == "Enabled" || response.State == "Enabled") {
 					Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is active...");
 					Log("PluginsManager: Registering '" + pluginMetadata.Name + "'");
 
