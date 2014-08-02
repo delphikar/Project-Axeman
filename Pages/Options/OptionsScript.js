@@ -7,6 +7,10 @@
 		this.IsLoggingEnabled = false;
 		this.IsDevelopmentModeEnabled = false;
 
+		this.ToggleIsAdvancedShown = function() {
+			this.IsAdancedShown(!this.IsAdancedShown());
+		};
+
 		// Plugins
 		this.Plugins = new Array();
 	};
