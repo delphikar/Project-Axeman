@@ -1,5 +1,24 @@
 ﻿function Options() {
-	this.InitializeSettings = function() {
+	this.InitializeSettings = function () {
+		var SettingsViewModel = function() {
+			this.IsExtensionEnabled = ko.observe(true);
+			this.IsLoggingEnabled = ko.observe(false);
+		};
+		
+		// Load or create ViewModel
+		var viewModel = JSON.parse(localStorage.getItem("Settings"));
+		if (!viewModel) {
+			viewModel = new SettingsViewModel();
+			localStorage.setItem("Settings", JSON.stringify(viewModel));
+		}
+
+		// Subscribe to changes
+		viewModel.track(function() {
+
+		});
+		
+		ko.applyBindings(viewModel, $("#settings")[0]);
+
 		//
 		// Extension State
 		//
@@ -40,7 +59,7 @@
 			return true;
 		});
 
-		ko.applyBindings(new PluginsViewModel(pluginsArray));
+		ko.applyBindings(new PluginsViewModel(pluginsArray), $("#plugins")[0]);
 
 		$(".PluginStateCheckbox").change(function () {
 			var pluginName = $(this).data("plugin");
