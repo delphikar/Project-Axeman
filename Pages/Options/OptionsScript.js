@@ -1,22 +1,6 @@
 ﻿function Options() {
-	// Options page viewModel
-	this.OptionsViewModel = function() {
-		// Settings
-		this.IsAdancedShown = false;
-		this.IsExtensionEnabled = true;
-		this.IsLoggingEnabled = false;
-		this.IsDevelopmentModeEnabled = false;
-
-		this.ToggleIsAdvancedShown = function() {
-			this.IsAdancedShown(!this.IsAdancedShown());
-		};
-
-		// Plugins
-		this.Plugins = new Array();
-	};
-
 	// Create ViewModel with mapping
-	this.ViewModel = ko.mapping.fromJS(new this.OptionsViewModel(), {
+	this.ViewModel = ko.mapping.fromJS(new Models.OptionsModel(), {
 		Plugins: {
 			key: function(data) {
 				return ko.utils.unwrapObservable(data.Name);
@@ -51,14 +35,8 @@
 
 	this.InitializePlugins = function () {
 		var self = this;
-
 		// Populate ViewModel with default values
 		$.each(GlobalPluginsList, function (index, metadata) {
-			// Skip internal plugins if not in development mode
-			if (metadata.Flags.Internal && !IsDevelopmentMode) {
-				return true;
-			}
-
 			metadata["ImageSource"] = GetPluginImage(metadata);
 			metadata["State"] = ko.observable(true);
 			metadata["toJSON"] = function() {
