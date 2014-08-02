@@ -14,6 +14,26 @@ var Models = {};
 
 /******************************************************************************
  *
+ * Options model
+ *
+ *****************************************************************************/
+Models.OptionsModel = function() {
+	// Settings
+	this.IsAdancedShown = false;
+	this.IsExtensionEnabled = true;
+	this.IsLoggingEnabled = false;
+	this.IsDevelopmentModeEnabled = false;
+
+	this.ToggleIsAdvancedShown = function() {
+		this.IsAdancedShown(!this.IsAdancedShown());
+	};
+
+	// Plugins
+	this.Plugins = new Array();
+};
+
+/******************************************************************************
+ *
  * Plugin metadata model
  *
  *****************************************************************************/
@@ -25,6 +45,7 @@ Models.PluginMetadata = {
 	Description: "TODO",
 	Author: "",
 	Site: "",
+	State: false,
 
 	Settings: {
 		//HasSettings: false,
@@ -38,7 +59,7 @@ Models.PluginMetadata = {
 	},
 
 	Default: {
-		State: "Enabled"
+		State: true
 	},
 
 	Flags: {

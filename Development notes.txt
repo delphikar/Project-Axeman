@@ -24,9 +24,9 @@ USING AND LAUNCHING APP
 		(in that order)
 
 		Scripts/App/Enums.js
+		Scripts/App/Models.js
 		Scripts/App/Variables.js
 		Scripts/App/Helpers.js
-		Scripts/App/Models.js
 		
 		Scripts/App/RequestManager.js
 		Scripts/App/NotificationManager.js
@@ -48,15 +48,18 @@ AVAILABLE PLUGINS
 	filename including path to list of extension scripts and in PluginManager.html
 	page (and here below).
 
-	Total: (10)
+	Total: (13)
 
 	Services				(Plugins/Core/Services/Services.js)
 	Decorations				(Plugins/Fun/Decorations/Decorations.js)
 	Feedback				(Plugins/Support/Feedback/Feedback.js)
-	ResourceCalculator		(Plugins/Economy/ResourceCalculator/ResourceClaculator.js)
+	ResourceCalculator		(Plugins/Economy/ResourceCalculator/ResourceCalculator.js)
 	ResourceIndicator		(Plugins/Economy/ResourceIndicator/ResourceIndicator.js)
 	UpgradeIndicator		(Plugins/Economy/UpgradeIndicator/UpgradeIndicator.js)
 	ResourceSender			(Plugins/Economy/ResourceSender/ResourceSender.js)
 	VillageListEnhancement	(Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js)
 	MarketplaceEnhancements	(Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancements.js)
+	AutoAdventure			(Plugins/Utility/AutoAdventure/AutoAdventure.js)
+	ReportEnhancement		(Plugins/Utility/ReportEnhancement/ReportEnhancement.js)
 	TravianPLUS				(Plugins/Utility/TravianPLUS/TravianPLUS.js)
+	_Development			(Plugins/Development/_Development/_Development.js)

@@ -27,23 +27,23 @@
 					<li>
 						<a href="#help">Help</a>
 					</li>
-					<li>
+					<!--<li>
 						<a href="#about">About</a>
-					</li>
+					</li>-->
 				</ul>
 			</div>
 			
 			<!-- Content -->
 			<div class="mainview view">
 				<!-- Settings -->
-				<div id="settings">
+				<div id="settings" class="selected">
 					<header>
 						<h1>Settings</h1>
 					</header>
 					<div class="content">
 						<section>
 							<h3>Extension state</h3>
-							<div>
+							<div style="padding: 7px 0;">
 								<input id="SettingsExtensionStateCheckbox" data-bind="checked: IsExtensionEnabled" type="checkbox" checked />
 								<span>Enabled</span>
 							</div>
@@ -52,11 +52,11 @@
 						<div data-bind="if: IsAdancedShown">
 							<section>
 								<h3>Debugging</h3>
-								<div>
+								<div style="padding: 7px 0;">
 									<input id="SettingsAdvancedLogging" data-bind="checked: IsLoggingEnabled" type="checkbox" />
 									<span>Enable logging</span>
 								</div>
-								<div>
+								<div style="padding: 7px 0;">
 									<input id="SettingsAdvancedLogging" data-bind="checked: IsDevelopmentModeEnabled" type="checkbox" />
 									<span>Enable development mode</span>
 								</div>
@@ -70,7 +70,7 @@
 				</div>
 				
 				<!-- Plugins -->
-				<div id="plugins" class="selected">
+				<div id="plugins">
 					<header>
 						<h1>Plugins</h1>
 					</header>
@@ -110,7 +110,7 @@
 								<div style="position: relative; margin-right: 20px;">
 									<div>
 										<label style="padding: 7px 0;">
-											<input class="PluginStateCheckbox" type="checkbox" data-bind="checked: State, attr: { 'data-plugin': Name }" />
+											<input type="checkbox" data-bind="checked: State, attr: { 'data-plugin': Name }" />
 											<span style="min-width: 58px; margin-left: 0.6em; margin-right: 30px;">Enabled</span>
 										</label>
 									</div>
@@ -122,13 +122,23 @@
 				
 				<!-- Help -->
 				<div id="help">
-					<p>Help</p>
+					<header>
+						<h1>Plugins</h1>
+					</header>
+					<div class="content">
+						<p>For more info visit our <a href="https://github.com/JustBuild/Project-Axeman/wiki">Wiki</a> page</p>
+					</div>
 				</div>
 				
 				<!-- About -->
-				<div id="about">
-					<p>About</p>
-				</div>
+				<!--<div id="about">
+					<header>
+						<h1>Plugins</h1>
+					</header>
+					<div class="content">
+						
+					</div>
+				</div>-->
 			</div>
 		</div>
 		
@@ -139,29 +149,29 @@
 		
 		<!-- Extension scripts -->
 		<script type="text/javascript" src="../../Scripts/App/Enums.js"></script>
+		<script type="text/javascript" src="../../Scripts/App/Models.js"></script>
 		<script type="text/javascript" src="../../Scripts/App/Variables.js"></script>
 		<script type="text/javascript" src="../../Scripts/App/Helpers.js"></script>
-		<script type="text/javascript" src="../../Scripts/App/Models.js"></script>
 
 		<script type="text/javascript" src="../../Scripts/App/RequestManager.js"></script>
 		<script type="text/javascript" src="../../Scripts/App/NotificationManager.js"></script>
 		<script type="text/javascript" src="../../Scripts/App/NavigationManager.js"></script>
 		<script type="text/javascript" src="../../Scripts/App/PluginsManager.js"></script>
 
-		<script type="text/javascript" src="../../Plugins/Utility/TravianPLUS/TravianPLUS.js"></script>
-		<script type="text/javascript" src="../../Plugins/Utility/ReportEnhancement/ReportEnhancement.js"></script>
-		<script type="text/javascript" src="../../Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js"></script>
-		<script type="text/javascript" src="../../Plugins/Utility/AutoAdventure/AutoAdventure.js"></script>
-		<script type="text/javascript" src="../../Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancements.js"></script>
-		<script type="text/javascript" src="../../Plugins/Economy/ResourceIndicator/ResourceIndicator.js"></script>
+		<script type="text/javascript" src="../../Plugins/Core/Services/Services.js"></script>
+		<script type="text/javascript" src="../../Plugins/Fun/Decorations/Decorations.js"></script>
+		<script type="text/javascript" src="../../Plugins/Support/Feedback/Feedback.js"></script>
 		<script type="text/javascript" src="../../Plugins/Economy/ResourceCalculator/ResourceCalculator.js"></script>
+		<script type="text/javascript" src="../../Plugins/Economy/ResourceIndicator/ResourceIndicator.js"></script>
 		<script type="text/javascript" src="../../Plugins/Economy/UpgradeIndicator/UpgradeIndicator.js"></script>
 		<script type="text/javascript" src="../../Plugins/Economy/ResourceSender/ResourceSender.js"></script>
-		<script type="text/javascript" src="../../Plugins/Core/Services/Services.js"></script>
-		<script type="text/javascript" src="../../Plugins/Support/Feedback/Feedback.js"></script>
-		<script type="text/javascript" src="../../Plugins/Fun/Decorations/Decorations.js"></script>
+		<script type="text/javascript" src="../../Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js"></script>
+		<script type="text/javascript" src="../../Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancements.js"></script>
+		<script type="text/javascript" src="../../Plugins/Utility/AutoAdventure/AutoAdventure.js"></script>
+		<script type="text/javascript" src="../../Plugins/Utility/ReportEnhancement/ReportEnhancement.js"></script>
+		<script type="text/javascript" src="../../Plugins/Utility/TravianPLUS/TravianPLUS.js"></script>
 		<script type="text/javascript" src="../../Plugins/Development/_Development/_Development.js"></script>
-		
+
 		<!-- Options script -->
 		<script type="text/javascript" src="OptionsScript.js"></script>
 	</body>

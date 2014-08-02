@@ -16,6 +16,7 @@ function App() {
 	/// This is start class for content script
 	/// </summary>
 
+	var self = this;
 	var loadNumber = 0;
 	var currentLoad = 0;
 	var pluginsManager = new PluginsManager();
@@ -27,34 +28,8 @@ function App() {
 		/// Initializes App object
 		/// </summary>
 
-		Log("App: Initialization started...");
-
-		// Disables browser caching of ajax calls so that changes made on 
-		// plugins manager page are available on next restart
-		$.ajaxSetup({ cache: false });
-
-		// Initialize Modal View
-		this.InitializeModalView();
-		this.isModalViewActive = false;
-
-		// Get active page
-		this.GetActivePage();
-
 		// Initiates loading
 		this.Load();
-
-		if (!IsDevelopmentMode) {
-			// Google analytics
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-33221456-3']);
-			_gaq.push(['_trackEvent', 'App', 'Application used']);
-
-			(function () {
-				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-				ga.src = 'https://ssl.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		}
 	};
 
 	this.Load = function () {
@@ -62,7 +37,7 @@ function App() {
 		/// Loads all variables needed for further initialization
 		/// </summary>
 
-		Log("App: Loading...");
+		console.log("App: Loading...");
 
 		// Loading available user profiles
 		loadNumber++;
@@ -70,9 +45,10 @@ function App() {
 		
 		// Load extension active state
 		loadNumber++;
-		(new Request("Background", "Data", "IsExtensionActive", { Type: "get" }).Send(function(response) {
+		(new Request("Background", "Data", "Settings", { Type: "get" }).Send(function(response) {
 			if (response) {
-				isExtensionActive = response.State;
+				Settings = response;
+				isExtensionActive = Settings.IsExtensionEnabled;
 			}
 			CheckFinishedLoading();
 		}));
@@ -83,14 +59,14 @@ function App() {
 		/// Sends request and loads available user profiles
 		/// </summary>
 
-		DLog("App: Requesting profiles list...");
+		console.log("App: Requesting profiles list...");
 
 		var profilesRequest = new Request("Background", "Data", "Profiles", { Type: "get" });
 		profilesRequest.Send(function (response) {
 			// Check if response is valid
 			if (IsNullOrEmpty(response)) {
-				DLog("App: No profiles found...");
-				DLog("App: Creating new profiles list...");
+				console.log("App: No profiles found...");
+				console.log("App: Creating new profiles list...");
 
 				AvailableProfiles = new Array();
 			}
@@ -98,7 +74,7 @@ function App() {
 				// Parse response
 				AvailableProfiles = response || new Array();
 
-				DLog("App: Recieved [" + AvailableProfiles.length + "] profile(s)");
+				console.log("App: Recieved [" + AvailableProfiles.length + "] profile(s)");
 			}
 
 			// Calls for loading finished for this request
@@ -112,7 +88,7 @@ function App() {
 		/// to needed loads, if so calls initialization finalization
 		/// </summary>
 
-		DLog("App: Loaded [" + (currentLoad + 1) + " of " + loadNumber + "]");
+		console.log("App: Loaded [" + (currentLoad + 1) + " of " + loadNumber + "]");
 
 		if (++currentLoad >= loadNumber) {
 			// If loading finished, finalize initialization
@@ -125,11 +101,24 @@ function App() {
 		/// Finazlizes initialization process
 		/// </summary>
 
-		Log("App: Finalizing initialization...");
-
 		if (isExtensionActive) {
+			Log("App: Initialization started...");
+
+			// Disables browser caching of ajax calls so that changes made on 
+			// plugins manager page are available on next restart
+			$.ajaxSetup({ cache: false });
+
+			// Initialize Modal View
+			self.InitializeModalView();
+			self.isModalViewActive = false;
+
+			// Get active page
+			self.GetActivePage();
+
 			// Register plugins
 			pluginsManager.Initialize();
+		} else {
+			Log("Extension is set to Disabled by user");
 		}
 	};
 
