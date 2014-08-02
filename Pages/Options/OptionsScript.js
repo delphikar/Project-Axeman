@@ -1,52 +1,54 @@
 ﻿function Options() {
-	this.InitializeSettings = function () {
-		var SettingsViewModel = function() {
-			this.IsExtensionEnabled = ko.observe(true);
-			this.IsLoggingEnabled = ko.observe(false);
-		};
-		
-		// Load or create ViewModel
-		var viewModel = JSON.parse(localStorage.getItem("Settings"));
-		if (!viewModel) {
-			viewModel = new SettingsViewModel();
-			localStorage.setItem("Settings", JSON.stringify(viewModel));
-		}
+	// Options page viewModel
+	this.OptionsViewModel = function() {
+		// Settings
+		this.IsAdancedShown = false;
+		this.IsExtensionEnabled = true;
+		this.IsLoggingEnabled = false;
+		this.IsDevelopmentModeEnabled = false;
 
-		// Subscribe to changes
-		viewModel.track(function() {
-
-		});
-		
-		ko.applyBindings(viewModel, $("#settings")[0]);
-
-		//
-		// Extension State
-		//
-		var extensionStateCheckbox = $("#SettingsExtensionStateCheckbox");
-		var extensionStateMessage = $("#SettingsExtensionStateDisabledMessage");
-		extensionStateCheckbox.change(function() {
-			var isChecked = !extensionStateCheckbox.prop('checked');
-
-			// Handle Disabled message
-			if (!isChecked) {
-				extensionStateMessage.hide();
-			} else {
-				extensionStateMessage.show();
-			}
-		});
+		// Plugins
+		this.Plugins = new Array();
 	};
 
-	this.InitializePlugins = function() {
-		//
-		// Plugins
-		//
-		var PluginsViewModel = function(plugins) {
-			this.plugins = ko.observableArray(plugins);
-		};
+	// Create ViewModel with mapping
+	this.ViewModel = ko.mapping.fromJS(new this.OptionsViewModel(), {
+		Plugins: {
+			key: function(data) {
+				return ko.utils.unwrapObservable(data.Name);
+			}
+		}
+	});
 
-		var pluginsArray = new Array();
+	this.Initialize = function () {
+		var self = this;
 
-		// Go through all plugins in global list and add them to the page
+		this.InitializeSettings();
+		this.InitializePlugins();
+		
+		// Load settings
+		var data = JSON.parse(localStorage.getItem("Settings"));
+		if (data) {
+			ko.mapping.fromJS(data, self.ViewModel);
+		}
+
+		// Save settings on change
+		ko.watch(this.ViewModel, { depth: -1 }, function (parents, child, item) {
+			var jsData = ko.mapping.toJS(self.ViewModel);
+			localStorage.setItem("Settings", JSON.stringify(jsData));
+		});
+
+		ko.applyBindings(self.ViewModel);
+	};
+
+	this.InitializeSettings = function () {
+		var self = this;
+	};
+
+	this.InitializePlugins = function () {
+		var self = this;
+
+		// Populate ViewModel with default values
 		$.each(GlobalPluginsList, function (index, metadata) {
 			// Skip internal plugins if not in development mode
 			if (metadata.Flags.Internal && !IsDevelopmentMode) {
@@ -54,49 +56,23 @@
 			}
 
 			metadata["ImageSource"] = GetPluginImage(metadata);
-			metadata["State"] = GetActiveState(metadata) == "Enabled";
-			pluginsArray.push(metadata);
+			metadata["State"] = ko.observable(true);
+			metadata["toJSON"] = function() {
+				return {
+					Name: this.Name,
+					State: this.State
+				};
+			};
+			self.ViewModel.Plugins.push(metadata);
 			return true;
 		});
-
-		ko.applyBindings(new PluginsViewModel(pluginsArray), $("#plugins")[0]);
-
-		$(".PluginStateCheckbox").change(function () {
-			var pluginName = $(this).data("plugin");
-			var isActive = $(this).prop("checked");
-			SetActiveState(pluginName, isActive);
-		});
-	};
-
-	function SetActiveState(pluginName, isActive) {
-		var stateValue = isActive ? "Enabled" : "Disabled";
-		console.log(stateValue);
-
-		localStorage.setItem("IsPluginActive" + pluginName, JSON.stringify({ State: stateValue }));
-	}
-
-	function GetActiveState(metadata) {
-		var activeState = null;
-
-		// Gets currently set plugin state
-		var stateObject = JSON.parse(localStorage.getItem("IsPluginActive" + metadata.Name));
-
-		// If satte is not set, save default state else 
-		if (stateObject === null) {
-			activeState = metadata.Default.State;
-			localStorage.setItem("IsPluginActive" + metadata.Name, JSON.stringify({ State: activeState }));
-		}
-		else activeState = stateObject.State;
-
-		return activeState;
 	};
 };
 
 $(document).ready(function () {
 	// Instantiate options and initialize
 	var optionsInstance = new Options();
-	optionsInstance.InitializeSettings();
-	optionsInstance.InitializePlugins();
+	optionsInstance.Initialize();
 });
 
 //
