@@ -4,3 +4,6 @@
 [submodule "Scripts/knockoutjs-reactor"]
 	path = Scripts/knockoutjs-reactor
 	url = https://github.com/JustBuild/knockoutjs-reactor.git
+[submodule "Scripts/knockout.mapping"]
+	path = Scripts/knockout.mapping
+	url = https://github.com/JustBuild/knockout.mapping.git

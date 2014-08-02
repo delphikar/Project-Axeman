@@ -44,18 +44,28 @@
 						<section>
 							<h3>Extension state</h3>
 							<div>
-								<input id="SettingsExtensionStateCheckbox" type="checkbox" checked />
+								<input id="SettingsExtensionStateCheckbox" data-bind="checked: IsExtensionEnabled" type="checkbox" checked />
 								<span>Enabled</span>
 							</div>
-							<p id="SettingsExtensionStateDisabledMessage" style="display: none; color: #DAA520">Disabling extension will prevent it from executing on any Travian websites.</p>
+							<p id="SettingsExtensionStateDisabledMessage" data-bind="ifnot: IsExtensionEnabled" style="color: #DAA520">Disabling extension will prevent it from executing on any Travian websites.</p>
 						</section>
-						<section>
-							<h3>Advanced</h3>
-							<div>
-								<input id="SettingsAdvancedLogging" type="checkbox" />
-								<span>Enable logging</span>
-							</div>
-						</section>
+						<div data-bind="if: IsAdancedShown">
+							<section>
+								<h3>Debugging</h3>
+								<div>
+									<input id="SettingsAdvancedLogging" data-bind="checked: IsLoggingEnabled" type="checkbox" />
+									<span>Enable logging</span>
+								</div>
+								<div>
+									<input id="SettingsAdvancedLogging" data-bind="checked: IsDevelopmentModeEnabled" type="checkbox" />
+									<span>Enable development mode</span>
+								</div>
+							</section>
+						</div>
+						<div>
+							<button id="ShowAdvancedSettingsLink" href="#" class="link-button">Show advanced settings...</button>
+							<hr />
+						</div>
 					</div>
 				</div>
 				
@@ -65,7 +75,7 @@
 						<h1>Plugins</h1>
 					</header>
 					<div class="content">
-						<div data-bind="foreach: plugins" style="font-size: 1.1em; color: #333333; min-width: 576px; max-width: 738px;">
+						<div data-bind="foreach: Plugins" style="font-size: 1.1em; color: #333333; min-width: 576px; max-width: 738px;">
 							<div style="margin: 23px 0; display: -webkit-box;">
 								<div style="padding-right: 10px;">
 									<img data-bind="attr: { src: ImageSource }" style="width: 68px; height: 68px;"></img>
@@ -123,6 +133,8 @@
 		</div>
 		
 		<script type="text/javascript" src="../../Scripts/knockout.js"></script>
+		<script type="text/javascript" src="../../Scripts/knockout.mapping/knockout.mapping.js"></script>
+		<script type="text/javascript" src="../../Scripts/knockoutjs-reactor/knockout.reactor.js"></script>
 		<script type="text/javascript" src="../../Scripts/jQuery.js"></script>
 		
 		<!-- Extension scripts -->
