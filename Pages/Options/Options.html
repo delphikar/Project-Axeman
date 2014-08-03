@@ -63,7 +63,11 @@
 							</section>
 						</div>
 						<div>
-							<button id="ShowAdvancedSettingsLink" data-bind="click: ToggleIsAdvancedShown" class="link-button">Show advanced settings...</button>
+							<button id="ShowAdvancedSettingsLink" data-bind="click: ToggleIsAdvancedShown" class="link-button">
+								<span data-bind="ifnot: IsAdancedShown">Show</span>
+								<span data-bind="if: IsAdancedShown">Hide</span>
+								<span> advanced settings...</span>
+							</button>
 							<h1 class="chrome-hr"></h1>
 						</div>
 					</div>
