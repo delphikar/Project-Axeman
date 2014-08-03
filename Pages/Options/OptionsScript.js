@@ -18,6 +18,7 @@
 		var data = localStorage.getItem("Settings");
 		if (data) {
 			ko.mapping.fromJSON(data, {}, self.ViewModel);
+			console.log("Mapped saved data to models");
 		}
 
 		// Save settings on change
@@ -56,6 +57,7 @@
 				};
 			};
 			self.ViewModel.Plugins.push(metadata);
+			console.log("Processed model of " + metadata.Name);
 			return true;
 		});
 	};
