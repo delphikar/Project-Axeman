@@ -19,7 +19,7 @@ var GlobalPluginsList = new Array();
 
 // Google analytics
 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = 'https://ssl.google-analytics.com/ga.js';
+ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-33221456-3']);
 
