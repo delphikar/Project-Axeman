@@ -28,10 +28,13 @@ Models.OptionsModel = function() {
 		this.IsAdancedShown(!this.IsAdancedShown());
 	};
 
+<<<<<<< HEAD
 	this.ToggleIsOptionsShown = function (plugin, event) {
 		plugin.IsOptionsShown(!plugin.IsOptionsShown());
 	};
 
+=======
+>>>>>>> origin/development
 	// Plugins
 	this.Plugins = new Array();
 };
