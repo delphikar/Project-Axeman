@@ -9,9 +9,20 @@
  *
  *****************************************************************************/
 
+// Extensions
+var Settings = new Models.OptionsModel();
+
 // Development and debuging variables
-var IsDevelopmentMode = isDevMode() || false;
-var IsLogging = false && IsDevelopmentMode;
+var IsDevelopmentMode = function () {
+	if (!Settings)
+		return false;
+	return Settings.IsDevelopmentModeEnabled;
+};
+var IsLogging = function () {
+	if (!Settings)
+		return false;
+	return Settings.IsLoggingEnabled;
+};
 
 // Active page variables
 var ActiveServerAddress = "travian.com";

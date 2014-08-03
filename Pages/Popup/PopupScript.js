@@ -24,7 +24,7 @@ function PopupPage() {
 
 
 	this.Initialize = function () {
-		$("#Plugins").attr("href", GetURL("Pages/PluginsManager/PluginsManager.html"));
+		$("#Plugins").attr("href", GetURL("Pages/Options/Options.html"));
 
 		InitializeActiveButton();
 		InitializeModal();
