@@ -230,6 +230,15 @@ var UpgradeIndicatorMetadata = {
 		IsLoginRequired: true
 	},
 
+	CustomSettings: [
+		{
+			Name: "ResourceEfficiencySidebar",
+			Header: "Show Resource Efficiency Sidebar",
+			DataType: Enums.DataTypes.Boolean,
+			DefaultValue: true
+		}
+	],
+
 	Flags: {
 		Beta: true
 	},

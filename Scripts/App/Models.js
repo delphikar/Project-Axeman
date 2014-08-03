@@ -77,6 +77,7 @@ Models.PluginCustomSetting = {
 	Header: "",
 	Description: "",
 	DataType: undefined,
+	DefaultValue: undefined,
 	Link: ""
 };
 
