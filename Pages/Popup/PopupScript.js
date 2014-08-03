@@ -40,7 +40,7 @@ function PopupPage() {
 		
 		// Load and set extension active set
 		var state = ExtensionActive();
-		SetExtensionActiveState(!state ? true : state.State);
+		SetExtensionActiveState(state ? true : state.State);
 	};
 	
 	var SetExtensionActiveState = function (isActive) {
@@ -273,14 +273,14 @@ function PopupPage() {
 		else return new Array();
 	};
 
-	var ExtensionActive = function(state) {
+	var ExtensionActive = function (state) {
+		var settings = JSON.parse(localStorage.getItem("Settings")) || new Models.OptionsModel();
+		
 		if (state === undefined) {
-			var data = localStorage.getItem("IsExtensionActive");
-			if (data && data.length) {
-				return JSON.parse(data);
-			}
+			return settings.IsExtensionEnabled;
 		} else {
-			return localStorage.setItem("IsExtensionActive", JSON.stringify({ State: state }));
+			settings.IsExtensionEnabled = state;
+			return localStorage.setItem("Settings", JSON.stringify(settings));
 		}
 	};
 };
