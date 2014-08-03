@@ -28,6 +28,10 @@ Models.OptionsModel = function() {
 		this.IsAdancedShown(!this.IsAdancedShown());
 	};
 
+	this.ToggleIsOptionsShown = function (plugin, event) {
+		plugin.IsOptionsShown(!plugin.IsOptionsShown());
+	};
+
 	// Plugins
 	this.Plugins = new Array();
 };
@@ -77,6 +81,7 @@ Models.PluginCustomSetting = {
 	Header: "",
 	Description: "",
 	DataType: undefined,
+	Value: undefined,
 	DefaultValue: undefined,
 	Link: ""
 };

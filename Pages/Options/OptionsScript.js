@@ -15,17 +15,18 @@
 		this.InitializePlugins();
 		
 		// Load settings
-		var data = JSON.parse(localStorage.getItem("Settings"));
+		var data = localStorage.getItem("Settings");
 		if (data) {
-			ko.mapping.fromJS(data, self.ViewModel);
+			ko.mapping.fromJSON(data, {}, self.ViewModel);
 		}
 
 		// Save settings on change
 		ko.watch(this.ViewModel, { depth: -1 }, function (parents, child, item) {
+			console.log("Data changed. Saving...");
 			var jsData = ko.mapping.toJS(self.ViewModel);
 			localStorage.setItem("Settings", JSON.stringify(jsData));
 		});
-
+		console.log(self.ViewModel.Plugins()[5].CustomSettings());
 		ko.applyBindings(self.ViewModel);
 	};
 
@@ -35,14 +36,23 @@
 
 	this.InitializePlugins = function () {
 		var self = this;
+
 		// Populate ViewModel with default values
 		$.each(GlobalPluginsList, function (index, metadata) {
-			metadata["ImageSource"] = GetPluginImage(metadata);
-			metadata["State"] = ko.observable(true);
-			metadata["toJSON"] = function() {
+			$.each(metadata.CustomSettings, function(index, obj) {
+				obj.Value = obj.DefaultValue;
+				if (!obj.Description) obj.Description = false;
+				if (!obj.Link) obj.Link = false;
+			});
+			metadata.CustomSettings = ko.mapping.fromJS(metadata.CustomSettings);
+			metadata.ImageSource = GetPluginImage(metadata);
+			metadata.State = ko.observable(true);
+			metadata.IsOptionsShown = ko.observable(false);
+			metadata.toJSON = function() {
 				return {
 					Name: this.Name,
-					State: this.State
+					State: this.State,
+					CustomSettings: this.CustomSettings
 				};
 			};
 			self.ViewModel.Plugins.push(metadata);

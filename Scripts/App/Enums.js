@@ -14,7 +14,7 @@ var Enums = {
 		"Boolean": "Boolean",
 		"Number": "Number",
 		"String": "String",
-		"Color": "String"
+		"Color": "Color"
 	},
 
 	Tribes: {

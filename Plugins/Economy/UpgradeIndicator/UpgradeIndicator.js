@@ -234,8 +234,28 @@ var UpgradeIndicatorMetadata = {
 		{
 			Name: "ResourceEfficiencySidebar",
 			Header: "Show Resource Efficiency Sidebar",
+			Description: "Resource efficiency sidebar shows you what to upgrade next to maximize your population with least crop usage.",
 			DataType: Enums.DataTypes.Boolean,
-			DefaultValue: true
+			DefaultValue: true,
+			Link: "http://bing.com/"
+		},
+		{
+			Name: "ResourceEfficiencySidebarNumber",
+			Header: "Enter number",
+			DataType: Enums.DataTypes.Number,
+			DefaultValue: 42
+		},
+		{
+			Name: "ResourceEfficiencySidebarString",
+			Header: "Some message",
+			DataType: Enums.DataTypes.String,
+			DefaultValue: "Test message"
+		},
+		{
+			Name: "ResourceEfficiencySidebarColor",
+			Header: "Choose color",
+			DataType: Enums.DataTypes.Color,
+			DefaultValue: "#13579B"
 		}
 	],
 
