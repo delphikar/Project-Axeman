@@ -48,8 +48,6 @@ Models.PluginMetadata = {
 	State: false,
 
 	Settings: {
-		//HasSettings: false,
-		//SourceURL: "",
 		IsChangeable: true,
 		IsLoginRequired: false,
 		RunOnPages: [],
@@ -57,6 +55,8 @@ Models.PluginMetadata = {
 		PageMustContain: [],
 		PageMayContain: []
 	},
+
+	CustomSettings: [],
 
 	Default: {
 		State: true
@@ -70,6 +70,14 @@ Models.PluginMetadata = {
 	},
 
 	Class: ""
+};
+
+Models.PluginCustomSetting = {
+	Name: "",
+	Header: "",
+	Description: "",
+	DataType: undefined,
+	Link: ""
 };
 
 /******************************************************************************

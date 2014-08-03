@@ -10,6 +10,13 @@
  *****************************************************************************/
 
 var Enums = {
+	DataTypes: {
+		"Boolean": "Boolean",
+		"Number": "Number",
+		"String": "String",
+		"Color": "String"
+	},
+
 	Tribes: {
 		"1": "Romans",
 		"2": "Teutons",
