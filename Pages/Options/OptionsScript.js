@@ -15,31 +15,18 @@
 		this.InitializePlugins();
 		
 		// Load settings
-<<<<<<< HEAD
 		var data = localStorage.getItem("Settings");
 		if (data) {
 			ko.mapping.fromJSON(data, {}, self.ViewModel);
-=======
-		var data = JSON.parse(localStorage.getItem("Settings"));
-		if (data) {
-			ko.mapping.fromJS(data, self.ViewModel);
->>>>>>> origin/development
 		}
 
 		// Save settings on change
 		ko.watch(this.ViewModel, { depth: -1 }, function (parents, child, item) {
-<<<<<<< HEAD
 			console.log("Data changed. Saving...");
 			var jsData = ko.mapping.toJS(self.ViewModel);
 			localStorage.setItem("Settings", JSON.stringify(jsData));
 		});
-		console.log(self.ViewModel.Plugins()[5].CustomSettings());
-=======
-			var jsData = ko.mapping.toJS(self.ViewModel);
-			localStorage.setItem("Settings", JSON.stringify(jsData));
-		});
 
->>>>>>> origin/development
 		ko.applyBindings(self.ViewModel);
 	};
 
@@ -49,7 +36,6 @@
 
 	this.InitializePlugins = function () {
 		var self = this;
-<<<<<<< HEAD
 
 		// Populate ViewModel with default values
 		$.each(GlobalPluginsList, function (index, metadata) {
@@ -67,16 +53,6 @@
 					Name: this.Name,
 					State: this.State,
 					CustomSettings: this.CustomSettings
-=======
-		// Populate ViewModel with default values
-		$.each(GlobalPluginsList, function (index, metadata) {
-			metadata["ImageSource"] = GetPluginImage(metadata);
-			metadata["State"] = ko.observable(true);
-			metadata["toJSON"] = function() {
-				return {
-					Name: this.Name,
-					State: this.State
->>>>>>> origin/development
 				};
 			};
 			self.ViewModel.Plugins.push(metadata);
