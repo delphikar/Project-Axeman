@@ -19,6 +19,7 @@ function Decorations() {
 
 		RemoveInGameHelp();
 		AllianceNumbered();
+		EasyDemolish();
 
 		$('.openedClosedSwitch.switchClosed').on('click', function(e) {
 			AddCoordsToFarmList();
@@ -36,6 +37,21 @@ function Decorations() {
 			AddCommas(commaClasses[i]);
 		}
 	};
+
+	var EasyDemolish = function() {
+		if (!$('#demolish').length) {
+			return false;
+		}
+
+		$('#demolish option').each(function(index) {
+			$(this).text($(this).text().replace($(this).val() + '.', ''));
+		});
+
+		$("#demolish").append($("#demolish option").remove().sort(function(a, b) {
+			var at = $(a).text(), bt = $(b).text();
+			return (at > bt)?1:((at < bt)?-1:0);
+		}));
+	}
 
 	var AddCoordsToFarmList = function() {
 		$('.village').each(function(i) {

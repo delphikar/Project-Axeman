@@ -18,12 +18,10 @@
 var GlobalPluginsList = new Array();
 
 // Google analytics
-if (!IsDevelopmentMode) {
-	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	ga.src = 'https://ssl.google-analytics.com/ga.js';
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-33221456-3']);
-}
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = 'https://ssl.google-analytics.com/ga.js';
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-33221456-3']);
 
 function PluginsManager() {
 	var pluginsLoaded = 0;
@@ -36,7 +34,7 @@ function PluginsManager() {
 
 		this.RegisterPlugins(GlobalPluginsList);
 
-		if (!IsDevelopmentMode) {
+		if (!IsDevelopmentMode()) {
 			(function () {
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
@@ -55,13 +53,19 @@ function PluginsManager() {
 
 		$.each(pluginsToRegister, function (index, obj) {
 			// If plugins is internal don't load it if development mode is off
-			if (obj.Flags.Internal && !IsDevelopmentMode) {
+			if (obj.Flags.Internal && !IsDevelopmentMode()) {
 				DLog("PluginsManager: Internal plugin [" + obj.Name  + "]");
 				return;
 			}
 
 			try {
-				registerPlugin(obj);
+				var state = obj.Default.State;
+				var settingsPlugin = $.grep(Settings.Plugins, function (value, index) { return value.Name == obj.Name; })[0];
+				if (settingsPlugin) {
+					state = settingsPlugin.State;
+				}
+
+				registerPlugin(obj, state);
 				pluginsTotal++;
 			}
 			catch (ex) {
@@ -71,43 +75,34 @@ function PluginsManager() {
 		});
 	};
 
-	function registerPlugin(pluginMetadata) {
-		var activeStateRequest = new Request("Background", "Data", "IsPluginActive" + pluginMetadata.Name, { Type: "get" });
+	function registerPlugin(pluginMetadata, state) {
+		DLog("[-------------------- BEGIN " + pluginMetadata.Name + " --------------------]");
+		var startTime = (new Date()).getTime();
 
-		// Send request and handle callback
-		activeStateRequest.Send(function (response) {
-			var state = pluginMetadata.Default.State;
+		// Validate plugin registration
+		if (ValidatePluginRegistration(pluginMetadata)) {
+			// Check if plugin has state or default state is true
+			if (state) {
+				Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is active...");
+				Log("PluginsManager: Registering '" + pluginMetadata.Name + "'");
 
-			DLog("[-------------------- BEGIN " + pluginMetadata.Name + " --------------------]");
-			var startTime = (new Date()).getTime();
-
-			// Validate plugin registration
-			if (ValidatePluginRegistration(pluginMetadata)) {
-				// Check if plugin has state or default state is 'On'
-				if ((response == null || !response.State) && state == "On" || response.State == "On") {
-					Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is active...");
-					Log("PluginsManager: Registering '" + pluginMetadata.Name + "'");
-
-					// Google analytics
-					if (!IsDevelopmentMode) {
-						_gaq.push(['_trackEvent', 'Plugin', (pluginMetadata.Category + '/' + pluginMetadata.Name)]);
-					}
-
-					var pluginObject = new pluginMetadata.Class();
-					pluginObject.Register();
+				// Google analytics
+				if (!IsDevelopmentMode()) {
+					_gaq.push(['_trackEvent', 'Plugin', (pluginMetadata.Category + '/' + pluginMetadata.Name)]);
 				}
-				else Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is NOT active!");
-			}
 
-			// Calculates time needed for plugin to register
-			var endTime = (new Date()).getTime();
-			var timeDelta = endTime - startTime;
-			var message = "Plugin " + pluginMetadata.Name + " loaded successfully in (" + timeDelta + "ms)";
-			if (timeDelta > 20)
-				Warn(message, "PluginsManager");
-			else Log(message, "PluginsManager");
+				var pluginObject = new pluginMetadata.Class();
+				pluginObject.Register();
+			} else Log("PluginsManager: Plugin '" + pluginMetadata.Name + "' is NOT active!");
 		}
-		);
+
+		// Calculates time needed for plugin to register
+		var endTime = (new Date()).getTime();
+		var timeDelta = endTime - startTime;
+		var message = "Plugin " + pluginMetadata.Name + " loaded successfully in (" + timeDelta + "ms)";
+		if (timeDelta > 20)
+			Warn(message, "PluginsManager");
+		else Log(message, "PluginsManager");
 	};
 
 	var ValidatePluginRegistration = function (pluginMetadata) {
@@ -146,7 +141,7 @@ function PluginsManager() {
 		}
 
 		// Development check - Check if plugin uses parseInt (indicates this hould be crawled in Service)
-		if (IsDevelopmentMode && pluginMetadata.Class.toString().search("parseInt") >= 0) {
+		if (IsDevelopmentMode() && pluginMetadata.Class.toString().search("parseInt") >= 0) {
 			Warn("Plugin uses \"parseInt\" method. This should be replaced with crawled data!");
 		}
 

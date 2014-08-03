@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<link id="favicon" rel="shortcut icon" type="image/​png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACwElEQVQ4jcWSW0hTARjH/2dnZ9vxOHUO784rTpshpZlZYkVRKUE+FF4wJCEksciHQjJBesiIIqykqEwke5GKkD0oQtIipzLvE+dlTc2d42VuTXPHza31kg9JEfXS9/R9/L/fH/58H/C/i/gXqKGhwddlnTmXceTSM/Jv4cbGRql9ouutnzxkfWh8qOOPwLv25qKnD+tu/xiJO9XnW6oqzlZv6b+MUFdbFbcyzx1OP5BEuS36m6yRk61JwuqWF+zR6fv2WEsv1178rYFWq41puVGhJb3W0OP5KtCkGPPTNjjdPEZ0LNZ5Xza3vObU6cJCHQAIthtMGYZVc7OmUI+EQliEHMqUcCSlBiEg2A+gaSxyc+GT+v7srX3hVqPTGaMEUl+ZxLMyOHkw27j4+VN8e6cZmXs34XJ+wyzngtMtws60RMTFKjwAoNFowgidzujPWi0PeMdmnoCAiSb5a+xY54t127Rs7asLFt4BSkTCnxZDLlOM+EtcUV5xzECkMqXMyRqLhFZ+/dGgYbpQAC/ioyJnNmxL6R91EzIp7RxLTU8MhZmVS4RCMCICAdFpdZx5JW+0rz8/UyAtiE1Ivitw8LzdR+hu4t2bMC1asjbs5mI/Hyd3NKckp7d/dmV4yIiennG0dY4AJO03bzYlE64FdA/oz2i1Wl6QdyzjwpXyklKK9Bos9tVAPbsRfehEcaWLJFl5cLAmMJSGhxZggltGT++HXZyNjxyYmgdJ+fAqlYogAeCNWr1Db+IqKYYRi3zlToeXUaqUkVoxJO9XvyzmB4VEuBURCS9zcvOqQDJzmxQze/JI1vWCgoJlIQCs2e1SGhuvaSGxnydEiQwj9IiAmeHRrscRMbur/WXyJcNIdxlFUa7qqxXPAeBV85Of769Wq2U19+p7au43tfWNjioAoLW1NXBLb6i/ldXR0cFs/5vvGSgijfFSzbcAAAAASUVORK5CYII=">
+		<title>Settings</title>
+		
+		<link rel="stylesheet" type="text/css" href="chrome-bootstrap/chrome-bootstrap.css" />
+	</head>
+	<body class="chrome-bootstrap">
+		<div class="frame">
+			
+			<!-- Navigation -->
+			<div class="navigation">
+				<h1>
+					Axeman
+				</h1>
+				
+				<ul class="menu">
+					<li class="selected">
+						<a href="#settings">Settings</a>
+					</li>
+					<li>
+						<a href="#plugins">Plugins</a>
+					</li>
+				</ul>
+				<ul class="menu">
+					<li>
+						<a href="#help">Help</a>
+					</li>
+					<!--<li>
+						<a href="#about">About</a>
+					</li>-->
+				</ul>
+			</div>
+			
+			<!-- Content -->
+			<div class="mainview view">
+				<!-- Settings -->
+				<div id="settings" class="selected">
+					<header>
+						<h1>Settings</h1>
+					</header>
+					<div class="content">
+						<section>
+							<h3>Extension state</h3>
+							<div style="padding: 7px 0;">
+								<input id="SettingsExtensionStateCheckbox" data-bind="checked: IsExtensionEnabled" type="checkbox" checked />
+								<span>Enabled</span>
+							</div>
+							<p id="SettingsExtensionStateDisabledMessage" data-bind="ifnot: IsExtensionEnabled" style="color: #DAA520">Disabling extension will prevent it from executing on any Travian websites.</p>
+						</section>
+						<div data-bind="if: IsAdancedShown">
+							<section>
+								<h3>Debugging</h3>
+								<div style="padding: 7px 0;">
+									<input id="SettingsAdvancedLogging" data-bind="checked: IsLoggingEnabled" type="checkbox" />
+									<span>Enable logging</span>
+								</div>
+								<div style="padding: 7px 0;">
+									<input id="SettingsAdvancedLogging" data-bind="checked: IsDevelopmentModeEnabled" type="checkbox" />
+									<span>Enable development mode</span>
+								</div>
+							</section>
+						</div>
+						<div>
+							<button id="ShowAdvancedSettingsLink" data-bind="click: ToggleIsAdvancedShown" class="link-button">Show advanced settings...</button>
+							<h1 class="chrome-hr"></h1>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Plugins -->
+				<div id="plugins">
+					<header>
+						<h1>Plugins</h1>
+					</header>
+					<div class="content">
+						<div data-bind="foreach: Plugins" style="font-size: 1.1em; color: #333333; min-width: 576px; max-width: 738px;">
+							<div style="margin: 23px 0; display: -webkit-box;">
+								<div style="padding-right: 10px;">
+									<img data-bind="attr: { src: ImageSource }" style="width: 68px; height: 68px;"></img>
+									<div data-bind="if: Flags.Internal">
+										<div style="padding: 4px 10px; background-color: #333; color: white; border-radius: 5px; width: 48px; text-align: center; line-height: 20px; font-weight: bold; font-size: 0.75em; margin: 2px 0;">INTERNAL</div>
+									</div>
+									<div data-bind="if: Flags.Alpha">
+										<div style="padding: 4px 10px; background-color: #2D8AD6; color: white; border-radius: 5px; width: 48px; text-align: center; line-height: 20px; margin: 2px 0;">Alpha</div>
+									</div>
+									<div data-bind="if: Flags.Beta">
+										<div style="padding: 4px 10px; background-color: #C51A1A; color: white; border-radius: 5px; width: 48px; text-align: center; line-height: 20px; margin: 2px 0;">Beta</div>
+									</div>
+								</div>
+								<div style="-webkit-box-flex: 1; padding-right: 5px;">
+									<div>
+										<span data-bind="text: Alias" style="padding-right: 20px;"></span>
+										<span data-bind="text: Version"></span>
+									</div>
+									<div style="margin: 5px 0;">
+										<span data-bind="text: Description" style="color: rgb(151, 156, 160);"></span>
+										<a data-bind="attr: { href: Site }" style="margin-left: 0.5em;">Visit website</a>
+									</div>
+									<div style="margin: 5px 0;">
+										<span>Category: </span>
+										<span data-bind="text: Category"></span>
+									</div>
+									<div style="margin: 5px 0;">
+										<span>Author: </span>
+										<span data-bind="text: Author"></span>
+									</div>
+								</div>
+								<div style="position: relative; margin-right: 20px;">
+									<div>
+										<label style="padding: 7px 0;">
+											<input type="checkbox" data-bind="checked: State, attr: { 'data-plugin': Name }" />
+											<span style="min-width: 58px; margin-left: 0.6em; margin-right: 30px;">Enabled</span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<!-- Help -->
+				<div id="help">
+					<header>
+						<h1>Plugins</h1>
+					</header>
+					<div class="content">
+						<p>For more info visit our <a href="https://github.com/JustBuild/Project-Axeman/wiki">Wiki</a> page</p>
+					</div>
+				</div>
+				
+				<!-- About -->
+				<!--<div id="about">
+					<header>
+						<h1>Plugins</h1>
+					</header>
+					<div class="content">
+						
+					</div>
+				</div>-->
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="../../Scripts/knockout.js"></script>
+		<script type="text/javascript" src="../../Scripts/knockout.mapping/knockout.mapping.js"></script>
+		<script type="text/javascript" src="../../Scripts/knockoutjs-reactor/knockout.reactor.js"></script>
+		<script type="text/javascript" src="../../Scripts/jQuery.js"></script>
+		
+		<!-- Extension scripts -->
+		<script type="text/javascript" src="../../Scripts/App/Enums.js"></script>
+		<script type="text/javascript" src="../../Scripts/App/Models.js"></script>
+		<script type="text/javascript" src="../../Scripts/App/Variables.js"></script>
+		<script type="text/javascript" src="../../Scripts/App/Helpers.js"></script>
+
+		<script type="text/javascript" src="../../Scripts/App/RequestManager.js"></script>
+		<script type="text/javascript" src="../../Scripts/App/NotificationManager.js"></script>
+		<script type="text/javascript" src="../../Scripts/App/NavigationManager.js"></script>
+		<script type="text/javascript" src="../../Scripts/App/PluginsManager.js"></script>
+
+		<script type="text/javascript" src="../../Plugins/Core/Services/Services.js"></script>
+		<script type="text/javascript" src="../../Plugins/Fun/Decorations/Decorations.js"></script>
+		<script type="text/javascript" src="../../Plugins/Support/Feedback/Feedback.js"></script>
+		<script type="text/javascript" src="../../Plugins/Economy/ResourceCalculator/ResourceCalculator.js"></script>
+		<script type="text/javascript" src="../../Plugins/Economy/ResourceIndicator/ResourceIndicator.js"></script>
+		<script type="text/javascript" src="../../Plugins/Economy/UpgradeIndicator/UpgradeIndicator.js"></script>
+		<script type="text/javascript" src="../../Plugins/Economy/ResourceSender/ResourceSender.js"></script>
+		<script type="text/javascript" src="../../Plugins/Utility/VillageListEnhancement/VillageListEnhancement.js"></script>
+		<script type="text/javascript" src="../../Plugins/Utility/MarketplaceEnhancements/MarketplaceEnhancements.js"></script>
+		<script type="text/javascript" src="../../Plugins/Utility/AutoAdventure/AutoAdventure.js"></script>
+		<script type="text/javascript" src="../../Plugins/Utility/ReportEnhancement/ReportEnhancement.js"></script>
+		<script type="text/javascript" src="../../Plugins/Utility/TravianPLUS/TravianPLUS.js"></script>
+		<script type="text/javascript" src="../../Plugins/Development/_Development/_Development.js"></script>
+
+		<!-- Options script -->
+		<script type="text/javascript" src="OptionsScript.js"></script>
+	</body>
+</html>
