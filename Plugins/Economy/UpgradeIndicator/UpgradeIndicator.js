@@ -244,7 +244,7 @@ var UpgradeIndicatorMetadata = {
 	Name: "UpgradeIndicator",
 	Alias: "Upgrade Indicator",
 	Category: "Economy",
-	Version: "0.2.0.16",
+	Version: "0.2.1.0",
 	Description: "Know when you can upgrade fields and building without clicking for each. This plugin will highlight upgradeable fields and buildings for you.",
 	Author: "JustBuild Development",
 	Site: "https://github.com/JustBuild/Project-Axeman/wiki",
@@ -260,8 +260,7 @@ var UpgradeIndicatorMetadata = {
 			Header: "Show Resource Efficiency sidebar",
 			Description: "Resource efficiency sidebar shows you what to upgrade next to maximize your population with least crop usage.",
 			DataType: Enums.DataTypes.Boolean,
-			DefaultValue: true,
-			Link: "http://bing.com/"
+			DefaultValue: true
 		},
 		{
 			Name: "UpgradeableColor",
