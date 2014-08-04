@@ -272,7 +272,7 @@ var UpgradeIndicatorMetadata = {
 			Name: "UnderConstructionColor",
 			Header: "Under construction color",
 			DataType: Enums.DataTypes.Color,
-			DefaultValue: "#FFAA4"
+			DefaultValue: "#FFAA44"
 		},
 		{
 			Name: "NonUpgradeableColor",
