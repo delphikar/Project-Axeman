@@ -25,7 +25,7 @@ var IsLogging = function () {
 };
 
 // Active page variables
-var ActiveServerAddress = "travian.com";
+var ActiveServerAddress = "hitravian.com";
 var ActivePage = "/";
 var ActivePageQuery = "";
 var ActivePageTravianVersion = "unsuported";
